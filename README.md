@@ -3,7 +3,7 @@
 --- author/creator =  @epociask --- 
 
 ## ***GENERAL COMPONENTS***
-1. [_Backtester ](#Backtester)
+1. [Backtester ](#Backtester)
 2. [_LiveTrader_](#LiveTrader)
 3. [_DataBase_](#DataBase)
 
