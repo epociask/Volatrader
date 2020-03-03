@@ -14,7 +14,7 @@
 -- In baby phase, will need a lot of work
 
 # SQL QUERY TO AUTOMATE
-```
+```sql
 DROP TABLE mytable;
 
 
