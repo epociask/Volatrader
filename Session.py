@@ -1,5 +1,6 @@
 from Instance import Instance
 
+#Base template for how to write a strat
 class Session:
 
     def __init__(self, pair):
@@ -60,7 +61,7 @@ class Session:
 
         if not self.buy:
             self.buy = self.buyStrat(candle)
-            self.takeProfit = float(self.buyPrice) * 1.02
+            self.takeProfit = float(self.buyPrice) * 1.08
             print("Take profit price: ", self.takeProfit)
 
         else:

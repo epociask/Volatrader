@@ -18,4 +18,5 @@ def backTest(pair: str, strat: str, candleStep, sample):
     print("total profit loss: %" + str(test.getTotalPL()))
 
 
-backTest('BTC/USDT', "strat", "15m", 500)
+backTest('ETH/USDT', "strat", "1h", 500)
+backTest('ETH/USDT', "strat", "15m", 500)

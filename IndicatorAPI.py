@@ -3,7 +3,7 @@ def getIndicator(indicatorName: str, candleJSON):
     endpoint = "https://ta.taapi.io/{}".format(indicatorName)
 
     parameters = {
-        'secret': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtcG9jaWFza0Bkb25zLnVzZmNhLmVkdSIsImlhdCI6MTU4MDM2NjEzMCwiZXhwIjo3ODg3NTY2MTMwfQ.0WA7JOq3lPPHOdhgbUCdx7NDr3L9_4374Z44oNM5KiE',
+        'secret': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtcG9jaWFza0Bkb25zLnVzZmNhLmVkdSIsImlhdCI6MTU4MzIyNDIyNywiZXhwIjo3ODkwNDI0MjI3fQ.RzHJZLnEb4HzluravWjaQZg1W9jd7Jl4wDi0lgnY5jc',
         'candles': candleJSON,
     }
     resp = requests.post(url=endpoint, json={
@@ -18,6 +18,9 @@ def getIndicator(indicatorName: str, candleJSON):
         return result
 
     else:
+        print(resp.status_code)
+        print(resp.headers)
+        print(resp.content)
         raise Exception(resp.status_code + " " + resp.headers)
 
 
