@@ -87,3 +87,12 @@ x = DBoperations()
 x.connect()
 x.DBOPERATIONSFUNCTION()
 ```
+
+### To deploy:
+`git push heroku master`
+
+### To ssh into Heroku server:
+1. Make sure you've logged into Heroku via `heroku login`
+2. Pushing to heroku remote's master branch will deploy the code to Heroku
+3. `git push heroku master` will install deps and run 
+4. `heroku run bash` will open a cli in the server
