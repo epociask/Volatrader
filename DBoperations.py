@@ -34,12 +34,13 @@ class DBoperations:
     def connStatus(self):
         return self.conn
 
-    # returns candles from given date-time range
+        # returns candles from given date-time range
+
     def getCandleDataFromTimeRange(self, startDate: str, finishDate: str, pair: str, candleStep: str):
 
         try:
-            print('SELECT * FROM {}_OHLCV_{} WHERE timestamp <= \'{}\' and timestamp > \'{}\';'.format(
-                pair.replace("/", ""), candleStep, startDate, finishDate))
+            # print('SELECT * FROM {}_OHLCV_{} WHERE timestamp <= \'{}\' and timestamp > \'{}\';'.format(
+            #     pair.replace("/", ""), candleStep, startDate, finishDate))
             self.cur.execute('SELECT * FROM {}_OHLCV_{} WHERE timestamp <= \'{}\' and timestamp > \'{}\';'.format(
                 pair.replace("/", ""), candleStep, startDate, finishDate))
             return HelpfulOperators.convertCandlesToDict(self.cur.fetchall())
@@ -47,13 +48,18 @@ class DBoperations:
         except Exception as e:
             raise e
 
+    def getIndicatorData(self, pair, timeFrame, indicator, limit):
+
+        try:
+            self.cur.execute(
+                f'SELECT * FROM {indicator}_{pair.replace("/", "")}_{timeFrame} ORDER BY timestamp DESC LIMIT {limit};')
+            return self.cur.fetchall()
+
+        except Exception as e:
+            raise e
+
     # writes indicator data using TAAPIO api to POSTGRESQL server
-    def writeIndicatorData(self, timeFrame: str, pair: str, indicator: str, lim):
-
-        if lim is None:
-            lim = 500
-
-        candles = self.getCandleDataFromDB(timeFrame, pair, lim)
+    def writeIndicatorData(self, timeFrame: str, pair: str, indicator: str, candles):
 
         ts = candles[0]['timestamp']
 
@@ -68,7 +74,9 @@ class DBoperations:
 
         print(indicatorVal)
         delimeter = ", "
-        keys = "(timestamp, " + delimeter.join(indicatorVal.keys()) + ")"
+        clean = lambda indicator: indicator if indicator.find("3") == -1 else indicator.replace("3", "three")
+
+        keys = f"(timestamp{clean(indicator)}, " + delimeter.join(indicatorVal.keys()) + ")"
         delimter = "\', \'"
 
         l = []
@@ -79,24 +87,26 @@ class DBoperations:
         print("indicator keys", keys)
 
         print("indicator values", values)
-
         try:
-            print('INSERT INTO ' + indicator + "_" + pair.replace("/",
-                                                                  "") + "_" + timeFrame + keys + "VALUES" + values + ";")
-            self.cur.execute('INSERT INTO ' + indicator + "_" + pair.replace("/",
-                                                                             "") + "_" + timeFrame + keys + "VALUES" + values + ";")
+            print('INSERT INTO ' + clean(indicator) + "_" + pair.replace("/",
+                                                                         "") + "_" + timeFrame + keys + "VALUES" + values + ";")
+            self.cur.execute('INSERT INTO ' + clean(indicator) + "_" + pair.replace("/",
+                                                                                    "") + "_" + timeFrame + keys + "VALUES" + values + ";")
             self.conn.commit()
         except Exception as e:
 
             if type(e) == psycopg2.errors.UndefinedTable:
                 self.conn.rollback()
                 delimeter = " VARCHAR, "
-                keys = "(timestamp VARCHAR PRIMARY KEY NOT NULL, " + delimeter.join(indicatorVal.keys()) + " VARCHAR)"
-                print('CREATE TABLE ' + indicator + "_" + pair.replace("/", "") + "_" + timeFrame + "" + keys + ";")
+                keys = f"(timestamp{clean(indicator)} VARCHAR PRIMARY KEY NOT NULL, " + delimeter.join(
+                    indicatorVal.keys()) + f" VARCHAR, FOREIGN KEY(timestamp{clean(indicator)}) REFERENCES {pair.replace('/', '')}_OHLCV_{timeFrame}(timestamp))"
+                print('CREATE TABLE ' + clean(indicator) + "_" + pair.replace("/",
+                                                                              "") + "_" + timeFrame + "" + keys + ";")
                 self.cur.execute(
-                    'CREATE TABLE ' + indicator + "_" + pair.replace("/", "") + "_" + timeFrame + "" + keys + ";")
+                    'CREATE TABLE ' + clean(indicator) + "_" + pair.replace("/",
+                                                                            "") + "_" + timeFrame + "" + keys + ";")
                 self.conn.commit()
-                self.writeIndicatorData(timeFrame, pair, indicator, lim)
+                self.writeIndicatorData(timeFrame, pair, indicator, candles)
 
             elif type(e) == psycopg2.errors.UniqueViolation:
                 print("Unique violation")
@@ -114,6 +124,24 @@ class DBoperations:
             self.cur.execute(
                 "SELECT * FROM {}_OHLCV_{} ORDER BY timestamp ASC LIMIT {};".format(pair.replace("/", ""), timeFrame,
                                                                                     limit))
+            self.conn.commit()
+            return HelpfulOperators.convertCandlesToDict(self.cur.fetchall())
+
+        except Exception as e:
+            print("ERROR : ", e)
+            return None
+
+        # returns candle data as dict from psql server
+
+    def getCandleDataDescFromDB(self, timeFrame: str, pair: str, limit: int):
+        assert timeFrame == "1m" or timeFrame == "5m" or timeFrame == "15m" or timeFrame == "30m" or timeFrame == "1h" or timeFrame == "3h"
+        assert pair.find("/") != -1
+
+        try:
+            self.cur.execute(
+                "SELECT * FROM {}_OHLCV_{} ORDER BY timestamp DESC LIMIT {};".format(pair.replace("/", ""),
+                                                                                     timeFrame,
+                                                                                     limit))
             self.conn.commit()
             return HelpfulOperators.convertCandlesToDict(self.cur.fetchall())
 
@@ -296,13 +324,9 @@ class DBoperations:
                     str(coin["total_supply"] if coin["total_supply"] is not None else "0"), str(js)))
 
 
+
         except Exception as e:
             print("ERROR: ", e)
             return
 
         self.commit()
-
-
-x = DBoperations()
-x.connect()
-print(x.getCandleDataFromTimeRange('2020-03-02 01:45:00', '2020-02-29 00:00:00', 'ETH/USDT', '15m'))

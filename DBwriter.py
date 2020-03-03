@@ -2,6 +2,7 @@ import datetime
 import time
 from CMC_api import getMarketData, getMacroEconomicData
 from DBoperations import DBoperations
+import HelpfulOperators
 
 connection = DBoperations()
 connection.connect()
@@ -31,16 +32,25 @@ def writeStaticMarketData():
         connection.writeStaticMarketDataQuerys(coin)
 
 #writes candle data from CCXT to POSTGRESQL server
-def writeCandleData(timeFrame: str, pair: str):
-    connection.writeCandlesFromCCXT(timeFrame, pair)
+def writeCandleData(timeFrame: str, pair: str, lim):
+    connection.writeCandlesFromCCXT(timeFrame, pair, lim)
 
 
+#
+# #writes IndicatorData using indicatorAPI to POSTGRESQL server
+# def writeIndicatorData(timeFrame: str, pair: str, indicator: str, lim : int):
+#
+#    connection.writeIndicatorData(timeFrame, pair, indicator, lim)
 
-#writes IndicatorData using indicatorAPI to POSTGRESQL server
-def writeIndicatorData(timeFrame: str, pair: str, indicator: str, lim : int):
+#TODO make timeframe an enum
+def writeIndicatorForTable(timeFrame: str, pair: str, indicator: str):
 
-   connection.writeIndicatorData(timeFrame, pair, indicator, lim)
+    candles = connection.getCandleDataDescFromDB(timeFrame, pair, 500)
+    print(candles)
+
+    for candle in candles:
+        cs = connection.getCandleDataFromTimeRange(candle['timestamp'], HelpfulOperators.rewind(candle['timestamp'], 300, 15), pair, timeFrame)
+        connection.writeIndicatorData(timeFrame, pair, indicator, cs)
 
 
-
-writeCandleData("15m", "ETH/USDT")
+writeIndicatorForTable('15m', 'ETH/USDT', 'stochrsi')

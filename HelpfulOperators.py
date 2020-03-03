@@ -96,3 +96,5 @@ def convertCandlesToDict(candles: list):
     return new
 
 # TODO ASSERTION TESTS
+
+print(rewind('2020-02-29 00:15:00', 100, 15))
