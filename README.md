@@ -7,7 +7,7 @@
 1. [Backtester ](#Backtester)
 2. [_LiveTrader_](#LiveTrader)
 3. [_DataBase_](#DataBase)
-4. [__PaperTrader_](#PaperTrader)
+4. [_PaperTrader_](#PaperTrader)
 
 
 ## Backtester
