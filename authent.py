@@ -1,26 +1,20 @@
 import ccxt
 import DBoperations
+import os
 
 '''
     Holds public/private key authentification for our api Exchange data
-    
 '''
 
 binance = {
-    "PRIVATE": 't1OV0XHDRI0gEUTHLYDJ4hnGnDgwoq6dKZjLKGkWqm4e6vIgftJ5YbuDEyqkf2hg',
-    "PUBLIC": 'XastqOg46nhcQU3NYxwj1XpiktrInCUdgI6t0v2V6ykMP63iiGoGMjYp6Xu9GJgl',
+    "PUBLIC": os.environ['BINANCE_API_KEY'],
+    "PRIVATE": os.environ['BINANCE_SECRET_KEY'],
     "NAME": 'binance'
 }
-kraken = {
-    "PRIVATE" : "HxavT35nE0mlr9lPJ8vhYpgRaP+yR8J+m2hpR5iy0K8KNiPBCHUpWghqF/xy5qhIRK33fHA49PblSih9qGl8VQ==",
-    "PUBLIC" : "64++mKlHDw3GdvHmlm3VSuvqsBuWXm4kXvuIjjeBpdAimUvkmZUdRwRl",
-    "NAME" : 'kraken'
- }
 
+## TODO: ADD MODULARITY FOR OTHER EXCHANGES
 
-authList = [kraken, binance]
-
-
+authList = [binance]
 
 #returns a ccxt instance of a connected exchange
 def getExchangeInstance(authInfo: dict) -> (ccxt.Exchange, Exception):
@@ -29,7 +23,7 @@ def getExchangeInstance(authInfo: dict) -> (ccxt.Exchange, Exception):
         return ccxt.kraken({
             'apiKey' : authInfo["PUBLIC"],
             'secret' : authInfo["PRIVATE"]
-                })
+        })
 
     try:
         exchange_class = getattr(ccxt, authInfo['NAME'])
@@ -38,8 +32,8 @@ def getExchangeInstance(authInfo: dict) -> (ccxt.Exchange, Exception):
         raise e
     try:
         exchange = exchange_class({
-            'apiKey': '{}'.format(authInfo['PUBLIC']),
-            'secret': '{}'.format(authInfo['PRIVATE']),
+            'apiKey': authInfo["PUBLIC"],
+            'secret': authInfo["PRIVATE"],
             'timeout': 30000,
             'enableRateLimit': True,
             'options': {'adjustForTimeDifference': True},
@@ -58,10 +52,9 @@ def getPortfolio(exchange: ccxt.Exchange) -> dict:
         exchange).lower())  # verifies exchange object is passed through as PARAM properly
     active = {}
     valid = lambda x: bool(x != '0.00000000')
-    for entry in exchange.fetchBalance()['info']['balances']:
-        if valid(entry['free']):
-            active[entry['asset']] = entry['free']
 
+    # Creates dictionary of holdings like {btc: '0.1'}
+    active = {entry['asset']:entry['free'] for entry in exchange.fetchBalance()['info']['balances'] if valid(entry['free'])}
     return active
 
 
@@ -96,5 +89,3 @@ def sell(pair: str, exch: ccxt.Exchange, porfolio: dict) -> bool:
         return False
 
     return True
-
-
