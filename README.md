@@ -7,17 +7,26 @@
 1. [Backtester ](#Backtester)
 2. [_LiveTrader_](#LiveTrader)
 3. [_DataBase_](#DataBase)
+4. [__PaperTrader_](#PaperTrader)
 
 
 ## Backtester
 -- In baby phase, will need a lot of work
-### TO DO's
-- [ ] Add compatibility for multiple strategies
-- [ ] Ensure backtests are working properly --debug 
-- [ ] Automate backtests 
-- [ ] Output backtest result data to a POSTGRESQL table in database
-- [ ] Develop strategies to test
 
+# SQL QUERY TO AUTOMATE
+```
+DROP TABLE mytable;
+
+
+CREATE TEMP TABLE mytable AS
+SELECT * from ETHUSDT_OHLCV_15M, STOCHRSI_ETHUSDT_15M WHERE ETHUSDT_OHLCV_15M.timestamp = STOCHRSI_ETHUSDT_15M.timestampstochrsi;
+
+ALTER TABLE mytable 
+DROP COLUMN timestampstochrsi;
+
+SELECT * FROM mytable;
+
+```
 
 ### TO RUN (for now)
 1. Add `BINANCE_API_KEY` and `BINANCE_SECRET_KEY` to your path
