@@ -1,6 +1,7 @@
 # CCXT-TRADER
 
 --- author/creator =  @epociask ---
+--- author/creator = @a-drain ---
 
 ## ***GENERAL COMPONENTS***
 1. [Backtester ](#Backtester)
@@ -12,8 +13,8 @@
 -- In baby phase, will need a lot of work
 ### TO DO's
 - [ ] Add compatibility for multiple strategies
-- [ ] Ensure backtests are working properly --debug
-- [ ] Automate backtests
+- [ ] Ensure backtests are working properly --debug 
+- [ ] Automate backtests 
 - [ ] Output backtest result data to a POSTGRESQL table in database
 - [ ] Develop strategies to test
 
