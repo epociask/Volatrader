@@ -1,6 +1,6 @@
 # CCXT-TRADER
 
---- author/creator =  @epociask --- 
+--- author/creator =  @epociask ---
 
 ## ***GENERAL COMPONENTS***
 1. [Backtester ](#Backtester)
@@ -8,18 +8,19 @@
 3. [_DataBase_](#DataBase)
 
 
-## Backtester 
--- In baby phase, will need a lot of work 
+## Backtester
+-- In baby phase, will need a lot of work
 ### TO DO's
 - [ ] Add compatibility for multiple strategies
 - [ ] Ensure backtests are working properly --debug
-- [ ] Automate backtests 
-- [ ] Output backtest result data to a POSTGRESQL table in database 
-- [ ] Develop strategies to test 
+- [ ] Automate backtests
+- [ ] Output backtest result data to a POSTGRESQL table in database
+- [ ] Develop strategies to test
 
 
 ### TO RUN (for now)
-``py backtester.py``
+1. Add `BINANCE_API_KEY` and `BINANCE_SECRET_KEY` to your path
+2. `py backtester.py`
 
 
 ## LiveTrader
@@ -29,11 +30,11 @@ let's ensure our investments don't crumble when the market decides to move unfav
 #### TO DO('s)
 - [X] Port over logic from past TSL program to be compatible w/ CCXT
 
-    -Make logic significantly more concise... ie reduce # of lines and improve time-complexity 
-- [ ] Ensure effecient operations --> async concurrency || multithreading 
+    -Make logic significantly more concise... ie reduce # of lines and improve time-complexity
+- [ ] Ensure effecient operations --> async concurrency || multithreading
 - [X] Ensure multi-exchange compatibility (Binance, kraken,... etc)
 - [ ] Write unit tests to ensure proper debug
- - [ ] DEBUGG 
+ - [ ] DEBUGG
 - [ ] When sells are made, write data to POSTGRESQL server
 - [ ] Deploy on cloud
 
@@ -47,26 +48,27 @@ let's ensure our investments don't crumble when the market decides to move unfav
 
 #### TO RUN (for now)
 1. Ensure your api keys are put in the dictionary objects in ` authent.py `
-2. Make sure dependable packages are installed ` pip install ccxt ` , ` pip install schedule ` 
+2. Make sure dependable packages are installed ` pip install ccxt ` , ` pip install schedule `
 3. ``throw RuntimeException()``
 
 ## DataBase
 
 ### TO DO's
 - [ ]  Create an indicator schedule w/ OHLCV data
-    - [ ] link all indicator tables by timestamp 
+    - [ ] link all indicator tables by timestamp
 - [ ] Deploy schedule on cloud
 - [ ] debug
 
 ### To Access
-Ensure postgresql is installed 
+Ensure postgresql is installed
+
 ```
 username = doadmin
 password = imt6kws2bm7ffay8
 host = coin-do-user-7113675-0.db.ondigitalocean.com
 port = 25060
 database = defaultdb
-sslmode = require  
+sslmode = require
 
 ```
 
@@ -74,6 +76,6 @@ sslmode = require
 In DBoperations.py
 ```
 x = DBoperations()
-x.connect()   
+x.connect()
 x.DBOPERATIONSFUNCTION()
 ```
