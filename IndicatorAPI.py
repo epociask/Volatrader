@@ -1,9 +1,12 @@
 import requests
+
+
 def getIndicator(indicatorName: str, candleJSON):
     endpoint = "https://ta.taapi.io/{}".format(indicatorName)
 
+
     parameters = {
-        'secret': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtcG9jaWFza0Bkb25zLnVzZmNhLmVkdSIsImlhdCI6MTU4MzIyNDIyNywiZXhwIjo3ODkwNDI0MjI3fQ.RzHJZLnEb4HzluravWjaQZg1W9jd7Jl4wDi0lgnY5jc',
+        'secret':  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..RzHJZLnEb4HzluravWjaQZg1W9jd7Jl4wDi0lgnY5jc',
         'candles': candleJSON,
         'optInFastK_Period': 6,
     }

@@ -36,6 +36,34 @@ class DBoperations:
 
         # returns candles from given date-time range
 
+
+    def getCandlesWithIndicator(self, pair, candleStep, *args):
+        pair = pair.replace("/", "")
+        x = []
+        timestamps = []
+        x.append(pair + "_OHLCV_" + candleStep)
+
+        for indicator in args:
+            x.append(indicator + "_" + pair + "_" + candleStep)
+            timestamps.append("timstamp"+indicator)
+
+        s, col = HelpfulOperators.makeEqualities(x)
+        f = "CREATE TEMP TABLE mytable AS SELECT * FROM " + ", ".join(e for e in x) + " " + s + col
+        query = f + " SELECT * FROM mytable;"
+        print(query)
+
+        try:
+            self.cur.execute(query)
+            data = self.cur.fetchall()
+            self.cur.execute("DROP TABLE mytable;")
+            return data
+
+        except Exception as e:
+            raise e
+
+
+
+
     def getCandleDataFromTimeRange(self, startDate: str, finishDate: str, pair: str, candleStep: str):
 
         try:
@@ -330,6 +358,8 @@ class DBoperations:
 
         self.commit()
 
-# x =DBoperations()
-# x.connect()
-# x.writeCandlesFromCCXT("15m", "ETH/USDT", None)
+x = DBoperations()
+x.connect()
+
+for a in x.getCandlesWithIndicator("ETH/USDT", "15m", 'stochrsi'):
+    print(a)

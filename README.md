@@ -19,7 +19,7 @@
 CREATE TEMP TABLE mytable AS
 SELECT * from ETHUSDT_OHLCV_15M, STOCHRSI_ETHUSDT_15M WHERE ETHUSDT_OHLCV_15M.timestamp = STOCHRSI_ETHUSDT_15M.timestampstochrsi;
 
-ALTER TABLE mytable 
+ALTER TABLE mytable
 DROP COLUMN timestampstochrsi;
 
 SELECT * FROM mytable;
@@ -88,11 +88,16 @@ x.connect()
 x.DBOPERATIONSFUNCTION()
 ```
 
+
+### Indicator API Private key
+    ```
+        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtcG9jaWFza0Bkb25zLnVzZmNhLmVkdSIsImlhdCI6MTU4MzIyNDIyNywiZXhwIjo3ODkwNDI0MjI3fQ.RzHJZLnEb4HzluravWjaQZg1W9jd7Jl4wDi0lgnY5jc
+    ```
 ### To deploy:
 `git push heroku master`
 
 ### To ssh into Heroku server:
 1. Make sure you've logged into Heroku via `heroku login`
 2. Pushing to heroku remote's master branch will deploy the code to Heroku
-3. `git push heroku master` will install deps and run 
+3. `git push heroku master` will install deps and run
 4. `heroku run bash` will open a cli in the serverhttps://www.draw.io/#G1G2SjvvMVBpf-aHM6BmQZrGi0ucy79wNO
