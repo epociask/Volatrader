@@ -80,3 +80,9 @@ x = DBoperations()
 x.connect()
 x.DBOPERATIONSFUNCTION()
 ```
+
+
+### Indicator API Private key 
+    ```
+        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtcG9jaWFza0Bkb25zLnVzZmNhLmVkdSIsImlhdCI6MTU4MzIyNDIyNywiZXhwIjo3ODkwNDI0MjI3fQ.RzHJZLnEb4HzluravWjaQZg1W9jd7Jl4wDi0lgnY5jc
+    ```
