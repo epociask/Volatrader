@@ -95,4 +95,4 @@ x.DBOPERATIONSFUNCTION()
 1. Make sure you've logged into Heroku via `heroku login`
 2. Pushing to heroku remote's master branch will deploy the code to Heroku
 3. `git push heroku master` will install deps and run 
-4. `heroku run bash` will open a cli in the server
+4. `heroku run bash` will open a cli in the serverhttps://www.draw.io/#G1G2SjvvMVBpf-aHM6BmQZrGi0ucy79wNO
