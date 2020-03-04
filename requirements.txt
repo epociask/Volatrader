@@ -1,0 +1,4 @@
+schedule==0.6.0
+requests==2.22.0
+ccxt==1.23.4
+psycopg2==2.8.4

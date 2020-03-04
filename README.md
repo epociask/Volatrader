@@ -7,17 +7,24 @@
 1. [Backtester ](#Backtester)
 2. [_LiveTrader_](#LiveTrader)
 3. [_DataBase_](#DataBase)
+4. [_PaperTrader_](#PaperTrader)
 
 
 ## Backtester
 -- In baby phase, will need a lot of work
-### TO DO's
-- [ ] Add compatibility for multiple strategies
-- [ ] Ensure backtests are working properly --debug 
-- [ ] Automate backtests 
-- [ ] Output backtest result data to a POSTGRESQL table in database
-- [ ] Develop strategies to test
 
+# SQL QUERY TO AUTOMATE
+```sql
+
+CREATE TEMP TABLE mytable AS
+SELECT * from ETHUSDT_OHLCV_15M, STOCHRSI_ETHUSDT_15M WHERE ETHUSDT_OHLCV_15M.timestamp = STOCHRSI_ETHUSDT_15M.timestampstochrsi;
+
+ALTER TABLE mytable 
+DROP COLUMN timestampstochrsi;
+
+SELECT * FROM mytable;
+
+```
 
 ### TO RUN (for now)
 1. Add `BINANCE_API_KEY` and `BINANCE_SECRET_KEY` to your path
@@ -80,3 +87,12 @@ x = DBoperations()
 x.connect()
 x.DBOPERATIONSFUNCTION()
 ```
+
+### To deploy:
+`git push heroku master`
+
+### To ssh into Heroku server:
+1. Make sure you've logged into Heroku via `heroku login`
+2. Pushing to heroku remote's master branch will deploy the code to Heroku
+3. `git push heroku master` will install deps and run 
+4. `heroku run bash` will open a cli in the serverhttps://www.draw.io/#G1G2SjvvMVBpf-aHM6BmQZrGi0ucy79wNO
