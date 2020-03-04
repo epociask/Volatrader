@@ -12,7 +12,7 @@ jobs:
       - run:
           command: "rm -rf database.ini"
       - run:
-          command: "mv server_database database.ini"
+          command: "mv server_database.ini database.ini"
       - heroku/deploy-via-git
 
 workflows:
