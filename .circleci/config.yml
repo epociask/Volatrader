@@ -1,0 +1,24 @@
+version: 2.1
+
+orbs:
+  heroku: circleci/heroku@1.0.1
+
+jobs:
+  deploy:
+    executor: heroku/default
+    steps:
+      - checkout
+      - heroku/install
+      - run:
+          command: "rm -rf database.ini"
+      - run:
+          command: "mv server_database.ini database.ini"
+      - heroku/deploy-via-git
+
+workflows:
+  heroku_deploy:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only: master
