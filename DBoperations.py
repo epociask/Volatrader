@@ -59,9 +59,8 @@ class DBoperations:
             raise e
 
     # writes indicator data using TAAPIO api to POSTGRESQL server
-    def writeIndicatorData(self, timeFrame: str, pair: str, indicator: str, candles):
-
-        ts = candles[0]['timestamp']
+    def writeIndicatorData(self, timeFrame: str, pair: str, indicator: str, candles: list):
+        ts = candles[len(candles)-1]['timestamp']
 
         if candles is None:
             raise TypeError("wrong parameters supplied into getCandleData()")
@@ -330,3 +329,7 @@ class DBoperations:
             return
 
         self.commit()
+
+# x =DBoperations()
+# x.connect()
+# x.writeCandlesFromCCXT("15m", "ETH/USDT", None)
