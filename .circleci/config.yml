@@ -4,21 +4,38 @@ orbs:
   heroku: circleci/heroku@1.0.1
 
 jobs:
+  build:
+    executor: heroku/default
+    steps:
+      - checkout
+      - heroku/install
+      - run:
+          name: "Running unit tests"
+          command: "python -m unittest test/*.py -v"
+
   deploy:
     executor: heroku/default
     steps:
       - checkout
       - heroku/install
       - run:
+          name: "Running unit tests"
+          command: "python -m unittest test/*.py -v"
+      - run:
+          name: "Removing database.ini"
           command: "rm -rf database.ini"
       - run:
+          name: "Configuring remote db"
           command: "mv server_database.ini database.ini"
       - heroku/deploy-via-git
 
 workflows:
   heroku_deploy:
     jobs:
+      - build
       - deploy:
+          requires:
+            - build
           filters:
             branches:
               only: master
