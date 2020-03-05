@@ -15,7 +15,8 @@ jobs:
           command: "python -m unittest test/*.py -v"
 
   deploy:
-    executor: heroku/default
+    docker:
+      - image: circleci/python:3.7.3
     steps:
       - checkout
       - heroku/install
