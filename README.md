@@ -13,18 +13,6 @@
 ## Backtester
 -- In baby phase, will need a lot of work
 
-# SQL QUERY TO AUTOMATE
-```sql
-
-CREATE TEMP TABLE mytable AS
-SELECT * from ETHUSDT_OHLCV_15M, STOCHRSI_ETHUSDT_15M WHERE ETHUSDT_OHLCV_15M.timestamp = STOCHRSI_ETHUSDT_15M.timestampstochrsi;
-
-ALTER TABLE mytable
-DROP COLUMN timestampstochrsi;
-
-SELECT * FROM mytable;
-
-```
 
 ### TO RUN (for now)
 1. Add `BINANCE_API_KEY` and `BINANCE_SECRET_KEY` to your path
