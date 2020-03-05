@@ -3,7 +3,8 @@ from config import confige
 import ccxt
 from IndicatorAPI import getIndicator
 import HelpfulOperators
-
+import time
+import IndicatorConstants
 
 class DBoperations:
 
@@ -37,12 +38,14 @@ class DBoperations:
         # returns candles from given date-time range
 
 
-    def getCandlesWithIndicator(self, pair, candleStep, *args):
+#TODO this can probably be consolidated with the getCandlesFromDB method with some conditional logic to consoldiate space & reduce repition in code operations
+
+    def getCandlesWithIndicator(self, pair, candleStep, args):
         pair = pair.replace("/", "")
         x = []
         timestamps = []
         x.append(pair + "_OHLCV_" + candleStep)
-
+        print(args)
         for indicator in args:
             x.append(indicator + "_" + pair + "_" + candleStep)
             timestamps.append("timstamp"+indicator)
@@ -56,13 +59,34 @@ class DBoperations:
             self.cur.execute(query)
             data = self.cur.fetchall()
             self.cur.execute("DROP TABLE mytable;")
-            return data
 
         except Exception as e:
             raise e
 
+        l = []
+        for a in data:
+            indlist = []
+            c = IndicatorConstants.getIndicator('candle').copy()
+            d= {}
+            it2 = iter(args)
+            for indicator in args:
+                indlist.append(IndicatorConstants.getIndicator(indicator).copy())
+            #ind = IndicatorConstants.getIndicator('threeoutside').copy()
+            it = iter(a)
+            c['timestamp'] = HelpfulOperators.cleaner(next(it))
+            c['open'] = HelpfulOperators.cleaner(next(it))
+            c['high'] = HelpfulOperators.cleaner(next(it))
+            c['low'] = HelpfulOperators.cleaner(next(it))
+            c['close'] = HelpfulOperators.cleaner(next(it))
+            c['volume'] = HelpfulOperators.cleaner(next(it))
 
-
+            d['candle'] = c
+            for ind in indlist:
+                for key in ind.keys():
+                    ind[key] = next(it)
+                d[next(it2)] = ind
+            l.append(d)
+        return l
 
     def getCandleDataFromTimeRange(self, startDate: str, finishDate: str, pair: str, candleStep: str):
 
@@ -358,8 +382,5 @@ class DBoperations:
 
         self.commit()
 
-x = DBoperations()
-x.connect()
 
-for a in x.getCandlesWithIndicator("ETH/USDT", "15m", 'stochrsi'):
-    print(a)
+

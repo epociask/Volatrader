@@ -6,9 +6,9 @@ def getIndicator(indicatorName: str, candleJSON):
 
 
     parameters = {
-        'secret':  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..RzHJZLnEb4HzluravWjaQZg1W9jd7Jl4wDi0lgnY5jc',
+        'secret':  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtcG9jaWFza0Bkb25zLnVzZmNhLmVkdSIsImlhdCI6MTU4MzMxNzYwNSwiZXhwIjo3ODkwNTE3NjA1fQ.hfTvshR4HJuCSJ4XJNEgb_xkWIuW0ixZXm7OthcwUFk',
         'candles': candleJSON,
-        'optInFastK_Period': 6,
+        'kPeriod': 3,
     }
     resp = requests.post(url=endpoint, json={
         'params': parameters

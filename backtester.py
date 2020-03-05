@@ -1,22 +1,20 @@
 from DBoperations import *
 from Session import Session
-
 x = DBoperations()
 x.connect()
 
 #TODO write to be compatible w/ a strategy param
 #TODO ADD A SHITTON SON
-def backTest(pair: str, strat: str, candleStep, sample):
+def backTest(pair: str, candleStep, *args):
     test = Session(pair)
-    candles = x.getCandleDataFromDB(candleStep, pair, sample)
-    print(len(candles))
+    DataSet = x.getCandlesWithIndicator(pair, candleStep, args)
 
-    for candle in candles:
-        test.update(candle)
-        print(candle)
+    print(DataSet)
+    for data in DataSet:
+        test.update(data)
 
-    print("total profit loss: %" + str(test.getTotalPL()))
-
+    print("total profit loss: " + f"+%{str(test.getTotalPL())}" if test.getTotalPL() > 0 else str(test.getTotalPL()))
 
 
-backTest('ETH/USDT', "strat", "1h", 500)
+
+backTest('ETH/USDT', "15m", "threeoutside")

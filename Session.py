@@ -16,7 +16,7 @@ class Session:
         self.sell = False
 
     def reset(self):
-        self.sellStrat = Instance(self.pair)
+        self.sellStrat.reset()
         self.buy = False
         self.buyPrice = 0
         self.sellPrice = 0
@@ -34,11 +34,15 @@ class Session:
                                                                                         self.sellPrice, self.sellTime,
                                                                                         self.profitLoss)
 
-    def buyStrat(self, candle):
-        if not self.sell:
+    def buyStrat(self, data):
+        print("Checking buy start")
+        print(data['threeoutside']['value'])
+        if data['threeoutside']['value'] != '0':
             print("Buying")
-            self.buyPrice = float(candle['close'])
-            self.buyTime = candle['timestamp']
+            self.buyPrice = float(data['candle']['close'])
+            self.buyTime = data['candle']['timestamp']
+            self.takeProfit = float(self.buyPrice) * 1.02
+
             return True
 
         return False
@@ -48,24 +52,24 @@ class Session:
 
         return sum(self.profitlosses)
 
-    def checkForSell(self, candle):
-        if self.sellStrat.run(float(candle['close'])) or self.takeProfit <= float(candle['close']):
-            print("Checking sell")
-            self.sellPrice = float(candle['close'])
-            self.sellTime = candle['timestamp']
+    def checkForSell(self, data):
+        print("Checking sell:::::::current price", data['candle']['close'])
+        if self.sellStrat.run(float(data['candle']['close'])) or self.takeProfit <= float(data['candle']['close']):
+            self.sellPrice = float(data['candle']['close'])
+            self.sellTime = data['candle']['timestamp']
             return True
 
         return False
 
-    def update(self, candle):
+    def update(self, data):
+        print("Checking for ", data)
 
         if not self.buy:
-            self.buy = self.buyStrat(candle)
-            self.takeProfit = float(self.buyPrice) * 1.08
+            self.buy = self.buyStrat(data)
             print("Take profit price: ", self.takeProfit)
 
         else:
-            self.sell = self.checkForSell(candle)
+            self.sell = self.checkForSell(data)
 
             if self.sell:
                 self.calcPL()

@@ -46,6 +46,7 @@ def convertNumericTimeToString(numeric: (float, int, str)) -> (str, Exception):
 getLow = lambda ticker: str(ticker).find('.') #used in getLowHighBounds
 getHigh = lambda ticker: (len(str(ticker)[str(ticker).find('.'): len(str(ticker))]))  #used in getLowHighBounds
 cleanBounds = lambda bounds: bounds.replace("(", "").replace(")", "").replace(",", "").replace("[", "").replace("]", "") #cleans bounds to be parsed easier
+cleaner = lambda word: word if type(word) != decimal.Decimal else str(word)
 
 
 #TODO FUNCTION IS PROBABLY UNECESSARY.. TEST TO MAKE SURE
@@ -82,7 +83,6 @@ def getLowHighBounds(candles: list) -> (int, int):
 def convertCandlesToDict(candles: list):
     assert type(candles) == list
     new = []
-    cleaner = lambda word: word if type(word) != decimal.Decimal else str(word)
     for candle in candles:
 
         it = iter(candle)

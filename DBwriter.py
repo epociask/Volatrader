@@ -3,6 +3,7 @@ import time
 from CMC_api import getMarketData, getMacroEconomicData
 from DBoperations import DBoperations
 import HelpfulOperators
+import threading
 
 connection = DBoperations()
 connection.connect()
@@ -50,9 +51,15 @@ def writeIndicatorForTable(timeFrame: str, pair: str, indicator: str):
     for candle in candles:
         if i == 0:
             break
-        cs = connection.getCandleDataFromTimeRange(candle['timestamp'], HelpfulOperators.rewind(candle['timestamp'], 100, 15), pair, timeFrame)
+        cs = connection.getCandleDataFromTimeRange(candle['timestamp'], HelpfulOperators.rewind(candle['timestamp'], 10, 60), pair, timeFrame)
         print(cs)
         connection.writeIndicatorData(timeFrame, pair, indicator, cs)
 
+#writeCandleData("15m", 'ETH/USDT', None)
+#p1 = threading.Thread(target=writeIndicatorForTable, args=('15m', 'ETH/USDT', '3blackcrows',))
+# p2 = threading.Thread(target=writeIndicatorForTable, args=('1h', 'ETH/USDT', '3outside',))
+# #
+# # #p1.start()
+# p2.start()
 
-writeIndicatorForTable('15m', 'ETH/USDT', 'macd')
+# writeIndicatorForTable('15m', 'ETH/USDT', 'morningstar')
