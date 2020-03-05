@@ -1,10 +1,10 @@
 import datetime
 import decimal
 
-
 '''
     Helper Script w/ utility functions that are referenced throughout master program
 '''
+
 
 def makeEqualities(list):
     s = "WHERE "
@@ -14,23 +14,31 @@ def makeEqualities(list):
         if index != 0:
             s += f"{list[0]}.timestamp = {list[index]}.timestamp{list[index][0: list[index].find('_')]} " if index == 1 else f"AND {list[0]}.timestamp = {list[index]}.timestamp{list[index][0: list[index].find('_')]} "
             f += f"DROP COLUMN timestamp{list[index][0: list[index].find('_')]} " if index == 1 else f", DROP COLUMN timestamp{list[index][0: list[index].find('_')]}"
-    s+= ";"
-    f+= ";"
-    return s,f
+    s += ";"
+    f += ";"
+    return s, f
 
 
+# takes a timestamp and returns a timestamp from a previous time reference
+# X rewind('2020-02-29 00:15:00', 1, 60) --> '2020-02-28 23:15:00'
 
-#takes a timestamp and returns a timestamp from a previous time reference
-#EX rewind('2020-02-29 00:15:00', 1, 60) --> '2020-02-28 23:15:00'
 def rewind(timeStamp: str, limit: int, timeStep: int):
+    return convertNumericTimeToString(
+        int(datetime.datetime.timestamp(datetime.datetime.strptime(timeStamp, '%Y-%m-%d %H:%M:%S')) * 1000) - (
+                    limit * 6 * timeStep * 10000))
 
-    return convertNumericTimeToString(int(datetime.datetime.timestamp(datetime.datetime.strptime(timeStamp, '%Y-%m-%d %H:%M:%S')) * 1000) - (limit*6*timeStep*10000))
+
+# takes a timestamp and returns a timestamp from a previous time reference
+# EX rewind('2020-02-29 00:15:00', 1, 60) --> '2020-02-28 23:15:00'
+def rewind(timeStamp: str, limit: int, timeStep: int):
+    return convertNumericTimeToString(
+        int(datetime.datetime.timestamp(datetime.datetime.strptime(timeStamp, '%Y-%m-%d %H:%M:%S')) * 1000) - (
+                limit * 6 * timeStep * 10000))
 
 
-
-#converts numeric timestamp type to string
-#@returns Exception if error
-#@returns string timestamp
+# converts numeric timestamp type to string
+# @returns Exception if error
+# @returns string timestamp
 def convertNumericTimeToString(numeric: (float, int, str)) -> (str, Exception):
     try:
         date = datetime.datetime.fromtimestamp(numeric / 1e3)
@@ -41,15 +49,22 @@ def convertNumericTimeToString(numeric: (float, int, str)) -> (str, Exception):
     return date.strftime('%Y-%m-%d %H:%M:%S')
 
 
-##Helper lambda functions
+# Helper lambda functions
 
+#<<<<<<< HEAD
 getLow = lambda ticker: str(ticker).find('.') #used in getLowHighBounds
 getHigh = lambda ticker: (len(str(ticker)[str(ticker).find('.'): len(str(ticker))]))  #used in getLowHighBounds
 cleanBounds = lambda bounds: bounds.replace("(", "").replace(")", "").replace(",", "").replace("[", "").replace("]", "") #cleans bounds to be parsed easier
 cleaner = lambda word: word if type(word) != decimal.Decimal else str(word)
+#=======
+getLow = lambda ticker: str(ticker).find('.')  # used in getLowHighBounds
+getHigh = lambda ticker: (len(str(ticker)[str(ticker).find('.'): len(str(ticker))]))  # used in getLowHighBounds
+cleanBounds = lambda bounds: bounds.replace("(", "").replace(")", "").replace(",", "").replace("[", "").replace("]",
+                                                                                                                "")  # cleans bounds to be parsed easier
+#>>>>>>> dfdadf7ad11f96dd442d17433bf86a47e063ddca
 
 
-#TODO FUNCTION IS PROBABLY UNECESSARY.. TEST TO MAKE SURE
+# TODO FUNCTION IS PROBABLY UNECESSARY.. TEST TO MAKE SURE
 def cleanCandle(candle, high):
     for key in candle:
         print(len(str((candle[key]))))
@@ -60,8 +75,7 @@ def cleanCandle(candle, high):
     return candle
 
 
-
-#returns low high bounds of candleset to effectively format decimal size for CREATE TABLE query
+# returns low high bounds of candleset to effectively format decimal size for CREATE TABLE query
 def getLowHighBounds(candles: list) -> (int, int):
     lows = []
     highs = []
@@ -79,7 +93,8 @@ def getLowHighBounds(candles: list) -> (int, int):
     print(high)
     return low, high
 
-#converts list candle data to list of dictionary..... ie list[dict{}]
+
+# converts list candle data to list of dictionary..... ie list[dict{}]
 def convertCandlesToDict(candles: list):
     assert type(candles) == list
     new = []
@@ -108,6 +123,7 @@ def convertCandlesToDict(candles: list):
             print("Error", e)
 
     return new
+
 
 # TODO ASSERTION TESTS
 

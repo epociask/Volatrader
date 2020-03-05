@@ -1,0 +1,43 @@
+version: 2.1
+
+orbs:
+  heroku: circleci/heroku@1.0.1
+
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.7.3
+    steps:
+      - checkout
+      - heroku/install
+      - run:
+          name: "Running unit tests"
+          command: "python -m unittest test/*.py -v"
+
+  deploy:
+    docker:
+      - image: circleci/python:3.7.3
+    steps:
+      - checkout
+      - heroku/install
+      - run:
+          name: "Running unit tests"
+          command: "python -m unittest test/*.py -v"
+      - run:
+          name: "Removing database.ini"
+          command: "rm -rf database.ini"
+      - run:
+          name: "Configuring remote db"
+          command: "mv server_database.ini database.ini"
+      - heroku/deploy-via-git
+
+workflows:
+  heroku_deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
