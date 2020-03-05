@@ -5,6 +5,7 @@ import decimal
     Helper Script w/ utility functions that are referenced throughout master program
 '''
 
+
 def makeEqualities(list):
     s = "WHERE "
     f = " ALTER TABLE mytable "
@@ -13,17 +14,19 @@ def makeEqualities(list):
         if index != 0:
             s += f"{list[0]}.timestamp = {list[index]}.timestamp{list[index][0: list[index].find('_')]} " if index == 1 else f"AND {list[0]}.timestamp = {list[index]}.timestamp{list[index][0: list[index].find('_')]} "
             f += f"DROP COLUMN timestamp{list[index][0: list[index].find('_')]} " if index == 1 else f", DROP COLUMN timestamp{list[index][0: list[index].find('_')]}"
-    s+= ";"
-    f+= ";"
-    return s,f
+    s += ";"
+    f += ";"
+    return s, f
 
 
+# takes a timestamp and returns a timestamp from a previous time reference
+# X rewind('2020-02-29 00:15:00', 1, 60) --> '2020-02-28 23:15:00'
 
-#takes a timestamp and returns a timestamp from a previous time reference
-#EX rewind('2020-02-29 00:15:00', 1, 60) --> '2020-02-28 23:15:00'
 def rewind(timeStamp: str, limit: int, timeStep: int):
+    return convertNumericTimeToString(
+        int(datetime.datetime.timestamp(datetime.datetime.strptime(timeStamp, '%Y-%m-%d %H:%M:%S')) * 1000) - (
+                    limit * 6 * timeStep * 10000))
 
-    return convertNumericTimeToString(int(datetime.datetime.timestamp(datetime.datetime.strptime(timeStamp, '%Y-%m-%d %H:%M:%S')) * 1000) - (limit*6*timeStep*10000))
 
 # takes a timestamp and returns a timestamp from a previous time reference
 # EX rewind('2020-02-29 00:15:00', 1, 60) --> '2020-02-28 23:15:00'
