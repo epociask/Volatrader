@@ -66,7 +66,7 @@ def writeIndicatorForTable(timeFrame: str, pair: str, indicator: str, *args):
     else:
         candles = connection.getCandleDataDescFromDB(timeFrame, pair, args[0])
     for candle in candles:
-        end = HelpfulOperators.rewind(candle['timestamp'], 300, 5)
+        end = HelpfulOperators.rewind(candle['timestamp'], 300, 15)
         #print(f"{candle['timestamp']} ---> {end}")
         cs = connection.getCandleDataFromTimeRange(candle['timestamp'], end, pair, timeFrame)
         #print(cs)
@@ -79,4 +79,4 @@ def writeIndicatorForTable(timeFrame: str, pair: str, indicator: str, *args):
 # p1.start()
 # p2.start()
 
-writeIndicatorForTable('15m', 'ETH/USDT', '3outside')
+writeIndicatorForTable('15m', 'ETH/USDT', 'macd')

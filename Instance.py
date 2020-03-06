@@ -5,7 +5,6 @@ class Instance:
     def __init__(self, base):
         # Global variables
         self.pair: str = base
-        print(self.pair)
         self.percentStopLoss: float = 0  # PercentSL...input by user : DEFAULT 0
         self.globalHigh: float = 0  # global high ..ie highest value found in session : DEFAULT 0
         self.currentPrice: float = 0  # current price... obtained by CCXT API : DEFAULT 0

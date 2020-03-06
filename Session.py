@@ -1,3 +1,4 @@
+from termcolor import colored
 from Instance import Instance
 
 #Base template for how to write a strat
@@ -12,19 +13,24 @@ class Session:
         self.buyPrice = 0
         self.takeProfit = 0
         self.sellPrice = 0
-        self.ProfitLoss = None
+        self.profitLoss = None
         self.sell = False
         self.buyStrat = buyStrategy
         self.takeProfitPercent = float(f"1.{takeProfitPercent}")
+        self.results = []
 
 
+    def addResult(self):
+        self.results.append({'buytime': self.buyTime, 'buyprice': self.buyPrice, 'selltime': self.sellTime,
+                'sellprice': self.sellPrice, 'profitloss': self.profitLoss})
 
     def reset(self):
+        self.addResult()
         self.sellStrat.reset()
         self.buy = False
         self.buyPrice = 0
         self.sellPrice = 0
-        self.ProfitLoss = None
+        self.profitLoss = None
         self.sell = False
 
     def calcPL(self):
@@ -66,7 +72,10 @@ class Session:
 
             if self.sell:
                 self.calcPL()
-                print(self.toString())
+                print(colored(self.toString(), 'green')) if self.profitLoss > 0 else print(colored(self.toString(), 'red'))
                 self.profitlosses.append(self.profitLoss)
                 self.reset()
 
+
+    def getResults(self):
+        return self.results

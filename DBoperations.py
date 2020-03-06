@@ -93,7 +93,6 @@ class DBoperations:
                 d[next(it2)] = ind
             l.append(d)
 
-        print(l)
         return l
 
     def getCandleDataFromTimeRange(self, startDate: str, finishDate: str, pair: str, candleStep: str):
@@ -337,6 +336,26 @@ class DBoperations:
                     self.commit()
                     self.writeCandlesFromCCXT(candleSize, pair, args)
 
+
+                elif type(e) == psycopg2.errors.NumericValueOutOfRange:
+
+                    print(
+                        f"SELECT HIGH, LOW FROM BOUNDTABLE WHERE SYMBOL = '{marketPair}'"
+                    )
+
+                    self.conn.rollback()
+
+                    self.cur.execute(
+                        f"SELECT HIGH, LOW FROM BOUNDTABLE WHERE SYMBOL = '{marketPair}'"
+                    )
+
+                    bounds = self.cur.fetchall()
+
+                    print(bounds)
+                    #     f"ALTER TABLE {}_OHLCV_{} "
+                    # )
+
+
                 else:
                     print(type(e))
                     print(e)
@@ -430,13 +449,11 @@ class DBoperations:
 
         self.commit()
 
-
-#
 # x = DBoperations()
 # x.connect()
-# x.writeIndicatorData("15m", "ETH/USDT", "3outside")
-
-#x.writeCandlesFromCCXT("15m", "ETH/USDT", '2020-01-01')
-
+# x.writeIndicatorData("1d", "BTC/USDT", "3outside")
+#
+# x.writeCandlesFromCCXT("15m", "BTC/USDT", '2020-01-01')
+#
 
 
