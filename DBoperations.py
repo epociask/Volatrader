@@ -384,3 +384,6 @@ class DBoperations:
 
 
 
+x = DBoperations()
+x.connect()
+# x.writeCandlesFromCCXT(, "ETH/USDT", None)

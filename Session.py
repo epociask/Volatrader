@@ -3,7 +3,7 @@ from Instance import Instance
 #Base template for how to write a strat
 class Session:
 
-    def __init__(self, pair):
+    def __init__(self, pair, buyStrategy):
         self.pair = pair
         self.sellStrat = Instance(pair)
         self.sellStrat.setStopLossPercent(1)
@@ -14,6 +14,7 @@ class Session:
         self.sellPrice = 0
         self.ProfitLoss = None
         self.sell = False
+        self.buyStrat = buyStrategy
 
     def reset(self):
         self.sellStrat.reset()
@@ -34,18 +35,6 @@ class Session:
                                                                                         self.sellPrice, self.sellTime,
                                                                                         self.profitLoss)
 
-    def buyStrat(self, data):
-        print("Checking buy start")
-        print(data['threeoutside']['value'])
-        if data['threeoutside']['value'] != '0':
-            print("Buying")
-            self.buyPrice = float(data['candle']['close'])
-            self.buyTime = data['candle']['timestamp']
-            self.takeProfit = float(self.buyPrice) * 1.02
-
-            return True
-
-        return False
 
     # returns total profit-loss percentage after running strategy
     def getTotalPL(self):
@@ -65,10 +54,11 @@ class Session:
         print("Checking for ", data)
 
         if not self.buy:
-            self.buy = self.buyStrat(data)
-            print("Take profit price: ", self.takeProfit)
+            self.buy, self.buyTime, self.buyPrice = self.buyStrat(data)
+
 
         else:
+            self.takeProfit = float(self.buyPrice) * 1.02
             self.sell = self.checkForSell(data)
 
             if self.sell:
