@@ -3,10 +3,10 @@ from Instance import Instance
 #Base template for how to write a strat
 class Session:
 
-    def __init__(self, pair, buyStrategy):
+    def __init__(self, pair, buyStrategy, takeProfitPercent, percentSL):
         self.pair = pair
         self.sellStrat = Instance(pair)
-        self.sellStrat.setStopLossPercent(1)
+        self.sellStrat.setStopLossPercent(percentSL)
         self.profitlosses = []
         self.buy = False
         self.buyPrice = 0
@@ -15,6 +15,9 @@ class Session:
         self.ProfitLoss = None
         self.sell = False
         self.buyStrat = buyStrategy
+        self.takeProfitPercent = float(f"1.{takeProfitPercent}")
+
+
 
     def reset(self):
         self.sellStrat.reset()
@@ -42,7 +45,7 @@ class Session:
         return sum(self.profitlosses)
 
     def checkForSell(self, data):
-        print("Checking sell:::::::current price", data['candle']['close'])
+        #print("Checking sell:::::::current price", data['candle']['close'])
         if self.sellStrat.run(float(data['candle']['close'])) or self.takeProfit <= float(data['candle']['close']):
             self.sellPrice = float(data['candle']['close'])
             self.sellTime = data['candle']['timestamp']
@@ -51,14 +54,14 @@ class Session:
         return False
 
     def update(self, data):
-        print("Checking for ", data)
+        #print("Checking for ", data)
 
         if not self.buy:
             self.buy, self.buyTime, self.buyPrice = self.buyStrat(data)
 
 
         else:
-            self.takeProfit = float(self.buyPrice) * 1.02
+            self.takeProfit = float(self.buyPrice) * self.takeProfitPercent
             self.sell = self.checkForSell(data)
 
             if self.sell:

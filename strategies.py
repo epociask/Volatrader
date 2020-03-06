@@ -7,10 +7,10 @@ def getStrat(name):
 
 
 def SIMPLE_BUY_STRAT(data):
-    print("Checking buy start")
-    print(data['threeoutside']['value'])
-    if data['threeoutside']['value'] != '0':
-        print("Buying")
+    #print("Checking buy start")
+    #print(data['threeoutside']['value'])
+    if data['threeoutside']['value'] == '-100':
+        #print("Buying")
         buyPrice = float(data['candle']['close'])
         buyTime = data['candle']['timestamp']
 
