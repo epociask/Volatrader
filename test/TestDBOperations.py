@@ -31,6 +31,7 @@ class TestDBOperations(unittest.TestCase):
         candle = {'timestamp': 1583535600000, 'open': 239.99, 'high': 240.59, 'low': 239.75, 'close': 240.59, 'volume': 1768.84486 }
         marketPair = 'ETHUSDT'
         candleSize = '15m'
+        print('TS: ' + HelpfulOperators.convertNumericTimeToString(candle['timestamp']))
 
         expected = "INSERT INTO ETHUSDT_OHLCV_15m(timestamp, open, high, low, close, volume) VALUES ('2020-03-06 15:00:00', '239.99', '240.59', '239.75', '240.59', '1768.84486');"
         received = dbOperations.getCandleInsertQuery(candle, marketPair, candleSize)
