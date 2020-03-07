@@ -11,6 +11,9 @@ jobs:
       - checkout
       - heroku/install
       - run:
+          name: Installing requirements
+          command: "pip install -r requirements.txt"
+      - run:
           name: "Running unit tests"
           command: "python -m unittest test/*.py -v"
 
@@ -20,6 +23,9 @@ jobs:
     steps:
       - checkout
       - heroku/install
+      - run:
+          name: Installing requirements
+          command: "pip install -r requirements.txt"
       - run:
           name: "Running unit tests"
           command: "python -m unittest test/*.py -v"
