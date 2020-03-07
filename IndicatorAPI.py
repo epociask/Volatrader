@@ -1,5 +1,5 @@
 import requests
-
+import time
 
 def getIndicator(indicatorName: str, candleJSON):
     endpoint = "https://ta.taapi.io/{}".format(indicatorName)
@@ -18,7 +18,10 @@ def getIndicator(indicatorName: str, candleJSON):
 
     if resp.status_code == 200:
         result = resp.json()
-        print(resp)
+        if not bool(result):
+            print("Empty response body-------{}")
+            return None
+
         return result
 
     else:
