@@ -2,14 +2,20 @@ version: 2.1
 
 orbs:
   heroku: circleci/heroku@1.0.1
+  python: circleci/python@0.2.1
+
 
 jobs:
   build:
+    executor: python/default
     docker:
       - image: circleci/python:3.7.3
     steps:
       - checkout
       - heroku/install
+      - python/load-cache
+      - python/install-deps
+      - python/save-cache
       - run:
           name: "Running unit tests"
           command: "python -m unittest test/*.py -v"
@@ -20,6 +26,9 @@ jobs:
     steps:
       - checkout
       - heroku/install
+      - python/load-cache
+      - python/install-deps
+      - python/save-cache
       - run:
           name: "Running unit tests"
           command: "python -m unittest test/*.py -v"
