@@ -2,9 +2,12 @@ version: 2.1
 
 orbs:
   heroku: circleci/heroku@1.0.1
+  python: circleci/python@0.2.1
+
 
 jobs:
   build:
+    executor: python/default
     docker:
       - image: circleci/python:3.7.3
     steps:
