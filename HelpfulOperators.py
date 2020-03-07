@@ -49,19 +49,10 @@ def convertNumericTimeToString(numeric: (float, int, str)) -> (str, Exception):
     return date.strftime('%Y-%m-%d %H:%M:%S')
 
 
-# Helper lambda functions
-
-#<<<<<<< HEAD
-getLow = lambda ticker: str(ticker).find('.') #used in getLowHighBounds
-getHigh = lambda ticker: (len(str(ticker)[str(ticker).find('.'): len(str(ticker))]))  #used in getLowHighBounds
 cleanBounds = lambda bounds: bounds.replace("(", "").replace(")", "").replace(",", "").replace("[", "").replace("]", "") #cleans bounds to be parsed easier
 cleaner = lambda word: word if type(word) != decimal.Decimal else str(word)
-#=======
 getLow = lambda ticker: str(ticker).find('.')  # used in getLowHighBounds
 getHigh = lambda ticker: (len(str(ticker)[str(ticker).find('.'): len(str(ticker))]))  # used in getLowHighBounds
-cleanBounds = lambda bounds: bounds.replace("(", "").replace(")", "").replace(",", "").replace("[", "").replace("]",
-                                                                                                                "")  # cleans bounds to be parsed easier
-#>>>>>>> dfdadf7ad11f96dd442d17433bf86a47e063ddca
 
 
 # TODO FUNCTION IS PROBABLY UNECESSARY.. TEST TO MAKE SURE

@@ -6,8 +6,7 @@ import HelpfulOperators
 import time
 import IndicatorConstants
 
-
-dateFormat = lambda time : str(time) + "T00:00:00Z"
+dateFormat = lambda time: str(time) + "T00:00:00Z"
 
 
 class DBoperations:
@@ -41,8 +40,7 @@ class DBoperations:
 
         # returns candles from given date-time range
 
-
-#TODO this can probably be consolidated with the getCandlesFromDB method with some conditional logic to consoldiate space & reduce repition in code operations
+    # TODO this can probably be consolidated with the getCandlesFromDB method with some conditional logic to consoldiate space & reduce repition in code operations
 
     def getCandlesWithIndicator(self, pair, candleStep, args):
         pair = pair.replace("/", "")
@@ -52,7 +50,7 @@ class DBoperations:
         print(args)
         for indicator in args:
             x.append(indicator + "_" + pair + "_" + candleStep)
-            timestamps.append("timstamp"+indicator)
+            timestamps.append("timstamp" + indicator)
 
         s, col = HelpfulOperators.makeEqualities(x)
         f = "CREATE TEMP TABLE mytable AS SELECT * FROM " + ", ".join(e for e in x) + " " + s + col
@@ -73,11 +71,11 @@ class DBoperations:
             c = IndicatorConstants.getIndicator('candle').copy()
             if c is None:
                 return
-            d= {}
+            d = {}
             it2 = iter(args)
             for indicator in args:
                 indlist.append(IndicatorConstants.getIndicator(indicator).copy())
-            #ind = IndicatorConstants.getIndicator('threeoutside').copy()
+            # ind = IndicatorConstants.getIndicator('threeoutside').copy()
             it = iter(a)
             c['timestamp'] = HelpfulOperators.cleaner(next(it))
             c['open'] = HelpfulOperators.cleaner(next(it))
@@ -119,7 +117,7 @@ class DBoperations:
 
     # writes indicator data using TAAPIO api to POSTGRESQL server
     def writeIndicatorData(self, candleSize: str, pair: str, indicator: str, candles: list):
-        ts = candles[len(candles)-1]['timestamp']
+        ts = candles[len(candles) - 1]['timestamp']
 
         if candles is None:
             raise TypeError("wrong parameters supplied into getCandleData()")
@@ -203,14 +201,14 @@ class DBoperations:
 
             if limit is not None:
                 self.cur.execute(
-                "SELECT * FROM {}_OHLCV_{} ORDER BY timestamp DESC LIMIT {};".format(pair.replace("/", ""),
-                                                                                     candleSize,
-                                                                                     limit))
+                    "SELECT * FROM {}_OHLCV_{} ORDER BY timestamp DESC LIMIT {};".format(pair.replace("/", ""),
+                                                                                         candleSize,
+                                                                                         limit))
             else:
                 self.cur.execute(
                     "SELECT * FROM {}_OHLCV_{} ORDER BY timestamp DESC;".format(pair.replace("/", ""),
-                                                                                         candleSize,
-                                                                                         ))
+                                                                                candleSize,
+                                                                                ))
 
             self.conn.commit()
             return HelpfulOperators.convertCandlesToDict(self.cur.fetchall())
@@ -242,6 +240,34 @@ class DBoperations:
 
             raise e
 
+    # Returns candles fetched from an exchange
+    def fetchCandleData(self, api: ccxt.Exchange, pair: str, candleSize: str, *args: (int, None)):
+        if len(args) == 0:
+            candles = api.fetchOHLCV(pair, candleSize)
+
+        else:
+            if type(args[0]) == int:
+                candles = api.fetchOHLCV(pair, candleSize, limit=args[0])
+
+            else:
+                candle = api.parse8601(dateFormat(args[0]))
+                candles = api.fetchOHLCV(pair, candleSize, candle)
+        return candles
+
+
+    def getCandleInsertQuery(self, candle: dict, marketPair, candleSize: str) -> str:
+        ts = HelpfulOperators.convertNumericTimeToString(candle['timestamp'])
+        return f"INSERT INTO {marketPair}_OHLCV_{candleSize}" \
+               f"(timestamp, open, high, low, close, volume) VALUES " \
+               f"(\'{ts}\', \'{candle['open']}\', \'{candle['high']}\', \'{candle['low']}\', \'{candle['close']}\', \'{candle['volume']}\');"
+
+    # Generates create table query
+    def getCreateCandleTableQuery(self, low, high, marketPair: str, candleSize: str):
+        lowHigh = f'{low}, {high}'
+        return f"CREATE TABLE {marketPair}_OHLCV_{candleSize}(timestamp VARCHAR PRIMARY KEY NOT NULL, " \
+               f"open DECIMAL({lowHigh}), high  DECIMAL({lowHigh}), low DECIMAL({lowHigh}), " \
+               f"close DECIMAL({lowHigh}), volume numeric(10));"
+
     # gets OHLCV candle data from CCXT_BINANCE and writes data to POSTGRESQL server table
 
     '''
@@ -251,27 +277,16 @@ class DBoperations:
     timestamp format EX--> "2020-01-01"
     '''
 
-    #TODO ADD CATCH FOR WHEN DECIMAL VALUES OF CANDLE FLOAT DATA CHANGES
+    # TODO ADD CATCH FOR WHEN DECIMAL VALUES OF CANDLE FLOAT DATA CHANGES
 
     def writeCandlesFromCCXT(self, candleSize: str, pair: str, *args: (int, None)) -> (None, Exception):
         api = ccxt.binance()
 
         assert len(args) == 0 or len(args) == 1
 
-
         try:
 
-            if len(args) == 0:
-                candles = api.fetchOHLCV(pair, candleSize)
-
-            else:
-                if type(args[0]) == int:
-                    candles = api.fetchOHLCV(pair, candleSize, limit=args[0])
-
-                else:
-                    candle = api.parse8601(dateFormat(args[0]))
-                    candles = api.fetchOHLCV(pair, candleSize, candle)
-
+            candles = self.fetchCandleData(api, pair, candleSize, args)
 
             candles = HelpfulOperators.convertCandlesToDict(candles)
 
@@ -295,7 +310,7 @@ class DBoperations:
             raise e
 
         marketPair = pair.replace('/', '')
-        last = candles[len(candles)-1]
+        last = candles[len(candles) - 1]
         for candle in candles:
             print("Cleaning candle with val: ", low)
             candle = HelpfulOperators.cleanCandle(candle, low)
@@ -304,16 +319,9 @@ class DBoperations:
             #    last = candle
             ts = HelpfulOperators.convertNumericTimeToString(candle['timestamp'])
             try:
-                print(
-                    "INSERT INTO {}_OHLCV_{}(timestamp, open, high, low, close, volume) VALUES (\'{}\', \'{}\', \'{}\', \'{}\', \'{}\', \'{}\');".format(
-                        marketPair, candleSize, ts,
-                        candle['open'],
-                        candle['high'], candle['low'], candle['close'], candle['volume']))
-                self.cur.execute(
-                    "INSERT INTO {}_OHLCV_{}(timestamp, open, high, low, close, volume) VALUES (\'{}\', \'{}\', \'{}\', \'{}\', \'{}\', \'{}\');".format(
-                        marketPair, candleSize, HelpfulOperators.convertNumericTimeToString(candle['timestamp']),
-                        candle['open'],
-                        candle['high'], candle['low'], candle['close'], candle['volume']))
+                insertQuery = self.getCandleInsertQuery(candle, marketPair, candleSize)
+                print("[info] CANDLE INSERT QUERY: ", insertQuery)
+                self.cur.execute(insertQuery)
 
             except Exception as e:
                 print(e)
@@ -326,12 +334,10 @@ class DBoperations:
                     self.conn.rollback()
                     print("table not found... CREATING NEW ONE TO FORMAT DATA")
 
-                    print(
-                        "CREATE TABLE {}_OHLCV_{}(timestamp VARCHAR PRIMARY KEY NOT NULL, open DECIMAL({}, {}), high  DECIMAL({}, {}), low  DECIMAL({}, {}), close  DECIMAL({}, {}), volume numeric(10));".format(
-                            marketPair, candleSize, low, high, low, high, low, high, low, high))
-                    self.cur.execute(
-                        "CREATE TABLE {}_OHLCV_{}(timestamp VARCHAR PRIMARY KEY NOT NULL, open DECIMAL({}, {}), high  DECIMAL({}, {}), low  DECIMAL({}, {}), close  DECIMAL({}, {}), volume numeric(10));".format(
-                            marketPair, candleSize, low, high, low, high, low, high, low, high))
+                    createTableQuery = self.getCreateCandleTableQuery(low, high, marketPair, candleSize)
+
+                    print("CREATE TABLE: ", createTableQuery)
+                    self.cur.execute(createTableQuery)
                     print("CREATED TABLE  \n\n")
                     self.commit()
                     self.writeCandlesFromCCXT(candleSize, pair, args)
@@ -339,15 +345,11 @@ class DBoperations:
 
                 elif type(e) == psycopg2.errors.NumericValueOutOfRange:
 
-                    print(
-                        f"SELECT HIGH, LOW FROM BOUNDTABLE WHERE SYMBOL = '{marketPair}'"
-                    )
+                    print(f"SELECT HIGH, LOW FROM BOUNDTABLE WHERE SYMBOL = '{marketPair}'")
 
                     self.conn.rollback()
 
-                    self.cur.execute(
-                        f"SELECT HIGH, LOW FROM BOUNDTABLE WHERE SYMBOL = '{marketPair}'"
-                    )
+                    self.cur.execute(f"SELECT HIGH, LOW FROM BOUNDTABLE WHERE SYMBOL = '{marketPair}'")
 
                     bounds = self.cur.fetchall()
 
@@ -363,12 +365,12 @@ class DBoperations:
 
             self.commit()
 
-        if len(args) != 0 and str(args[0]) != dateFormat(HelpfulOperators.convertNumericTimeToString(last['timestamp'])) and type(args[0]) != int:
+        if len(args) != 0 and str(args[0]) != dateFormat(
+                HelpfulOperators.convertNumericTimeToString(last['timestamp'])) and type(args[0]) != int:
             print(f"{args[0]} ---> {last}")
             print("Writing for : ", dateFormat(HelpfulOperators.convertNumericTimeToString(last['timestamp'])))
-            self.writeCandlesFromCCXT(candleSize, pair, dateFormat(HelpfulOperators.convertNumericTimeToString(last['timestamp'])))
-
-
+            self.writeCandlesFromCCXT(candleSize, pair,
+                                      dateFormat(HelpfulOperators.convertNumericTimeToString(last['timestamp'])))
 
     '''
     #writes macroeconomic metric data from CoinCapAPI to postgresql server
@@ -455,5 +457,3 @@ class DBoperations:
 #
 # x.writeCandlesFromCCXT("15m", "BTC/USDT", '2020-01-01')
 #
-
-
