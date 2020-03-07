@@ -10,9 +10,9 @@ jobs:
     steps:
       - checkout
       - heroku/install
-      - run:
-          name: Installing requirements
-          command: "pip install -r requirements.txt"
+      - python/load-cache
+      - python/install-deps
+      - python/save-cache
       - run:
           name: "Running unit tests"
           command: "python -m unittest test/*.py -v"
@@ -23,9 +23,9 @@ jobs:
     steps:
       - checkout
       - heroku/install
-      - run:
-          name: Installing requirements
-          command: "pip install -r requirements.txt"
+      - python/load-cache
+      - python/install-deps
+      - python/save-cache
       - run:
           name: "Running unit tests"
           command: "python -m unittest test/*.py -v"
