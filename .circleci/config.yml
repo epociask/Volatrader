@@ -16,6 +16,7 @@ jobs:
       - python/load-cache
       - python/install-deps
       - python/save-cache
+      -
       - run:
           name: "Running unit tests"
           command: "python -m unittest test/*.py -v"

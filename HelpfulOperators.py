@@ -46,7 +46,7 @@ def convertNumericTimeToString(numeric: (float, int, str)) -> (str, Exception):
     except Exception as e:
         raise e
 
-    return date.strftime('%Y-%m-%d %H:%M:%S')
+    return date.astimezone(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
 
 
 cleanBounds = lambda bounds: bounds.replace("(", "").replace(")", "").replace(",", "").replace("[", "").replace("]", "") #cleans bounds to be parsed easier
