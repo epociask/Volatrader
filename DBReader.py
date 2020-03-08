@@ -35,8 +35,8 @@ class DBReader(DBoperations):
 
     def fetchIndicatorData(self, pair, candleSize, indicator, limit):
         try:
-            indicator = HelpfulOperators.getIndicatorName(indicator)
-            self.cur.execute(f'SELECT * FROM {indicator}_{pair.value.replace("/", "")}_{candleSize.value} ORDER BY timestamp{indicator} DESC LIMIT {limit};')
+
+            self.cur.execute(f'SELECT * FROM {indicator}_{pair.value.replace("/", "")}_{candleSize.value} ORDER BY timestamp DESC LIMIT {limit};')
             return self.cur.fetchall()
 
         except Exception as e:
@@ -103,3 +103,6 @@ class DBReader(DBoperations):
             l.append(d)
 
         return l
+
+
+

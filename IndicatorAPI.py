@@ -1,5 +1,4 @@
 import requests
-import time
 
 def getIndicator(indicatorName: str, candleJSON):
     endpoint = "https://ta.taapi.io/{}".format(indicatorName)
@@ -29,5 +28,4 @@ def getIndicator(indicatorName: str, candleJSON):
         print(resp.headers)
         print(resp.content)
         raise Exception(resp.status_code + " " + resp.headers)
-
 
