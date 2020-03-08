@@ -445,7 +445,7 @@ class DBoperations:
         self.commit()
 
 
-x = DBoperations()
-x.connect()
-
-x.writeCandlesFromCCXT(Candle.HOUR, Pair.ETHUSDT, "2020-01-01 00:00:00")
+# x = DBoperations()
+# x.connect()
+#
+# x.writeCandlesFromCCXT(Candle.HOUR, Pair.ETHUSDT, "2020-01-01 00:00:00")
