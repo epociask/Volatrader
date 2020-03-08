@@ -1,4 +1,4 @@
-SIMPLE_BUY_STRAT_INDICATORS = ['threeoutside', 'rsi', 'invertedhammer']
+SIMPLE_BUY_STRAT_INDICATORS = ['threeoutside', 'invertedhammer']
 
 
 

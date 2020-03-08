@@ -123,7 +123,7 @@ class DBwriter(DBoperations):
     '''
     @param candleSize --> timelength of candle
     @param pair --> Trading pair
-    @param args --> *optional ---> either limit of how many recent candles OR timestamp of data to get candles starting from  
+    @param args --> *optional ---> either limit of how many recent candles OR timestamp of data to get candles starting from
     timestamp format EX--> "2020-01-01"
     '''
 
@@ -295,4 +295,3 @@ class DBwriter(DBoperations):
 
         except Exception as e:
             print("ERROR: ", e)
-

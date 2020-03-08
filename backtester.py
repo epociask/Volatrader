@@ -10,10 +10,10 @@ x = DBReader()
 
 '''
 main backtest function
-@param pair -> pair you wish to run backtest on 
+@param pair -> pair you wish to run backtest on
 @param candleSize -> size of candle you wish to use
-@param strategy -> Buying strategy that you wish to implement 
-@param Stop-Loss percent 
+@param strategy -> Buying strategy that you wish to implement
+@param Stop-Loss percent
 @Param Take profit percent -> percent gain from buy-price at which you wish to sell
 '''
 
