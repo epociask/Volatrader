@@ -1,13 +1,12 @@
 from datetime import datetime
 from HelpfulOperators import rewind
-from DBoperations import *
+from DBReader import *
 from Session import Session
 import strategies
 from termcolor import colored
 from Enums import *
 
-x = DBoperations()
-x.connect()
+x = DBReader()
 
 '''
 main backtest function
@@ -18,12 +17,13 @@ main backtest function
 @Param Take profit percent -> percent gain from buy-price at which you wish to sell
 '''
 
-
 # TODO add optional start time for args parameter
 def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProfitPercent, principle, *args):
     assert len(args) == 0 or len(args) == 1
     assert stopLossPercent in range(1, 100)
     assert takeProfitPercent in range(1, 100)
+    assert type(pair) is Pair
+    assert(type(candleSize)) is Candle
 
     takeProfitPercent = f"0{takeProfitPercent}" if takeProfitPercent - 10 <= 0 else f"{takeProfitPercent}"
 
@@ -49,12 +49,12 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
 
 
     endingPrice = float(principle + float(principle * (test.getTotalPL()*.01)))
-    endVal = colored("\t\tEnding Price: ", attrs=['bold']) + (colored(str(endingPrice), "blue") if float(endingPrice) > float(principle) else colored(str(endingPrice), "red"))
+    endVal = colored("\t\tEnding Price: ", attrs=['bold']) + "$" + (colored(str(endingPrice), "blue") if float(endingPrice) > float(principle) else colored(str(endingPrice), "red"))
 
     gainCount, lossCount = test.getTradeData()
 
     print(
-        colored("\t\t Starting Principle Amount: ", attrs=['bold']) + str(principle) + "\n" +
+        colored("\t\t Starting Principle Amount: $", attrs=['bold']) + str(principle) + "\n" +
         endVal +
         "\n\t\t" + colored("Total Profit Loss: ", attrs=['bold']) + (
             colored(f"+%{str(test.getTotalPL())}", "green", attrs=['underline']) if test.getTotalPL() > 0 else colored(
@@ -73,4 +73,4 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
         attrs=['bold']))
 
 
-backTest(Pair.ETHUSDT, Candle.FIFTEEEN, "SIMPLE_BUY_STRAT", 1, 2, 10000, Time.THREEMONTH)
+backTest(Pair.ETHUSDT, Candle.FIFTEEEN, "SIMPLE_BUY_STRAT", 2, 4, 10000, Time.MONTH)
