@@ -39,18 +39,19 @@ def rewind(timeStamp: str, limit: int, timeStep: int):
     return int(datetime.datetime.timestamp(datetime.datetime.strptime(timeStamp, '%Y-%m-%d %H:%M:%S')) * 1000) - (
             limit * 6 * timeStep * 10000)
 
+'''
+converts numeric timestamp type to string
+@returns Exception if error
+@returns string timestamp
+'''
+def convertNumericTimeToString(numeric: (float, int, str)) -> (str, Exception):
+    try:
+        date = datetime.datetime.fromtimestamp(numeric / 1e3)
 
-# converts numeric timestamp type to string
-# @returns Exception if error
-# @returns string timestamp
-# def convertNumericTimeToString(numeric: (float, int, str)) -> (str, Exception):
-#     try:
-#         date = datetime.datetime.fromtimestamp(numeric / 1e3)
-#
-#     except Exception as e:
-#         raise e
-#
-#     return date.strftime('%Y-%m-%d %H:%M:%S')
+    except Exception as e:
+        raise e
+
+    return date.strftime('%Y-%m-%d %H:%M:%S')
 
 
 # TODO FUNCTION IS PROBABLY UNECESSARY.. TEST TO MAKE SURE

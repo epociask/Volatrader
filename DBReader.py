@@ -3,13 +3,12 @@ import HelpfulOperators
 from DBoperations import DBoperations
 import IndicatorConstants
 import QueryHelpers
-import ccxt
 
 class DBReader(DBoperations):
 
     def __init__(self):
         super().__init__()
-        self.connect()
+        super().connect()
 
     # returns candle data as dict from psql server
     def getTableData(self, candleSize: str, pair: str, args: list):
@@ -23,15 +22,6 @@ class DBReader(DBoperations):
             print("ERROR : ", e)
             return None
 
-    # returns candle data as dict from psql server
-    def getCandleDataDescFromDB(self, candleSize: Candle, pair: Pair, limit=None):
-        try:
-            self.conn.commit()
-            return HelpfulOperators.convertCandlesToDict(self.cur.fetchall())
-
-        except Exception as e:
-            print("ERROR : ", e)
-            return None
 
     def fetchIndicatorData(self, pair, candleSize, indicator, limit):
         try:
@@ -63,7 +53,6 @@ class DBReader(DBoperations):
             query = f + " SELECT * FROM mytable ORDER BY timestamp ASC;"
 
         else:
-            assert type(args[0]) == str
             query = f + f"SELECT * FROM mytable WHERE timestamp >= \'{args[0]}\' ORDER BY timestamp ASC;"
         print("Query ::::::: ", query)
 

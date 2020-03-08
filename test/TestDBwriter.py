@@ -12,10 +12,17 @@ class TestDBwriter(unittest.TestCase):
             self.fail(f"testWriteCandleData raised ExceptionType {e} unexpectedly!")
 
 
-    # def testwriteStaticMarketData(self):
-    #
-    #     try:
-    #         writer.writeStaticMarketData()
-    #
-    #     except Exception as e:
-    #         self.fail(f"writeStaticMarketData raised ExceptionType {e} unexpectedly!")
+
+    def testWriteCandleDataWithLimit(self):
+        try:
+            writer.writeCandleData(Candle.HOUR, Pair.XRPUSDT, 200)
+        except Exception as e:
+            self.fail(f"testWriteCandleData raised ExceptionType {e} unexpectedly!")
+
+
+    def testWriteCandleDataWithTS(self):
+        try:
+            writer.writeCandleData(Candle.HOUR, Pair.XRPUSDT, 200)
+        except Exception as e:
+            self.fail(f"testWriteCandleData raised ExceptionType {e} unexpectedly!")
+

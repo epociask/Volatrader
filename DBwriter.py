@@ -68,25 +68,26 @@ class DBwriter(DBoperations):
             print(f"{candle['timestamp']}-------------------->>")
 
             try:
-                self.conn.writeIndicatorData(candleSize, pair, indicator, candles[:300])
-
+                candles.reverse()
+                self.writeIndicatorData(candleSize, pair, indicator, candles[0:300])
+                candles.reverse()
             except Exception as e:
                 raise (e)
                 # print("Reached end of possible calculating range")
                 return
-            candles.pop(0)
-
-    # writes indicator data using TAAPIO api to POSTGRESQL server
-
+            candles.pop(-1)
+    '''
+    writes indicator data using TAAPIO api to POSTGRESQL server
+    '''
     def writeIndicatorData(self, candleSize: Candle, pair: Pair, indicator: Indicator, candles: list):
-        ts = str(candles[0]['timestamp'])
-        print("TIMESTAMP", ts)
+        ts = str(candles[-1]['timestamp'])
+        # print("TIMESTAMP", ts)
         if candles is None:
             raise TypeError("wrong parameters supplied into getCandleData()")
-        candles.reverse()
+        # print("Inserting candldes ::: ", candles)
+        # print(len(candles))
         try:
             indicatorValues = IndicatorAPI.getIndicator(indicator.value, candles).copy()
-            candles.reverse()
             print("INDICATOR VALUE", indicatorValues)
 
             if indicatorValues is None:
@@ -295,3 +296,7 @@ class DBwriter(DBoperations):
 
         except Exception as e:
             print("ERROR: ", e)
+
+
+# writer = DBwriter()
+# writer.writeIndicatorForTable(Candle.FIFTEEEN, Pair.ETHUSDT, Indicator.CONCEALBABYSWALL)
