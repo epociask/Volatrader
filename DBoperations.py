@@ -270,6 +270,7 @@ class DBoperations:
     # Generates create table query
     def getCreateCandleTableQuery(self, low, high, marketPair: str, candleSize: str) -> str:
         lowHigh = f'{low}, {high}'
+
         return f"CREATE TABLE {marketPair}_OHLCV_{candleSize}(timestamp TIMESTAMP PRIMARY KEY NOT NULL, " \
                f"open DECIMAL({lowHigh}), high  DECIMAL({lowHigh}), low DECIMAL({lowHigh}), " \
                f"close DECIMAL({lowHigh}), volume numeric(10));"
@@ -305,6 +306,7 @@ class DBoperations:
         last = candles[len(candles) - 1]
         for candle in candles:
             ts = candle['timestamp']
+            print(ts)
             try:
                 insertQuery = self.getCandleInsertQuery(candle, pair.value, candleSize.value)
                 print("[info] CANDLE INSERT QUERY: ", insertQuery)
@@ -446,4 +448,4 @@ class DBoperations:
 x = DBoperations()
 x.connect()
 
-x.writeCandlesFromCCXT(Candle.HOUR, Pair.ETHUSDT, 5)
+x.writeCandlesFromCCXT(Candle.HOUR, Pair.ETHUSDT, "2020-01-01 00:00:00")
