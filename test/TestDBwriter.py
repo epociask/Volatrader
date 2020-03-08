@@ -26,10 +26,3 @@ class TestDBwriter(unittest.TestCase):
         except Exception as e:
             self.fail(f"testWriteCandleData raised ExceptionType {e} unexpectedly!")
 
-    def testwriteStaticMarketData(self):
-
-        try:
-            writer.writeStaticMarketData()
-
-        except Exception as e:
-            self.fail(f"writeStaticMarketData raised ExceptionType {e} unexpectedly!")

@@ -1,4 +1,8 @@
 import psycopg2
+
+import HelpfulOperators
+import QueryHelpers
+from Enums import Candle, Pair
 from config import config
 
 class DBoperations:
@@ -41,3 +45,17 @@ class DBoperations:
     def ensureConnection(self):
         if self.connStatus() is None:
             self.connect()
+
+    '''
+    returns candle data as dict from psql server
+    '''
+    def getCandleDataDescFromDB(self, candleSize: Candle, pair: Pair, limit=None):
+        try:
+            self.cur.execute(QueryHelpers.getCandlesFromDBQuery(pair, candleSize, limit))
+            return HelpfulOperators.convertCandlesToDict(self.cur.fetchall())
+
+        except Exception as e:
+            print("ERROR : ", e)
+            raise e
+
+

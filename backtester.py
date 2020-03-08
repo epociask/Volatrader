@@ -1,7 +1,7 @@
 from datetime import datetime
 from HelpfulOperators import rewind
 from DBReader import *
-from BacktestSession import Session
+from BackTesterSession import Session
 import strategies
 from termcolor import colored
 from Enums import *

@@ -50,3 +50,6 @@ def getCandlesFromDBQuery(pair: Pair, candleSize: Candle, limit):
 def getIndicatorDataQuery(pair, candleSize, indicator, limit):
     return f"SELECT * FROM {indicator.value}_{pair.value.replace('/','')}_{candleSize.value} ORDER BY timestamp " \
            f"DESC LIMIT {limit};"
+
+
+print(getCandlesFromDBQuery(Pair.ETHUSDT, Candle.FIFTEEEN, 20))
