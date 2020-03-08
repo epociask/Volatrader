@@ -33,11 +33,11 @@ jobs:
       - python/install-deps
       - python/save-cache
       - run:
-          name: "Running unit tests"
-          command: "python -m unittest test/*.py -v"
-      - run:
           name: "Creating DB config"
           command: "sh create_db.sh"
+      - run:
+          name: "Running unit tests"
+          command: "python -m unittest test/*.py -v"
       - heroku/deploy-via-git
 
 workflows:
