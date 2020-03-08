@@ -1,6 +1,6 @@
 import unittest
 
-from HelpfulOperators import rewind, makeEqualities
+from HelpfulOperators import rewind, makeEqualities, getLowHighBounds
 
 class TestHelpfulOperators(unittest.TestCase):
 
@@ -22,7 +22,7 @@ class TestHelpfulOperators(unittest.TestCase):
         expectedLow = 3
         expectedHigh = 2
 
-        low, high = HelpfulOperators.getLowHighBounds(candles)
+        low, high = getLowHighBounds(candles)
 
         self.assertEqual(low, expectedLow)
         self.assertEqual(high, expectedHigh)
