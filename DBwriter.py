@@ -1,4 +1,7 @@
 import datetime
+import time
+from Enums import *
+from multiprocessing.pool import Pool
 
 from CMC_api import getMarketData, getMacroEconomicData
 from DBoperations import DBoperations
@@ -9,12 +12,13 @@ connection = DBoperations()
 connection.connect()
 
 
-#ensures connection is still bounded
+# ensures connection is still bounded
 def ensureConnection():
     if connection.connStatus() is None:
         connection.connect()
 
-#writes dynamicmarketdata from CMC to POSTGRESQL server
+
+# writes dynamicmarketdata from CMC to POSTGRESQL server
 def writeDynamicMarketMacroData():
     st = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
     print(st)
@@ -26,15 +30,16 @@ def writeDynamicMarketMacroData():
     for coin in dataDict:
         connection.writeDynamicMarketDataQuerys(coin, st)
 
-#writes staticmarketdata from CMC to POSTGRESQL server
+
+# writes staticmarketdata from CMC to POSTGRESQL server
 def writeStaticMarketData():
     dataDict = getMarketData()
     for coin in dataDict:
         connection.writeStaticMarketDataQuerys(coin)
 
-#writes candle data from CCXT to POSTGRESQL server
-def writeCandleData(timeFrame: str, pair: str, *args):
 
+# writes candle data from CCXT to POSTGRESQL server
+def writeCandleData(timeFrame: str, pair: str, *args):
     if len(args) == 0:
         connection.writeCandlesFromCCXT(timeFrame, pair)
 
@@ -45,15 +50,15 @@ def writeCandleData(timeFrame: str, pair: str, *args):
         print("too many arguments supplied to")
 
 
-
 #
 # #writes IndicatorData using indicatorAPI to POSTGRESQL server
 # def writeIndicatorData(timeFrame: str, pair: str, indicator: str, lim : int):
 #
 #    connection.writeIndicatorData(timeFrame, pair, indicator, lim)
 
-#TODO make timeframe an enum
-def writeIndicatorForTable(timeFrame: str, pair: str, indicator: str, *args):
+# TODO make timeframe an enum
+# TODO additional args to to be date
+def writeIndicatorForTable(candleSize: str, pair: str, indicator: str, *args):
 
     assert len(args) == 0 or len(args) == 1
 
@@ -61,22 +66,42 @@ def writeIndicatorForTable(timeFrame: str, pair: str, indicator: str, *args):
         assert type(args[0]) == int
 
     if len(args) == 0:
-        candles = connection.getCandleDataDescFromDB(timeFrame, pair, None)
+        candles = connection.getCandleDataDescFromDB(candleSize, pair, None)
 
     else:
-        candles = connection.getCandleDataDescFromDB(timeFrame, pair, args[0])
+        candles = connection.getCandleDataDescFromDB(candleSize, pair, args[0])
+
+    print(candles)
+    print(candles[0])
     for candle in candles:
-        end = HelpfulOperators.rewind(candle['timestamp'], 300, 15)
-        #print(f"{candle['timestamp']} ---> {end}")
-        cs = connection.getCandleDataFromTimeRange(candle['timestamp'], end, pair, timeFrame)
-        #print(cs)
-        connection.writeIndicatorData(timeFrame, pair, indicator, cs)
+        print(f"{candle['timestamp']}-------------------->>")
 
-# writeCandleData("1h", 'ETH/USDT', '2020-02-15')
-# p1 = threading.Thread(target=writeIndicatorForTable, args=('15m', 'ETH/USDT', '3outside',))
-# p2 = threading.Thread(target=writeIndicatorForTable, args=('1h', 'ETH/USDT', '3outside',))
-# # #
-# p1.start()
-# p2.start()
+        try:
+            connection.writeIndicatorData(candleSize, pair, indicator, candles[:300])
 
-writeIndicatorForTable('15m', 'ETH/USDT', 'macd')
+        except Exception as e:
+            print("Reached end of possible calculating range")
+            return
+        candles.pop(0)
+
+
+
+
+
+# p1 = threading.Thread(target= writeIndicatorForTable, args = (Candle.FIFTEEEN, Pair.ETHUSDT, 'abandonedbaby',))
+# p2 = threading.Thread(target= writeIndicatorForTable, args = (Candle.FIFTEEEN, Pair.ETHUSDT, 'advanceblock',))
+# # p3 = threading.Thread(target= writeIndicatorForTable, args = (Candle.FIFTEEEN, Pair.ETHUSDT, 'belthold',))
+# # p4 = threading.Thread(target= writeIndicatorForTable, args = (Candle.FIFTEEEN, Pair.ETHUSDT, 'breakaway',))
+#
+# if __name__ == '__main__':
+#     p1.start()
+#     time.sleep(2)
+#     p2.start()
+#     time.sleep(2)
+#     p3.start()
+#     time.sleep(2)
+#     p4.start()
+#     p1.join()
+#     p2.join()
+#     p3.join()
+#     p4.join()
