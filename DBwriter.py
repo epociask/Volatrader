@@ -8,16 +8,14 @@ import QueryHelpers
 import IndicatorAPI
 import HelpfulOperators
 import ccxt
-from DBReader import DBReader
 class DBwriter(DBoperations):
 
     def __init__(self):
         super().__init__()
         self.connect()
 
-    '''
-    writes dynamicmarketdata from CMC to POSTGRESQL server
-    '''
+
+    # writes dynamicmarketdata from CMC to POSTGRESQL server
     def writeDynamicMarketMacroData(self):
         st = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
         print(st)
@@ -28,20 +26,16 @@ class DBwriter(DBoperations):
         print("Inserting dynamic market data ;-)")
         for coin in dataDict:
             self.conn.writeDynamicMarketDataQuerys(coin, st)
-    '''
-    writes staticmarketdata from CMC to POSTGRESQL server
-    '''
+
+    # writes staticmarketdata from CMC to POSTGRESQL server
     def writeStaticMarketData(self):
         dataDict = getMarketData()
         for coin in dataDict:
             self.writeStaticMarketDataQuerys(coin)
 
-    '''
-    writes candle data from CCXT to POSTGRESQL server
-    '''
+    # writes candle data from CCXT to POSTGRESQL server
     def writeCandleData(self, candleSize: Candle, pair: Pair, *args):
         if len(args) == 0:
-            print("writing candle data")
             self.writeCandlesFromCCXT(candleSize, pair)
 
         elif len(args) == 1:
@@ -50,15 +44,18 @@ class DBwriter(DBoperations):
         else:
             print("too many arguments supplied to")
 
-    '''
-    writes IndicatorData using indicatorAPI to POSTGRESQL server
-    '''
+    #
+    # #writes IndicatorData using indicatorAPI to POSTGRESQL server
+    # def writeIndicatorData(timeFrame: str, pair: str, indicator: str, lim : int):
+    #
+    #    self.conn.writeIndicatorData(timeFrame, pair, indicator, lim)
+
     def writeIndicatorForTable(self, candleSize: Candle, pair: Pair, indicator: str, *args):
 
         assert len(args) == 0 or len(args) == 1
 
         if len(args) == 1:
-            assert type(args[0]) == int or type(args[0]) == str
+            assert type(args[0]) == int
 
         if len(args) == 0:
             candles = self.getCandleDataDescFromDB(candleSize, pair, None)
@@ -66,13 +63,17 @@ class DBwriter(DBoperations):
         else:
             candles = self.getCandleDataDescFromDB(candleSize, pair, args[0])
 
+        print(candles)
         for candle in candles:
+            print(f"{candle['timestamp']}-------------------->>")
+
             try:
-                self.writeIndicatorData(candleSize, pair, indicator, candles[:300])
+                self.conn.writeIndicatorData(candleSize, pair, indicator, candles[:300])
 
             except Exception as e:
                 raise (e)
                 # print("Reached end of possible calculating range")
+                return
             candles.pop(0)
 
     # writes indicator data using TAAPIO api to POSTGRESQL server
@@ -84,7 +85,6 @@ class DBwriter(DBoperations):
             raise TypeError("wrong parameters supplied into getCandleData()")
         candles.reverse()
         try:
-            print("Getting indicator value from API")
             indicatorValues = IndicatorAPI.getIndicator(indicator.value, candles).copy()
             candles.reverse()
             print("INDICATOR VALUE", indicatorValues)
@@ -107,9 +107,9 @@ class DBwriter(DBoperations):
 
             if type(e) == psycopg2.errors.UndefinedTable:
                 self.conn.rollback()
-                print(QueryHelpers.getCreateIndicatorTableQuery(candleSize, pair, indicator, indicatorValues))
+                print(QueryHelpers.makeCreateIndicatorTableQuery(candleSize, pair, indicator, indicatorValues))
                 self.cur.execute(
-                    QueryHelpers.getCreateIndicatorTableQuery(candleSize, pair, indicator, indicatorValues))
+                    QueryHelpers.makeCreateIndicatorTableQuery(candleSize, pair, indicator, indicatorValues))
                 self.conn.commit()
                 self.writeIndicatorData(candleSize, pair, indicator, candles)
 
@@ -123,9 +123,12 @@ class DBwriter(DBoperations):
     '''
     @param candleSize --> timelength of candle
     @param pair --> Trading pair
-    @param args --> *optional ---> either limit of how many recent candles OR timestamp of data to get candles starting from  
+    @param args --> *optional ---> either limit of how many recent candles OR timestamp of data to get candles starting from
     timestamp format EX--> "2020-01-01"
     '''
+
+    # TODO ADD CATCH FOR WHEN DECIMAL VALUES OF CANDLE FLOAT DATA CHANGES
+
     def writeCandlesFromCCXT(self, candleSize: Candle, pair: Pair, *args: (int, None)) -> (None, Exception):
         api = ccxt.binance()
 
@@ -134,11 +137,11 @@ class DBwriter(DBoperations):
         try:
             if len(args) != 0:
                 candles = HelpfulOperators.fetchCandleData(api, pair, candleSize, args)
-            else:
+#def fetchCandleData(api: ccxt.Exchange, pair: Pair, candleSize: Candle, args: (int, None)):
 
+            else:
                 candles = HelpfulOperators.fetchCandleData(api, pair, candleSize, [500])
 
-            print("converting candles to dict")
             candles = HelpfulOperators.convertCandlesToDict(candles)
 
 
@@ -151,7 +154,6 @@ class DBwriter(DBoperations):
             ts = candle['timestamp']
             print(ts)
             try:
-                print(QueryHelpers.getCandleInsertQuery(candle, pair, candleSize))
                 insertQuery = QueryHelpers.getCandleInsertQuery(candle, pair, candleSize)
                 print("[info] CANDLE INSERT QUERY: ", insertQuery)
                 self.cur.execute(insertQuery)
@@ -167,8 +169,13 @@ class DBwriter(DBoperations):
                 elif type(e) == psycopg2.errors.UndefinedTable:  # table not created yet, so lets make it
                     self.conn.rollback()
                     print("table not found... CREATING NEW ONE TO FORMAT DATA")
+                    bounds = self.getBounds(pair, candles)
+                    print("Bounds ,", bounds)
 
-                    low, high = HelpfulOperators.getLowHighBounds(candles)
+                    bounds = HelpfulOperators.cleanBounds(str(bounds))
+                    low = int(bounds[1: 2])
+                    high = int(bounds[2: 3])
+
                     low += high
                     ++high
 
@@ -179,36 +186,37 @@ class DBwriter(DBoperations):
                     self.commit()
                     self.writeCandlesFromCCXT(candleSize, pair, args)
 
-                #
-                # elif type(e) == psycopg2.errors.NumericValueOutOfRange:
-                #
-                #     print(f"SELECT HIGH, LOW FROM BOUNDTABLE WHERE SYMBOL = '{pair}'")
-                #
-                #     self.conn.rollback()
-                #
-                #     self.cur.execute(f"SELECT HIGH, LOW FROM BOUNDTABLE WHERE SYMBOL = '{pair}'")
-                #
-                #     bounds = self.cur.fetchall()
+
+                elif type(e) == psycopg2.errors.NumericValueOutOfRange:
+
+                    print(f"SELECT HIGH, LOW FROM BOUNDTABLE WHERE SYMBOL = '{pair}'")
+
+                    self.conn.rollback()
+
+                    self.cur.execute(f"SELECT HIGH, LOW FROM BOUNDTABLE WHERE SYMBOL = '{pair}'")
+
+                    bounds = self.cur.fetchall()
 
                 else:
-                   raise e
+                    print(type(e))
+                    print(e)
+                    return e
 
             self.commit()
-        if len(args) != 0:
-            if str(args[0]) != HelpfulOperators.dateFormat(
+        print(args[0])
+        if len(args) != 0 and str(args[0]) != HelpfulOperators.dateFormat(
                 HelpfulOperators.convertNumericTimeToString((last['timestamp']))) and type(args[0]) != int:
-                print(f"{args[0]} ---> {HelpfulOperators.dateFormat(HelpfulOperators.convertNumericTimeToString(last['timestamp']))}")
+            print(f"{args[0]} ---> {HelpfulOperators.dateFormat(HelpfulOperators.convertNumericTimeToString(last['timestamp']))}")
 
-                print("Writing for : ", HelpfulOperators.dateFormat(HelpfulOperators.convertNumericTimeToString(last['timestamp'])))
-                self.writeCandlesFromCCXT(candleSize, pair,
+            print("Writing for : ", HelpfulOperators.dateFormat(HelpfulOperators.convertNumericTimeToString(last['timestamp'])))
+            self.writeCandlesFromCCXT(candleSize, pair,
                                       HelpfulOperators.dateFormat(HelpfulOperators.convertNumericTimeToString(last['timestamp'])))
             return
 
         print("Finshed :::: ;)")
 
-    '''
-    writes static market metric data from CoinCapAPI to postgresql server
-    '''
+
+    # writes static market metric data from CoinCapAPI to postgresql server
     def writeStaticMarketDataQuerys(self, coin, timeStamp):
 
         if coin['platform'] is not None:
@@ -232,9 +240,8 @@ class DBwriter(DBoperations):
 
         self.commit()
 
-    ''''
-    writes dynamic metric market data from CoinCapAPI to postgresql server
-    '''
+
+    # writes dynamic metric market data from CoinCapAPI to postgresql server
     def writeDynamicMarketDataQuerys(self, coin, timeStamp):
 
         clean = lambda exp: exp if exp is not None else "0"
@@ -288,4 +295,3 @@ class DBwriter(DBoperations):
 
         except Exception as e:
             print("ERROR: ", e)
-

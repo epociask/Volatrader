@@ -63,7 +63,7 @@ class DBReader(DBoperations):
             query = f + " SELECT * FROM mytable ORDER BY timestamp ASC;"
 
         else:
-            print((args[0]))
+            assert type(args[0]) == str
             query = f + f"SELECT * FROM mytable WHERE timestamp >= \'{args[0]}\' ORDER BY timestamp ASC;"
         print("Query ::::::: ", query)
 
