@@ -1,4 +1,4 @@
-SIMPLE_BUY_STRAT_INDICATORS = ['threeoutside']
+SIMPLE_BUY_STRAT_INDICATORS = ['threeoutside', 'rsi', 'invertedhammer']
 
 
 
@@ -12,9 +12,8 @@ def getStrat(name):
 
 
 def SIMPLE_BUY_STRAT(data):
-    #print("Checking buy start")
-    #print(data['threeoutside']['value'])
-    if data['threeoutside']['value'] == '-100':
+
+    if data['threeoutside']['value'] != '0' or float(data['invertedhammer']['value']) != "0":
         buyPrice = float(data['candle']['close'])
         buyTime = data['candle']['timestamp']
 

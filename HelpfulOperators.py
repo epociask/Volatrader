@@ -25,7 +25,7 @@ def makeEqualities(list):
 def rewind(timeStamp: str, limit: int, timeStep: int):
     return convertNumericTimeToString(
         int(datetime.datetime.timestamp(datetime.datetime.strptime(timeStamp, '%Y-%m-%d %H:%M:%S')) * 1000) - (
-                    limit * 6 * timeStep * 10000))
+                limit * 6 * timeStep * 10000))
 
 
 # takes a timestamp and returns a timestamp from a previous time reference
@@ -46,16 +46,29 @@ def convertNumericTimeToString(numeric: (float, int, str)) -> (str, Exception):
     except Exception as e:
         raise e
 
-    return date.astimezone(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
+    return date.strftime('%Y-%m-%d %H:%M:%S')
 
 
-cleanBounds = lambda bounds: bounds.replace("(", "").replace(")", "").replace(",", "").replace("[", "").replace("]", "") #cleans bounds to be parsed easier
-cleaner = lambda word: word if type(word) != decimal.Decimal else str(word)
+# Helper lambda functions
+
+# <<<<<<< HEAD
 getLow = lambda ticker: str(ticker).find('.')  # used in getLowHighBounds
 getHigh = lambda ticker: (len(str(ticker)[str(ticker).find('.'): len(str(ticker))]))  # used in getLowHighBounds
+cleanBounds = lambda bounds: bounds.replace("(", "").replace(")", "").replace(",", "").replace("[", "").replace("]",
+                                                                                                                "")  # cleans bounds to be parsed easier
+cleaner = lambda word: word if type(word) != decimal.Decimal else str(word)
+# =======
+getLow = lambda ticker: str(ticker).find('.')  # used in getLowHighBounds
+getHigh = lambda ticker: (len(str(ticker)[str(ticker).find('.'): len(str(ticker))]))  # used in getLowHighBounds
+cleanBounds = lambda bounds: bounds.replace("(", "").replace(")", "").replace(",", "").replace("[", "").replace("]",
+                                                                                                                "")  # cleans bounds to be parsed easier
+
+
+# >>>>>>> dfdadf7ad11f96dd442d17433bf86a47e063ddca
 
 
 # TODO FUNCTION IS PROBABLY UNECESSARY.. TEST TO MAKE SURE
+
 def cleanCandle(candle, high):
     for key in candle:
         print(len(str((candle[key]))))
@@ -114,8 +127,3 @@ def convertCandlesToDict(candles: list):
             print("Error", e)
 
     return new
-
-
-# TODO ASSERTION TESTS
-
-print(rewind('2020-02-29 00:15:00', 100, 15))

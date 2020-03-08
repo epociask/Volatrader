@@ -12,8 +12,6 @@ binance = {
     "NAME": 'binance'
 }
 
-## TODO: ADD MODULARITY FOR OTHER EXCHANGES
-
 authList = [binance]
 
 #returns a ccxt instance of a connected exchange

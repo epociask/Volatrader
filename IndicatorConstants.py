@@ -6,12 +6,8 @@ def getIndicator(name):
         return globals()[name]
 
     except Exception:
-        return default
+        return {"value": None}
 
-
-default = {
-    "value": None,
-}
 
 accbands = {
     "valueUpperBand": None,
