@@ -262,16 +262,16 @@ class DBoperations:
             return candles
 
 
-    def getCandleInsertQuery(self, candle: dict, marketPair: str, candleSize: str) -> str:
-        return f"INSERT INTO {marketPair}_OHLCV_{candleSize}" \
+    def getCandleInsertQuery(self, candle: dict, marketPair: Pair, candleSize: Candle) -> str:
+        return f"INSERT INTO {marketPair.value}_OHLCV_{candleSize.value}" \
                f"(timestamp, open, high, low, close, volume) VALUES " \
                f"(\'{candle['timestamp']}\', \'{candle['open']}\', \'{candle['high']}\', \'{candle['low']}\', \'{candle['close']}\', \'{candle['volume']}\');"
 
     # Generates create table query
-    def getCreateCandleTableQuery(self, low, high, marketPair: str, candleSize: str) -> str:
+    def getCreateCandleTableQuery(self, low, high, marketPair: Pair, candleSize: Candle) -> str:
         lowHigh = f'{low}, {high}'
 
-        return f"CREATE TABLE {marketPair}_OHLCV_{candleSize}(timestamp TIMESTAMP PRIMARY KEY NOT NULL, " \
+        return f"CREATE TABLE {marketPair.value}_OHLCV_{candleSize.value}(timestamp TIMESTAMP PRIMARY KEY NOT NULL, " \
                f"open DECIMAL({lowHigh}), high  DECIMAL({lowHigh}), low DECIMAL({lowHigh}), " \
                f"close DECIMAL({lowHigh}), volume numeric(10));"
 
@@ -292,8 +292,12 @@ class DBoperations:
         assert len(args) == 0 or len(args) == 1
 
         try:
+            if len(args) != 0:
+                candles = self.fetchCandleData(api, pair, candleSize, args)
 
-            candles = self.fetchCandleData(api, pair, candleSize, args)
+            else:
+                candles = self.fetchCandleData(api, pair, candleSize, [500])
+
 
             candles = HelpfulOperators.convertCandlesToDict(candles)
 
@@ -308,7 +312,7 @@ class DBoperations:
             ts = candle['timestamp']
             print(ts)
             try:
-                insertQuery = self.getCandleInsertQuery(candle, pair.value, candleSize.value)
+                insertQuery = self.getCandleInsertQuery(candle, pair, candleSize)
                 print("[info] CANDLE INSERT QUERY: ", insertQuery)
                 self.cur.execute(insertQuery)
 
@@ -333,7 +337,7 @@ class DBoperations:
                     low += high
                     ++high
 
-                    createTableQuery = self.getCreateCandleTableQuery(low, high, pair.value, candleSize.value)
+                    createTableQuery = self.getCreateCandleTableQuery(low, high, pair, candleSize)
 
                     print("CREATE TABLE: ", createTableQuery)
                     self.cur.execute(createTableQuery)
