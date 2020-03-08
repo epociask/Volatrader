@@ -27,7 +27,7 @@ class TestDBOperations(unittest.TestCase):
         candle = {'timestamp': 1583535600000, 'open': 239.99, 'high': 240.59, 'low': 239.75, 'close': 240.59, 'volume': 1768.84486 }
         marketPair = Pair.ETHUSDT
         candleSize = Candle.FIFTEEEN
-        expected = "INSERT INTO ETHUSDT_OHLCV_15m(timestamp, open, high, low, close, volume) VALUES ('1583535600000', '239.99', '240.59', '239.75', '240.59', '1768.84486');"
+        expected = "INSERT INTO ETHUSDT_OHLCV_15m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583535600.0), '239.99', '240.59', '239.75', '240.59', '1768.84486');"
         received = dbOperations.getCandleInsertQuery(candle, marketPair, candleSize)
 
         self.assertEqual(expected, received)
