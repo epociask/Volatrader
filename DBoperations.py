@@ -41,5 +41,3 @@ class DBoperations:
     def ensureConnection(self):
         if self.connStatus() is None:
             self.connect()
-
-

@@ -36,30 +36,21 @@ def makeEqualities(lst):
 # X rewind('2020-02-29 00:15:00', 1, 60) --> '2020-02-28 23:15:00'
 
 def rewind(timeStamp: str, limit: int, timeStep: int):
-    return convertNumericTimeToString(
-        int(datetime.datetime.timestamp(datetime.datetime.strptime(timeStamp, '%Y-%m-%d %H:%M:%S')) * 1000) - (
-                limit * 6 * timeStep * 10000))
-
-
-# takes a timestamp and returns a timestamp from a previous time reference
-# EX rewind('2020-02-29 00:15:00', 1, 60) --> '2020-02-28 23:15:00'
-def rewind(timeStamp: str, limit: int, timeStep: int):
-    return convertNumericTimeToString(
-        int(datetime.datetime.timestamp(datetime.datetime.strptime(timeStamp, '%Y-%m-%d %H:%M:%S')) * 1000) - (
-                limit * 6 * timeStep * 10000))
+    return int(datetime.datetime.timestamp(datetime.datetime.strptime(timeStamp, '%Y-%m-%d %H:%M:%S')) * 1000) - (
+            limit * 6 * timeStep * 10000)
 
 
 # converts numeric timestamp type to string
 # @returns Exception if error
 # @returns string timestamp
-def convertNumericTimeToString(numeric: (float, int, str)) -> (str, Exception):
-    try:
-        date = datetime.datetime.fromtimestamp(numeric / 1e3)
-
-    except Exception as e:
-        raise e
-
-    return date.strftime('%Y-%m-%d %H:%M:%S')
+# def convertNumericTimeToString(numeric: (float, int, str)) -> (str, Exception):
+#     try:
+#         date = datetime.datetime.fromtimestamp(numeric / 1e3)
+#
+#     except Exception as e:
+#         raise e
+#
+#     return date.strftime('%Y-%m-%d %H:%M:%S')
 
 
 # TODO FUNCTION IS PROBABLY UNECESSARY.. TEST TO MAKE SURE
