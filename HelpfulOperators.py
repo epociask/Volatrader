@@ -98,14 +98,16 @@ def getLowHighBounds(candles: list) -> (int, int):
     return low, high
 
 
+
+
 # converts list candle data to list of dictionary..... ie list[dict{}]
 def convertCandlesToDict(candles: list):
     assert type(candles) == list
     new = []
     for candle in candles:
-
         it = iter(candle)
-        time = next(it)
+        time = str(next(it))
+        print(time)
         open = cleaner(next(it))
         high = cleaner(next(it))
         low = cleaner(next(it))
@@ -126,4 +128,5 @@ def convertCandlesToDict(candles: list):
         except Exception as e:
             print("Error", e)
 
+    print(new)
     return new

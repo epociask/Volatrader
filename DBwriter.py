@@ -58,7 +58,7 @@ def writeCandleData(timeFrame: str, pair: str, *args):
 
 # TODO make timeframe an enum
 # TODO additional args to to be date
-def writeIndicatorForTable(candleSize: str, pair: str, indicator: str, *args):
+def writeIndicatorForTable(candleSize: Candle, pair: Pair, indicator: str, *args):
 
     assert len(args) == 0 or len(args) == 1
 
@@ -72,7 +72,6 @@ def writeIndicatorForTable(candleSize: str, pair: str, indicator: str, *args):
         candles = connection.getCandleDataDescFromDB(candleSize, pair, args[0])
 
     print(candles)
-    print(candles[0])
     for candle in candles:
         print(f"{candle['timestamp']}-------------------->>")
 
@@ -84,17 +83,14 @@ def writeIndicatorForTable(candleSize: str, pair: str, indicator: str, *args):
             return
         candles.pop(0)
 
-
-
-
-
-# p1 = threading.Thread(target= writeIndicatorForTable, args = (Candle.FIFTEEEN, Pair.ETHUSDT, 'abandonedbaby',))
-# p2 = threading.Thread(target= writeIndicatorForTable, args = (Candle.FIFTEEEN, Pair.ETHUSDT, 'advanceblock',))
-# # p3 = threading.Thread(target= writeIndicatorForTable, args = (Candle.FIFTEEEN, Pair.ETHUSDT, 'belthold',))
-# # p4 = threading.Thread(target= writeIndicatorForTable, args = (Candle.FIFTEEEN, Pair.ETHUSDT, 'breakaway',))
 #
-# if __name__ == '__main__':
-#     p1.start()
+p1 = threading.Thread(target= writeIndicatorForTable, args = (Candle.HOUR, Pair.ETHUSDT, 'abandonedbaby',))
+# # p2 = threading.Thread(target= writeIndicatorForTable, args = (Candle.FIFTEEEN, Pair.ETHUSDT, 'advanceblock',))
+# # # p3 = threading.Thread(target= writeIndicatorForTable, args = (Candle.FIFTEEEN, Pair.ETHUSDT, 'belthold',))
+# # # p4 = threading.Thread(target= writeIndicatorForTable, args = (Candle.FIFTEEEN, Pair.ETHUSDT, 'breakaway',))
+# #
+if __name__ == '__main__':
+    p1.start()
 #     time.sleep(2)
 #     p2.start()
 #     time.sleep(2)

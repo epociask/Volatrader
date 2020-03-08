@@ -74,6 +74,7 @@ class DBoperations:
             raise e
 
         l = []
+        print("Data:::", data)
         for a in data:
             indlist = []
             c = IndicatorConstants.getIndicator('candle').copy()
@@ -126,7 +127,7 @@ class DBoperations:
     # writes indicator data using TAAPIO api to POSTGRESQL server
 
     def writeIndicatorData(self, candleSize: Candle, pair: Pair, indicator: str, candles: list):
-        ts = candles[0]['timestamp']
+        ts = str(candles[0]['timestamp'])
         print("TIMESTAMP", ts)
         if candles is None:
             raise TypeError("wrong parameters supplied into getCandleData()")
@@ -141,6 +142,7 @@ class DBoperations:
                 return
 
         except Exception as e:
+            print(e)
             print(indicatorVal)
         delimeter = ", "
         clean = lambda indicator: indicator if indicator.find("3") == -1 else indicator.replace("3", "three")
@@ -169,7 +171,7 @@ class DBoperations:
             if type(e) == psycopg2.errors.UndefinedTable:
                 self.conn.rollback()
                 delimeter = " VARCHAR, "
-                keys = f"(timestamp{clean(indicator)} VARCHAR PRIMARY KEY NOT NULL, " + (delimeter.join(
+                keys = f"(timestamp{clean(indicator)} TIMESTAMP PRIMARY KEY NOT NULL, " + (delimeter.join(
                     indicatorVal.keys()) if list(indicatorVal.keys())[0] != "value" else f" {clean(indicator)}value") + f" VARCHAR, FOREIGN KEY(timestamp{clean(indicator)}) REFERENCES {pair.value.replace('/', '')}_OHLCV_{candleSize.value}(timestamp))"
                 print('CREATE TABLE ' + clean(indicator) + "_" + pair.value.replace("/",
                                                                               "") + "_" + candleSize.value + "" + keys + ";")
@@ -204,7 +206,6 @@ class DBoperations:
         # returns candle data as dict from psql server
 
     def getCandleDataDescFromDB(self, candleSize: Candle, pair: Pair, limit: int):
-        assert pair.value.find("/") != -1
 
         try:
 
@@ -265,7 +266,7 @@ class DBoperations:
     def getCandleInsertQuery(self, candle: dict, marketPair: Pair, candleSize: Candle) -> str:
         return f"INSERT INTO {marketPair.value}_OHLCV_{candleSize.value}" \
                f"(timestamp, open, high, low, close, volume) VALUES " \
-               f"(\'{candle['timestamp']}\', \'{candle['open']}\', \'{candle['high']}\', \'{candle['low']}\', \'{candle['close']}\', \'{candle['volume']}\');"
+               f"(to_timestamp({candle['timestamp']/1000}), \'{candle['open']}\', \'{candle['high']}\', \'{candle['low']}\', \'{candle['close']}\', \'{candle['volume']}\');"
 
     # Generates create table query
     def getCreateCandleTableQuery(self, low, high, marketPair: Pair, candleSize: Candle) -> str:
@@ -361,14 +362,16 @@ class DBoperations:
                     return e
 
             self.commit()
-
-        if len(args) != 0 and str(args[0]) != dateFormat(last['timestamp']) and type(args[0]) != int:
+        print(args[0])
+        if len(args) != 0 and str(args[0]) != dateFormat(HelpfulOperators.convertNumericTimeToString((last['timestamp']))) and type(args[0]) != int:
             print(f"{args[0]} ---> {dateFormat(HelpfulOperators.convertNumericTimeToString(last['timestamp']))}")
 
             print("Writing for : ", dateFormat(HelpfulOperators.convertNumericTimeToString(last['timestamp'])))
             self.writeCandlesFromCCXT(candleSize, pair,
                                       dateFormat(HelpfulOperators.convertNumericTimeToString(last['timestamp'])))
+            return
 
+        print("Finshed :::: ;)")
     '''
     #writes macroeconomic metric data from CoinCapAPI to postgresql server
     '''
@@ -452,4 +455,4 @@ class DBoperations:
 # x = DBoperations()
 # x.connect()
 #
-# x.writeCandlesFromCCXT(Candle.HOUR, Pair.ETHUSDT, "2020-01-01 00:00:00")
+# x.writeCandlesFromCCXT(Candle.HOUR, Pair.ETHUSDT, "2020-03-01 00:00:00")
