@@ -24,7 +24,7 @@ class TestDBReader(unittest.TestCase):
     def testFetchCandleData(self):
         api = ccxt.binance()
         pair = Pair.ETHUSDT
-        candleSize = Candle.FIFTEEEN
+        candleSize = Candle.FIFTEEEN_MINUTE
 
         received = HelpfulOperators.fetchCandleData(api, pair, candleSize, [15])
         self.assertIsNotNone(received)
@@ -37,7 +37,7 @@ class TestDBReader(unittest.TestCase):
 
     def testFetchCandlesWithIndicators(self):
         pair = Pair.ETHUSDT
-        candleSize = Candle.FIFTEEEN
+        candleSize = Candle.FIFTEEEN_MINUTE
         received = reader.fetchCandlesWithIndicators(pair, candleSize, ['threeoutside'])
         print(received)
         self.assertIsNotNone(received)

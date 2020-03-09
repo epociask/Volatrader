@@ -128,11 +128,11 @@ class DBReader(DBoperations):
 
 
 
-inds = [QueryHelpers.clean2(QueryHelpers.clean100(QueryHelpers.clean3(e.value))) for e in Indicator]
-
-x = datetime.now()
-print(x)
-t = DBReader()
-t.fetchCandlesWithIndicators(Pair.STXUSDT, Candle.FIFTEEEN_MINUTE, inds)
-
-print(datetime.now() - x)
+# inds = [QueryHelpers.clean2(QueryHelpers.clean100(QueryHelpers.clean3(e.value))) for e in Indicator]
+#
+# x = datetime.now()
+# print(x)
+# t = DBReader()
+# t.fetchCandlesWithIndicators(Pair.STXUSDT, Candle.FIFTEEEN_MINUTE, inds)
+#
+# print(datetime.now() - x)
