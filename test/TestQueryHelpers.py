@@ -28,11 +28,11 @@ class TestQueryHelpers(unittest.TestCase):
         pair = Pair.ETHUSDT
         indicator = Indicator.MORNINGSTAR
 
-        expected = "CREATE TABLE morningstar_ETHUSDT_15m (timestampmorningstar VARCHAR PRIMARY KEY NOT NULL,  morningstarvalue VARCHAR, FOREIGN KEY(timestampmorningstar) REFERENCES ETHUSDT_OHLCV_15m(timestamp));"
+        expected = "CREATE TABLE morningstar_ETHUSDT_15m (timestampmorningstar timestamp PRIMARY KEY NOT NULL,  morningstarvalue VARCHAR, FOREIGN KEY(timestampmorningstar) REFERENCES ETHUSDT_OHLCV_15m(timestamp));"
         received = QueryHelpers.getCreateIndicatorTableQuery(candle, pair, indicator, IndicatorConstants.getIndicator(indicator.value))
         self.assertEqual(expected, received)
         indicator = Indicator.STOCHRSI
-        expected = "CREATE TABLE stochrsi_ETHUSDT_15m (timestampstochrsi TIMESTAMP PRIMARY KEY NOT NULL, valuefastK VARCHAR, valueFastD VARCHAR, FOREIGN KEY(timestampstochrsi) REFERENCES ETHUSDT_OHLCV_15m(timestamp));"
+        expected = "CREATE TABLE stochrsi_ETHUSDT_15m (timestampstochrsi timestamp PRIMARY KEY NOT NULL, valuefastK VARCHAR, valueFastD VARCHAR, FOREIGN KEY(timestampstochrsi) REFERENCES ETHUSDT_OHLCV_15m(timestamp));"
         received = QueryHelpers.getCreateIndicatorTableQuery(candle, pair, indicator, IndicatorConstants.getIndicator(indicator.value))
         self.assertEqual(expected, received)
 
