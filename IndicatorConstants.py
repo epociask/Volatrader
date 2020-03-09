@@ -1,5 +1,6 @@
-#Helper script w/ all TAAPIO indicators to be referenced for referencing strats as dictionaries
-
+'''
+Helper script w/ all TAAPIO indicators to be referenced for referencing strats as dictionaries
+'''
 def getIndicator(name):
 
     try:

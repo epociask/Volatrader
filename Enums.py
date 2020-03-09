@@ -1,18 +1,27 @@
 from enum import Enum
 
-class Candle(Enum):
-    ONE = "1m"
-    FIVE = "5m"
-    FIFTEEEN = "15m"
-    THIRTY = '30m'
-    HOUR = '1h'
-    THREEHOUR = "3h"
-    TWELVEHOUR = "12h"
-    DAY = '1d'
-    THREEDAY = '3d'
-    WEEK = '1w'
-    THREWEEK = "3w"
+'''
+Enum to represent all possible candle sizes
+'''
 
+
+class Candle(Enum):
+    ONE_MINUTE = "1m"
+    FIVE_MINUTE = "5m"
+    FIFTEEEN_MINUTE = "15m"
+    THIRTY_MINUTE = '30m'
+    HOUR = '1h'
+    THREE_HOUR = "3h"
+    TWELVE_HOUR = "12h"
+    ONE_DAY = '1d'
+    THREE_DAY = '3d'
+    ONE_WEEK = '1w'
+    THRE_WEEK = "3w"
+
+
+'''
+Enum to represent all base/quote currency pairs 
+'''
 
 
 class Pair(Enum):
@@ -20,8 +29,13 @@ class Pair(Enum):
     BTCUSDT = "BTCUSDT"
     STXUSDT = "STXUSDT"
     XRPUSDT = 'XRPUSDT'
-    ATOMBTC = "ATOMBTC"
+    ATOMBTC = "ATOMUSDT"
     LTCUSDT = 'LTCUSDT'
+
+
+'''
+enum to represent all time instances 
+'''
 
 
 class Time(Enum):
@@ -33,8 +47,14 @@ class Time(Enum):
     TWOMONTH = 1400
     THREEMONTH = 2100
 
+
+'''
+Enum to represent all TAAPIO indicator instances 
+'''
+
+
 class Indicator(Enum):
-    TWOCROW = "2crow"
+    TWOCROW = "2crows"
     THREEBLACKCROWS = '3blackcrows'
     THREEINSIDE = '3inside'
     THREELINESTRIKE = '3linestrike'
@@ -43,7 +63,7 @@ class Indicator(Enum):
     THREEWHITESOLDIERS = '3whitesoldiers'
     ABS = 'abs'
     ACOS = 'acos'
-    ACCBANDS = 'accbands'
+    # ACCBANDS = 'accbands'
     AD = 'ad'
     ADOSC = 'adosc'
     ADVANCEBLOCK = 'advanceblock'
@@ -56,7 +76,7 @@ class Indicator(Enum):
     ASIN = 'asin'
     ATAN = 'atan'
     ATR = 'atr'
-    AVGDEV  = 'avgdev'
+    # AVGDEV  = 'avgdev'                      #required period param
     AVGPRICE = 'avgprice'
     BBANDS = 'bbands'
     BELTHOLD = 'belthold'
@@ -73,28 +93,28 @@ class Indicator(Enum):
     COS = 'cos'
     COSH = 'cosh'
     COUNTERATTACK = 'counterattack'
-    CVI = 'cvi'
+    # CVI = 'cvi'                           #        requires mandatory parameter
     DARKCLOUDCOVER = 'darkcloudcover'
     DEMA = 'dema'
-    DI = 'di'
+    # DI = 'di'                              #          requires mandatory parameter
     DIV = 'div'
-    DM = 'dm'
+    # DM = 'dm'                               #         requires mandatory parameter
     DOJI = 'doji'
     DOJISTAR = 'dojistar'
-    DPO = 'dpo'
+    # DPO = 'dpo'
     DRAGONFLYDOJI = 'dragonflydoji'
     DX = 'dx'
     EMV = 'emv'
     ENGULFING = 'engulfing'
-    EMA = 'ema'
+    # EMA = 'ema'```````             not working atm
     EVENINGDOJISTAR = 'eveningdojistar'
     EVENINGSTAR = 'eveningstar'
     EXP = 'exp'
     FIBONACCIRETRACEMENT = 'fibonacciretracement'
     FISHER = 'fisher'
     FLOOR = 'floor'
-    FOSC = 'fosc'
-    GAPSIDEWHITE = 'gapsidewhite'
+    # FOSC = 'fosc'
+    GAPSIDEWHITE = 'gapsidesidewhite'
     GRAVESTONEDOJI = 'gravestonedoji'
     HARAMI = 'harami'
     HAMMER = 'hammer'
@@ -103,53 +123,53 @@ class Indicator(Enum):
     HIKKAKE = 'hikkake'
     HIGHWAVE = 'highwave'
     HMA = 'hma'
-    HIKKAEMOD = 'hikkaemod'
+    HIKKAE = 'hikkake'
     HOMINGPIGEON = 'homingpigeon'
-    HT_DCPHASE = 'ht_dcphase'
-    HT_PHASOR = 'ht_phasor'
-    HT_SINE = 'ht_sine'
-    HT_TRENDLINE = 'ht_trendline'
+    # HT_DCPHASE = 'ht_dcphase'
+    # HT_PHASOR = 'ht_phasor'
+    #  HT_SINE = 'ht_sine'
+    # HT_TRENDLINE = 'ht_trendline'
     IDENTICALTHREECROWS = 'identical3crows'
-    INVERTEDHAMMER ='invertedhammer'
+    INVERTEDHAMMER = 'invertedhammer'
     INNECK = 'inneck'
     KICKING = 'kicking'
     KAMA = 'kama'
-    KICKINGBYLENGTH = 'kickingbylength'
-    KVO = 'kvo'
-    LADDERBOTTOM = 'ladderbottom'
-    LINEARREG = 'linearreg'
-    LINEARREG_ANGLE = 'linearreg_angle'
-    LINEARREG_SLOP = 'linearreg_slop'
-    LINEARREG_INTERCEPT = 'linearreg_intercept'
-    LINREG = 'linereg'
-    LINREGSLOP = 'lineregslope'
-    LINEREGINTERCEPT = 'lineregintercept'
+    # KICKINGBYLENGTH = 'kickingbylength'
+    # KVO = 'kvo'
+    # LADDERBOTTOM = 'ladderbottom'
+    # LINEARREG = 'linearreg'
+    # LINEARREG_ANGLE = 'linearreg_angle'
+    # LINEARREG_SLOP = 'linearreg_slope'
+    # LINEARREG_INTERCEPT = 'linearreg_intercept'
+    # LINREG = 'linreg'
+    # LINREGSLOP = 'lineregslope'
+    LINEREGINTERCEPT = 'linregintercept'
     LN = 'ln'
     LOG = 'log10'
     LONGLEGGEDDOJI = "longleggeddoji"
     LONGLINE = 'longline'
-    MACDEXT = 'macdext'
-    MACD = 'macd'
+    # MACDEXT = 'macdext'
+    # MACD = 'macd'
     MA = 'ma'
     MAMA = 'mama'
     MACDFIX = 'macdfix'
-    MARKETFI = 'marketfi'
+    # MARKETFI = 'marketfi'
     MARUBOZU = 'marubozu'
     MASS = 'mass'
     MATCHINGLOW = 'matchinglow'
     MATHOLD = 'mathold'
-    MAVP = 'mavp'
+    # MAVP = 'mavp'
     MAX = 'max'
     MIDPOINT = 'midpoint'
     MIDPRICE = 'midprice'
     MIN = 'min'
     MININDEX = 'minindex'
     MINMAX = 'minmax'
-    MINMAXINDEX = 'minmaxindex'
+    # MINMAXINDEX = 'minmaxindex'
     MFI = 'mfi'
-    MINUS_DI = 'minus_di'
+    # MINUS_DI = 'minus_di'
     MAXINDEX = 'maxindex'
-    MINUS_DM = 'minus_dm'
+    # MINUS_DM = 'minus_dm'
     MEDPRICE = 'medprice'
     MORNINGSTAR = 'morningstar'
     MOM = 'mom'
@@ -163,12 +183,12 @@ class Indicator(Enum):
     ONNECK = 'onneck'
     PD = 'pd'
     PIERCING = 'piercing'
-    PLUS_DI = 'plus_di'
-    PLUS_DM = 'plus_dm'
+    # PLUS_DI = 'plus_di'
+    # PLUS_DM = 'plus_dm'
     PPO = 'ppo'
     PRIORSWINGHIGH = 'priorswinghigh'
-    PRIORSWINGLOW = 'priorswinglow'
-    PSAR = 'psar'
+    # PRIORSWINGLOW = 'priorswinglow'
+    # PSAR = 'psar'
     PVI = 'pvi'
     RICKSHAWMAN = 'rickshawman'
     QSTICK = 'qstick'
@@ -180,7 +200,7 @@ class Indicator(Enum):
     ROUND = 'round'
     RSI = 'rsi'
     SAR = 'sar'
-    SEPERATINGLINES = 'seperatinglines'
+    # SEPERATINGLINES = 'separatinglines'
     SAREXT = 'sarext'
     SHOOTINGSTAR = 'shootingstar'
     SHORTLINE = 'shortline'
@@ -194,13 +214,13 @@ class Indicator(Enum):
     STICKSANDWICH = 'sticksandwich'
     STOCHRSI = 'stochrsi'
     STOCH = 'stoch'
-    STOCHF = 'stochf'
-    STOCHRSI2 = 'stochrsi2'
+    # STOCHF = 'stochf'
+    # STOCHRSI2 = 'stochrsi2'
     STOCHTV = 'stochtv'
     SUM = 'sum'
     SUB = 'sub'
     T3 = 't3'
-    SUPERTREND = 'supertrend'
+    # SUPERTREND = 'supertrend'  giving weird error @TODO fix
     TAKURI = 'takuri'
     TAN = 'tan'
     TANH = 'tanh'
@@ -209,7 +229,7 @@ class Indicator(Enum):
     TDSEQUENTIAL = "tdsequential"
     THRUSTING = 'thrusting'
     TODEG = 'todeg'
-    TR  = 'tr'
+    TR = 'tr'
     TRANGE = 'trange'
     TORAD = 'torad'
     TRIMA = 'trima'
@@ -218,22 +238,22 @@ class Indicator(Enum):
     TRUNC = 'trunc'
     TYPPRICE = 'typprice'
     TSF = 'tsf'
-    IMI = 'imi'
+    # IMI = 'imi'
     UNIQUE3RIVER = 'unique3river'
     UPSIDEGAP2CROWS = 'upsidegap2crows'
     ULTOSC = 'ultosc'
     VAR = 'var'
     VHF = 'vhf'
     VOLATILITY = 'volatility'
-    VIDYA = 'vidya'
-    VOSC = 'vosc'
+    # VIDYA = 'vidya'        #requires mandatory params
+    # VOSC = 'vosc'          #requires mandatory params
     WAD = 'wad'
     WCLPRICE = 'wclprice'
     WCPRICE = 'wcprice'
-    VWMA = 'vwma'
-    WILDERS = 'wilders'
+    # VWMA = 'vwma'           #requires mandatory params
+    # WILDERS = 'wilders'        #requires mandatory params
     WILLR = 'willr'
     WMA = 'wma'
-    ZLEMA = 'zlema'
+    # ZLEMA = 'zlema'            #requires mandatory params
     XSIDEGAP3METHODS = 'xsidegap3methods'
-    HT_TRENDMODE = 'ht_trendmode'
+    # HT_TRENDMODE = 'ht_trendmode'

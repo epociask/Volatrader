@@ -1,8 +1,10 @@
 from termcolor import colored
-from Instance import Instance
+from BackTesterSellLogic import Instance
 
 
-# Base template for how to write a strat
+'''
+Class to hold buying and selling logic 
+'''
 class Session:
 
     def __init__(self, pair, buyStrategy, takeProfitPercent, percentSL):
@@ -21,19 +23,26 @@ class Session:
         self.results = []
         self.positiveTrades = 0
         self.NegativeTrades = 0
-
-    def getTradeData(self):
+    '''
+    @returns # of winning and # of losing trades
+    '''
+    def getTradeData(self) -> (int, int):
         return str(self.positiveTrades), str(self.NegativeTrades)
-
-    def addResult(self):
+    '''
+    Adds trade result to results list
+    updates winning and losing trade counts
+    '''
+    def addResult(self) -> None:
         self.results.append({'buytime': self.buyTime, 'buyprice': self.buyPrice, 'selltime': self.sellTime,
                              'sellprice': self.sellPrice, 'profitloss': self.profitLoss})
         if self.profitLoss > 0:
             self.positiveTrades += 1
         else:
             self.NegativeTrades += 1
-
-    def reset(self):
+    '''
+    resets after selling 
+    '''
+    def reset(self) -> None:
         self.addResult()
         self.sellStrat.reset()
         self.buy = False
@@ -42,23 +51,31 @@ class Session:
         self.profitLoss = None
         self.sell = False
 
-    def calcPL(self):
+    '''
+    Calculate profit loss function
+    '''
+    def calcPL(self) -> None:
 
         self.profitLoss = (100 - (100 * (self.buyPrice / self.sellPrice))) if self.sellPrice > self.buyPrice else -(
                     100 - (100 * (self.sellPrice / self.buyPrice)))
-
-    # ToString method
-    def toString(self):
+    '''
+    ToString method
+    '''
+    def toString(self) -> str:
 
         return "Buy Price {} time: {}\nSell Price {} time: {}\nProfit Loss {}\n".format(self.buyPrice, self.buyTime,
                                                                                         self.sellPrice, self.sellTime,
                                                                                         self.profitLoss)
-
-    # returns total profit-loss percentage after running strategy
+    '''
+    returns total profit-loss percentage after running strategy
+    '''
     def getTotalPL(self):
 
         return sum(self.profitlosses)
 
+    '''
+    Uses sell logic instance to see if it's time to sell 
+    '''
     def checkForSell(self, data):
         # print("Checking sell:::::::current price", data['candle']['close'])
         if self.sellStrat.run(float(data['candle']['close'])) or self.takeProfit <= float(data['candle']['close']):
@@ -68,7 +85,11 @@ class Session:
 
         return False
 
-    def update(self, data):
+    '''
+    main function
+    @param data takes in and makes buy/sell, do-nothing decisions accordingly 
+    '''
+    def update(self, data) -> None:
         # print("Checking for ", data)
 
         if not self.buy:
@@ -87,10 +108,16 @@ class Session:
                 self.profitlosses.append(self.profitLoss)
                 self.reset()
 
-    def getTotalTrades(self):
+    '''
+    @returns count of total trades 
+    '''
+    def getTotalTrades(self) -> int:
         return len(self.profitlosses)
 
-    def getResults(self):
+    '''
+    @returns results in a dictionary 
+    '''
+    def getResults(self) -> dict:
         return {
             "pair": self.pair.value,
             "tradeResults": self.results

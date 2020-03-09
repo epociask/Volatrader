@@ -9,7 +9,11 @@ from Enums import Indicator, Pair, Candle
     Helper Script w/ utility functions that are referenced throughout master program
 '''
 
-# Helper Lambda Functions
+'''
+    Helper Lambda Functions
+'''
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
 getLow = lambda ticker: str(ticker).find('.')  # used in getLowHighBounds
 getHigh = lambda ticker: (len(str(ticker)[str(ticker).find('.'): len(str(ticker))]))  # used in getLowHighBounds
 cleanBounds = lambda bounds: bounds.replace("(", "").replace(")", "").replace(",", "").replace("[", "").replace("]",
@@ -17,33 +21,33 @@ cleanBounds = lambda bounds: bounds.replace("(", "").replace(")", "").replace(",
 cleaner = lambda word: word if type(word) != decimal.Decimal else str(word)  # cleans bounds to be parsed easier
 getIndicatorName = lambda indicator: Indicator(indicator.value).name
 dateFormat = lambda time: str(time) + "T00:00:00Z"
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
+'''
+    Helper utility functions     
+'''
 
-def makeEqualities(lst):
-    s = "WHERE "
-    f = " ALTER TABLE mytable "
+'''
+takes a timestamp and returns a timestamp from a previous time reference
+EXAMPLE rewind('2020-02-29 00:15:00', 1, 60) --> '2020-02-28 23:15:00'
+@param timeStamp = timeStamp string
+@param limit = number of timestamps to count back
+@param timeStep = timeFrame to go back 
+'''
 
-    for index in range(len(lst)):
-        if index != 0:
-            s += f"{lst[0]}.timestamp = {lst[index]}.timestamp{lst[index][0: lst[index].find('_')]} " if index == 1 else f"AND {lst[0]}.timestamp = {lst[index]}.timestamp{lst[index][0: lst[index].find('_')]} "
-            f += f"DROP COLUMN timestamp{lst[index][0: lst[index].find('_')]} " if index == 1 else f", DROP COLUMN timestamp{lst[index][0: lst[index].find('_')]}"
-    s += ";"
-    f += ";"
-    return s, f
-
-
-# takes a timestamp and returns a timestamp from a previous time reference
-# X rewind('2020-02-29 00:15:00', 1, 60) --> '2020-02-28 23:15:00'
 
 def rewind(timeStamp: str, limit: int, timeStep: int):
     return int(datetime.datetime.timestamp(datetime.datetime.strptime(timeStamp, '%Y-%m-%d %H:%M:%S')) * 1000) - (
             limit * 6 * timeStep * 10000)
+
 
 '''
 converts numeric timestamp type to string
 @returns Exception if error
 @returns string timestamp
 '''
+
+
 def convertNumericTimeToString(numeric: (float, int, str)) -> (str, Exception):
     try:
         date = datetime.datetime.fromtimestamp(numeric / 1e3)
@@ -54,19 +58,12 @@ def convertNumericTimeToString(numeric: (float, int, str)) -> (str, Exception):
     return date.strftime('%Y-%m-%d %H:%M:%S')
 
 
-# TODO FUNCTION IS PROBABLY UNECESSARY.. TEST TO MAKE SURE
-
-def cleanCandle(candle, high):
-    for key in candle:
-        print(len(str((candle[key]))))
-        if len(str((candle[key]))) < high:
-            candle[key] = str(candle[key]) + "0"
-
-    print(candle)
-    return candle
+'''
+@returns low,high integer bounds of candleset to effectively format decimal size for CREATE TABLE query
+@param candles = list of candles 
+'''
 
 
-# returns low high bounds of candleset to effectively format decimal size for CREATE TABLE query
 def getLowHighBounds(candles: list) -> (int, int):
     lows = []
     highs = []
@@ -85,14 +82,20 @@ def getLowHighBounds(candles: list) -> (int, int):
     return low, high
 
 
-# converts list candle data to list of dictionary..... ie list[dict{}]
-def convertCandlesToDict(candles: list):
+'''
+converts list candle data to list of dictionary
+..... ie: list ==> list[dict{}]
+@param candles = list of candles
+@returns dictionary of candles 
+'''
+
+
+def convertCandlesToDict(candles: list) -> list:
     assert type(candles) == list
     new = []
     for candle in candles:
         try:
             new.append(cleanCandle(candle))
-
 
         except Exception as e:
             print("Error", e)
@@ -101,10 +104,16 @@ def convertCandlesToDict(candles: list):
     return new
 
 
-def cleanCandle(candle):
+'''
+Cleans candle OHLCV values to only extrapolate numeric values 
+@param candle = candle dictionary ex = {'timestamp': 3982435, 'open': '.235', high: '.325', low: '.20', close: '2.7', volume: '69'} 
+@returns cleaned candle 
+'''
+
+
+def cleanCandle(candle: dict) -> dict:
     it = iter(candle)
     time = str(next(it))
-    print(time)
     open = cleaner(next(it))
     high = cleaner(next(it))
     low = cleaner(next(it))
@@ -121,8 +130,18 @@ def cleanCandle(candle):
     }
 
 
-# TODO MAKE ADD HELPER CLEANING FUNCTION FOR PASSING PAIR ENUM TO FETCHOHLCV
-# Returns candles fetched from an exchange
+'''
+@returns candles fetched from an exchange
+@param api = CCXT API instance
+@param pair = Pair enum
+@param candleSize = Candle enum 
+@param args --> can either be None type, integer, or string 
+            --> None type == default limit of past 500 candles 
+            --> integer type == limit number of recent candles to fetch
+            --> string type == Timestamp to collect candles from 
+'''
+
+
 def fetchCandleData(api: ccxt.Exchange, pair: Pair, candleSize: Candle, args: (int, None)):
     arg = args[0]
     if type(arg) == int:
