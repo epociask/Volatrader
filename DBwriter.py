@@ -39,6 +39,8 @@ class DBwriter(DBoperations):
         else:
             print("too many arguments supplied to writeCandleData")
 
+
+
     def writeIndicatorForTable(self, candleSize: Candle, pair: Pair, returnOnUNIQUEVIOLATION, indicator: Indicator,
                                *args) -> None:
 
@@ -52,7 +54,6 @@ class DBwriter(DBoperations):
 
         """
         assert len(args) == 0 or len(args) == 1
-        err = True
         if len(args) == 1:
             assert type(args[0]) == int
 
@@ -62,6 +63,7 @@ class DBwriter(DBoperations):
         else:
             candles = self.getCandleDataDescFromDB(candleSize, pair, args[0] + 300).copy()
         x = True
+        err = True
         while x:
             try:
                 err = self.calculateAndInsertIndicatorEntry(candleSize, pair, indicator, candles[:300].copy(),
@@ -94,6 +96,7 @@ class DBwriter(DBoperations):
             raise TypeError("wrong parameters supplied into getCandleData()")
         try:
             candles = sorted(candles, key=lambda i: i['timestamp'], reverse=False)
+            print(candles)
             ts = str(candles[-1]['timestamp'])
 
             indicatorValues = IndicatorAPI.getIndicator(indicator, candles).copy()
@@ -114,7 +117,7 @@ class DBwriter(DBoperations):
 
         except Exception as e:
 
-            if type(e) == psycopg2.errors.UndefinedTable:
+            if type(e) == psycopg2.errors.UndefinedColumn:
                 self.conn.rollback()
                 createTable = QueryHelpers.getCreateIndicatorTableQuery(candleSize, pair, indicator, indicatorValues)
                 self.cur.execute(createTable)
@@ -137,7 +140,7 @@ class DBwriter(DBoperations):
                 logToSlack(e, tagChannel=True, messageType=MessageType.ERROR)
                 raise e
 
-            return True
+        return True
 
     def writeCandlesFromCCXT(self, candleSize: Candle, pair: Pair, *args: (int, None)) -> (None, Exception):
 
@@ -328,3 +331,7 @@ class DBwriter(DBoperations):
         for coin in dataDict:
             self.writeStaticMarketDataQuerys(coin)
 
+
+
+writer = DBwriter()
+writer.writeIndicatorForTable(Candle.THIRTY_MINUTE, Pair.ETHUSDT, False, Indicator.STOCHRSI)

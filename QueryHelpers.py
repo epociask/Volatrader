@@ -9,7 +9,6 @@ clean100 = lambda val: val if val.find('100') == -1 else val.replace("2", "hundr
 getIndicatorName = lambda indicator: Indicator(indicator.value).name.lower()  # Gets indicator key from enum
 
 
-
 def getCreateIndicatorTableQuery(candleSize: Candle, pair: Pair, indicator: Indicator, indicatorVal: dict) -> str:
     """
     1
@@ -20,15 +19,14 @@ def getCreateIndicatorTableQuery(candleSize: Candle, pair: Pair, indicator: Indi
     @:returns query that creates indicator table
     @:rtype str
     """
-    delimeter = " VARCHAR, "
-    keys = f"(timestamp{clean100(clean3(clean2(indicator.value)))} timestamp PRIMARY KEY NOT NULL, " + \
-           (delimeter.join(indicatorVal.keys())
-            if list(indicatorVal.keys())[0] != "value"
-            else f" {clean100(clean3(clean2(indicator.value)))}value") + f" VARCHAR, FOREIGN KEY(timestamp{clean100(clean3(clean2(indicator.value)))}) REFERENCES {pair.value}_OHLCV_{candleSize.value}(timestamp))"
-    return f"CREATE TABLE {clean100(clean3(clean2(indicator.value)))}_{pair.value}_{candleSize.value} {keys};"
+    returnString = ""
+    for val in indicatorVal:
+        temp = f"ALTER TABLE {pair.value}_OHLCV_{candleSize.value} ADD  {clean100(clean3(clean2(indicator.value)))}_{val} VARCHAR; "
+        returnString += temp
+    return returnString
 
 
-def getInsertIndicatorsQueryString(indicator: Indicator, indicatorValues: list, timeStamp: str, candleSize: Candle,
+def getInsertIndicatorsQueryString(indicator: Indicator, indicatorValues: dict, timeStamp: str, candleSize: Candle,
                                    pair: Pair) -> str:
     """
     2
@@ -39,32 +37,35 @@ def getInsertIndicatorsQueryString(indicator: Indicator, indicatorValues: list, 
     @:returns query that creates indicator table
     @:rtype str
     """
+    returnString = f'UPDATE {pair.value}_OHLCV_{candleSize.value} SET'
+      # creates appropiate column names
+    first = next(iter(indicatorValues))
+    returnString += f' {indicator.value}_{first} = \'{indicatorValues[first]}\''
 
-    l = []
-    delimiter = ", "
-    for ind in indicatorValues.values():
-        l.append(str(ind))
-
-    values = f"('{timeStamp}', 'none')" if 'None' in l else f"('{timeStamp}', {delimiter.join(l)})"
-
-    keys = (f"(timestamp{getIndicatorName(indicator)}, " + (delimiter.join(indicatorValues.keys())) if
-            list(indicatorValues.keys())[0] != "value" else f"(timestamp{getIndicatorName(indicator)}," +
-                                                            f" {getIndicatorName(indicator)}value") + ")"
-    return f'INSERT INTO {getIndicatorName(indicator)}_{pair.value.replace("/", "")}_{candleSize.value} {keys} VALUES {values};'
+    for value in indicatorValues:
+        if value is not first:
+            returnString += f', {indicator.value}_{value} = \'{indicatorValues[value]}\''
 
 
-def getCreateIndicatorTableQuery(candleSize: Candle, pair: Pair, indicator: Indicator, indicatorVal: dict) -> str:
-    delimeter = " VARCHAR, "
-    indicatorName = getIndicatorName(indicator)
-    keys = f"(timestamp{indicatorName} timestamp PRIMARY KEY NOT NULL, " + \
-           (delimeter.join(indicatorVal.keys())
-            if list(indicatorVal.keys())[0] != "value"
-            else f" {indicatorName}value") + f" VARCHAR, FOREIGN KEY(timestamp{indicatorName}) REFERENCES {pair.value}_OHLCV_{candleSize.value}(timestamp))"
-    return f"CREATE TABLE {indicatorName}_{pair.value}_{candleSize.value} {keys};"
+    returnString += f" WHERE timestamp = '{timeStamp}';"
+
+    return returnString
+
+
+# def getCreateIndicatorTableQuery(candleSize: Candle, pair: Pair, indicator: Indicator, indicatorVal: dict) -> str:
+#     delimeter = " VARCHAR, "
+#     indicatorName = getIndicatorName(indicator)
+#     keys = f"(timestamp{indicatorName} timestamp PRIMARY KEY NOT NULL, " + \
+#            (delimeter.join(indicatorVal.keys())
+#             if list(indicatorVal.keys())[0] != "value"
+#             else f" {indicatorName}value") + f" VARCHAR, FOREIGN KEY(timestamp{indicatorName}) REFERENCES {pair.value}_OHLCV_{candleSize.value}(timestamp))"
+#     return f"CREATE TABLE {indicatorName}_{pair.value}_{candleSize.value} {keys};"
+
 
 '''
 
 '''
+
 
 def getTableDataQuery(candleSize: Candle, pair: Pair, args: list):
     return f"SELECT * FROM {pair.value}_OHLCV_{candleSize.value} ORDER BY timestamp ASC LIMIT {str(args[0])};"
@@ -100,7 +101,7 @@ def getCreateCandleTableQuery(low, high, marketPair: Pair, candleSize: Candle) -
 
 
 def getCandlesFromDBQuery(pair: Pair, candleSize: Candle, limit):
-    query = f"SELECT * FROM {pair.value}_OHLCV_{candleSize.value} ORDER BY timestamp DESC"
+    query = f"SELECT timestamp, open, high, low, close, volume FROM {pair.value}_OHLCV_{candleSize.value} ORDER BY timestamp DESC"
     return query + ';' if limit is None else query + f" LIMIT {limit};"
 
 
@@ -130,3 +131,5 @@ def getWhereEqualsQuery(lst):
     s += ";"
     f += ";"
     return s, f
+
+

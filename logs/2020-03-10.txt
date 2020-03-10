@@ -40,77 +40,456 @@ DETAIL:  Key ("timestamp")=(2020-03-10 02:58:00) already exists.
 02:58:22,150 ccxt.base.exchange DEBUG 517 GET https://api.binance.com/api/v3/exchangeInfo, Request: {'User-Agent': 'python-requests/2.22.0', 'Accept-Encoding': 'gzip, deflate'} None
 02:58:22,153 urllib3.connectionpool DEBUG 959 Starting new HTTPS connection (1): api.binance.com:443
 02:58:22,684 urllib3.connectionpool DEBUG 437 https://api.binance.com:443 "GET /api/v3/exchangeInfo HTTP/1.1" 200 None
-02:58:22,699 ccxt.base.exchange DEBUG 553 GET https://api.binance.com/api/v3/exchangeInfo, Response: 200 {'Content-Type': 'application/json;charset=utf-8', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'Date': 'Tue, 10 Mar 2020 09:58:22 GMT', 'Server': 'nginx', 'X-MBX-UUID': '4b92e626-ad68-4892-b853-bfc3ac877cbf', 'X-MBX-USED-WEIGHT': '5', 'X-MBX-USED-WEIGHT-1M': '5', 'Content-Encoding': 'gzip', 'Strict-Transport-Security': 'max-age=31536000; includeSubdomains', 'X-Frame-Options': 'SAMEORIGIN', 'X-Xss-Protection': '1; mode=block', 'X-Content-Type-Options': 'nosniff', 'Content-Security-Policy': "default-src 'self'", 'X-Content-Security-Policy': "default-src 'self'", 'X-WebKit-CSP': "default-src 'self'", 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0', 'X-Cache': 'Miss from cloudfront', 'Via': '1.1 e84fdc4f831d7aaaedd48d30a9d5a069.cloudfront.net (CloudFront)', 'X-Amz-Cf-Pop': 'SFO5-C3', 'X-Amz-Cf-Id': 'vJFYMjuEcj2J6suvKwonROArFNI5Pu8icm2CSoLIt99FTPmpiCKmcg=='} {"timezone":"UTC","serverTime":1583834302262,"rateLimits":[{"rateLimitType":"REQUEST_WEIGHT","interval":"MINUTE","intervalNum":1,"limit":1200},{"rateLimitType":"ORDERS","interval":"SECOND","intervalNum":10,"limit":100},{"rateLimitType":"ORDERS","interval":"DAY","intervalNum":1,"limit":200000}],"exchangeFilters":[],"symbols":[{"symbol":"ETHBTC","status":"TRADING","baseAsset":"ETH","baseAssetPrecision":8,"quoteAsset":"BTC","quotePrecision":8,"baseCommissionPrecision":8,"quoteCommissionPrecision":8,"orderTypes":["LIMIT","LIMIT_MAKER","MARKET","STOP_LOSS_LIMIT","TAKE_PROFIT_LIMIT"],"icebergAllowed":true,"ocoAllowed":true,"quoteOrderQtyMarketAllowed":true,"isSpotTradingAllowed":true,"isMarginTradingAllowed":true,"filters":[{"filterType":"PRICE_FILTER","minPrice":"0.00000100","maxPrice":"100000.00000000","tickSize":"0.00000100"},{"filterType":"PERCENT_PRICE","multiplierUp":"5","multiplierDown":"0.2","avgPriceMins":5},{"filterType":"LOT_SIZE","minQty":"0.00100000","maxQty":"100000.00000000","stepSize":"0.00100000"},{"filterType":"MIN_NOTIONAL","minNotional":"0.00010000","applyToMarket":true,"avgPriceMins":5},{"filterType":"ICEBERG_PARTS","limit":10},{"filterType":"MARKET_LOT_SIZE","minQty":"0.00000000","maxQty":"6155.00180761","stepSize":"0.00000000"},{"filterType":"MAX_NUM_ALGO_ORDERS","maxNumAlgoOrders":5}]},{"symbol":"LTCBTC","status":"TRADING","baseAsset":"LTC","baseAssetPrecision":8,"quoteAsset":"BTC","quotePrecision":8,"baseCommissionPrecision":8,"quoteCommissionPrecision":8,"orderTypes":["LIMIT","LIMIT_MAKER","MARKET","STOP_LOSS_LIMIT","TAKE_PROFIT_LIMIT"],"icebergAllowed":true,"ocoAllowed":true,"quoteOrderQtyMarketAllowed":true,"isSpotTradingAllowed":true,"isMarginTradingAllowed":true,"filters":[{"filterType":"PRICE_FILTER","minPrice":"0.00000100","maxPrice":"100000.00000000","tickSize":"0.00000100"},{"filterType":"PERCENT_PRICE","multiplierUp":"5","multiplierDown":"0.2","avgPriceMins":5},{"filterType":"LOT_SIZE","minQty":"0.01000000","maxQty":"100000.00000000","stepSize":"0.01000000"},{"filterType":"MIN_NOTIONAL","minNotional":"0.00010000","applyToMarket":true,"avgPriceMins":5},{"filterType":"ICEBERG_PARTS","limit":10},{"filterType":"MARKET_LOT_SIZE","minQty":"0.00000000","maxQty":"28929.89957093","stepSize":"0.00000000"},{"filterType":"MAX_NUM_ALGO_ORDERS","maxNumAlgoOrders":5}]},{"symbol":"BNBBTC","status":"TRADING","baseAsset":"BNB","baseAssetPrecision":8,"quoteAsset":"BTC","quotePrecision":8,"baseCommissionPrecision":8,"quoteCommissionPrecision":8,"orderTypes":["LIMIT","LIMIT_MAKER","MARKET","STOP_LOSS_LIMIT","TAKE_PROFIT_LIMIT"],"icebergAllowed":true,"ocoAllowed":true,"quoteOrderQtyMarketAllowed":true,"isSpotTradingAllowed":true,"isMarginTradingAllowed":true,"filters":[{"filterType":"PRICE_FILTER","minPrice":"0.00000010","maxPrice":"100000.00000000","tickSize":"0.00000010"},{"filterType":"PERCENT_PRICE","multiplierUp":"5","multiplierDown":"0.2","avgPriceMins":5},{"filterType":"LOT_SIZE","minQty":"0.01000000","maxQty":"100000.00000000","stepSize":"0.01000000"},{"filterType":"MIN_NOTIONAL","minNotional":"0.00010000","applyToMarket":true,"avgPriceMins":5},{"filterType":"ICEBERG_PARTS","limit":10},{"filterType":"MARKET_LOT_SIZE","minQty":"0.00000000","maxQty":"87642.60007607","stepSize":"0.00000000"},{"filterType":"MAX_NUM_ALGO_ORDERS","maxNumAlgoOrders":5}]},{"symbol":"NEOBTC","status":"TRADING","baseAsset":"NEO","baseAssetPrecision":8,"quoteAsset":"BTC","quotePrecision":8,"baseCommissionPrecision":8,"quoteCommissionPrecision":8,"orderTypes":["LIMIT","LIMIT_MAKER","MARKET","STOP_LOSS_LIMIT","TAKE_PROFIT_LIMIT"],"iceb03:37:00,438 root DEBUG 83 [DEBUG] SELECT * FROM ETHUSDT_OHLCV_15m ORDER BY timestamp DESC;
+02:58:22,699 ccxt.base.exchange DEBUG 553 GET https://api.binance.com/api/v3/exchangeInfo, Response: 200 {'Content-Type': 'application/json;charset=utf-8', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'Date': 'Tue, 10 Mar 2020 09:58:22 GMT', 'Server': 'nginx', 'X-MBX-UUID': '4b92e626-ad68-4892-b853-bfc3ac877cbf', 'X-MBX-USED-WEIGHT': '5', 'X-MBX-USED-WEIGHT-1M': '5', 'Content-Encoding': 'gzip', 'Strict-Transport-Security': 'max-age=31536000; includeSubdomains', 'X-Frame-Options': 'SAMEORIGIN', 'X-Xss-Protection': '1; mode=block', 'X-Content-Type-Options': 'nosniff', 'Content-Security-Policy': "default-src 'self'", 'X-Content-Security-Policy': "default-src 'self'", 'X-WebKit-CSP': "default-src 'self'", 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0', 'X-Cache': 'Miss from cloudfront', 'Via': '1.1 e84fdc4f831d7aaaedd48d30a9d5a069.cloudfront.net (CloudFront)', 'X-Amz-Cf-Pop': 'SFO5-C3', 'X-Amz-Cf-Id': 'vJFYMjuEcj2J6suvKwonROArFNI5Pu8icm2CSoLIt99FTPmpiCKmcg=='} {"timezone":"UTC","serverTime":1583834302262,"rateLimits":[{"rateLimitType":"REQUEST_WEIGHT","interval":"MINUTE","intervalNum":1,"limit":1200},{"rateLimitType":"ORDERS","interval":"SECOND","intervalNum":10,"limit":100},{"rateLimitType":"ORDERS","interval":"DAY","intervalNum":1,"limit":200000}],"exchangeFilters":[],"symbols":[{"symbol":"ETHBTC","status":"TRADING","baseAsset":"ETH","baseAssetPrecision":8,"quoteAsset":"BTC","quotePrecision":8,"baseCommissionPrecision":8,"quoteCommissionPrecision":8,"orderTypes":["LIMIT","LIMIT_MAKER","MARKET","STOP_LOSS_LIMIT","TAKE_PROFIT_LIMIT"],"icebergAllowed":true,"ocoAllowed":true,"quoteOrderQtyMarketAllowed":true,"isSpotTradingAllowed":true,"isMarginTradingAllowed":true,"filters":[{"filterType":"PRICE_FILTER","minPrice":"0.00000100","maxPrice":"100000.00000000","tickSize":"0.00000100"},{"filterType":"PERCENT_PRICE","multiplierUp":"5","multiplierDown":"0.2","avgPriceMins":5},{"filterType":"LOT_SIZE","minQty":"0.00100000","maxQty":"100000.00000000","stepSize":"0.00100000"},{"filterType":"MIN_NOTIONAL","minNotional":"0.00010000","applyToMarket":true,"avgPriceMins":5},{"filterType":"ICEBERG_PARTS","limit":10},{"filterType":"MARKET_LOT_SIZE","minQty":"0.00000000","maxQty":"6155.00180761","stepSize":"0.00000000"},{"filterType":"MAX_NUM_ALGO_ORDERS","maxNumAlgoOrders":5}]},{"symbol":"LTCBTC","status":"TRADING","baseAsset":"LTC","baseAssetPrecision":8,"quoteAsset":"BTC","quotePrecision":8,"baseCommissionPrecision":8,"quoteCommissionPrecision":8,"orderTypes":["LIMIT","LIMIT_MAKER","MARKET","STOP_LOSS_LIMIT","TAKE_PROFIT_LIMIT"],"icebergAllowed":true,"ocoAllowed":true,"quoteOrderQtyMarketAllowed":true,"isSpotTradingAllowed":true,"isMarginTradingAllowed":true,"filters":[{"filterType":"PRICE_FILTER","minPrice":"0.00000100","maxPrice":"100000.00000000","tickSize":"0.00000100"},{"filterType":"PERCENT_PRICE","multiplierUp":"5","multiplierDown":"0.2","avgPriceMins":5},{"filterType":"LOT_SIZE","minQty":"0.01000000","maxQty":"100000.00000000","stepSize":"0.01000000"},{"filterType":"MIN_NOTIONAL","minNotional":"0.00010000","applyToMarket":true,"avgPriceMins":5},{"filterType":"ICEBERG_PARTS","limit":10},{"filterType":"MARKET_LOT_SIZE","minQty":"0.00000000","maxQty":"28929.89957093","stepSize":"0.00000000"},{"filterType":"MAX_NUM_ALGO_ORDERS","maxNumAlgoOrders":5}]},{"symbol":"BNBBTC","status":"TRADING","baseAsset":"BNB","baseAssetPrecision":8,"quoteAsset":"BTC","quotePrecision":8,"baseCommissionPrecision":8,"quoteCommissionPrecision":8,"orderTypes":["LIMIT","LIMIT_MAKER","MARKET","STOP_LOSS_LIMIT","TAKE_PROFIT_LIMIT"],"icebergAllowed":true,"ocoAllowed":true,"quoteOrderQtyMarketAllowed":true,"isSpotTradingAllowed":true,"isMarginTradingAllowed":true,"filters":[{"filterType":"PRICE_FILTER","minPrice":"0.00000010","maxPrice":"100000.00000000","tickSize":"0.00000010"},{"filterType":"PERCENT_PRICE","multiplierUp":"5","multiplierDown":"0.2","avgPriceMins":5},{"filterType":"LOT_SIZE","minQty":"0.01000000","maxQty":"100000.00000000","stepSize":"0.01000000"},{"filterType":"MIN_NOTIONAL","minNotional":"0.00010000","applyToMarket":true,"avgPriceMins":5},{"filterType":"ICEBERG_PARTS","limit":10},{"filterType":"MARKET_LOT_SIZE","minQty":"0.00000000","maxQty":"87642.60007607","stepSize":"0.00000000"},{"filterType":"MAX_NUM_ALGO_ORDERS","maxNumAlgoOrders":5}]},{"symbol":"NEOBTC","status":"TRADING","baseAsset":"NEO","baseAssetPrecision":8,"quoteAsset":"BTC","quotePrecision":8,"baseCommissionPrecision":8,"quoteCommissionPrecision":8,"orderTypes":["LIMIT","LIMIT_MAKER","MARKET","STOP_LOSS_LIMIT","TAKE_PROFIT_LIMIT"],"icebergAllowed":true,"ocoAllowed":true,"quoteOrderQtyMarketAllowed":true,"isSpotTradingAllowed":true,"isMarginTradingAllowed":true,"filters":[{"filterType":"PRICE_FILTER","minPrice":"0.00000100","maxPrice":"100000.00000000","tickSize":"0.00000100"},{"filterType":"PERCENT_PRICE","multiplierUp":"5","multiplierDown":"0.2","avgPriceMins":5},{"filterType":"LOT_SIZE","minQty":"0.01000000","maxQty":"100000.00000000","stepSize":"0.01000000"},{"filterType":"MIN_NOTIONAL","minNotional":"0.00010000","applyToMarket":true,"avgPriceMins":5},{"filterType":"ICEBERG_PARTS","limit":10},{"filterType":"MARKET_LOT_SIZE","minQty":"0.00000000","maxQty":"89511.72456747","stepSize":"0.00000000"},{"filterType":"MAX_NUM_ALGO_ORDERS","maxNumAlgoOrders":5}]},{"symbol":"QTUMETH","status":"TRADING","baseAsset":"QTUM","baseAssetPrecision":8,"quoteAsset":"ETH","quotePrecision":8,"baseCommissionPrecision":8,"quoteCommissionPrecision":8,"orderTypes":["LIMIT","LIMIT_MAKER","MARKET","STOP_LOSS_LIMIT","TAKE_PROFIT_LIMIT"],"icebergAllowed":true,"ocoAllowed":true,"quoteOrderQtyMarketAllowed":true,"isSpotTradingAllowed":true,"isMarginTradingAllowed":false,"filters":[{"filterType":"PRICE_FILTER","minPrice":"0.00000100","maxPrice":"1000.00000000","tickSize":"0.00000100"},{"filterType":"PERCENT_PRICE","multiplierUp":"5","multiplierDown":"0.2","avgPriceMins":5},{"filterType":"LOT_SIZE","minQty":"0.01000000","maxQty":"90000000.00000000","stepSize":"0.01000000"},{"filterType":"MIN_NOTIONAL","minNotional":"0.01000000","applyToMarket":true,"avgPriceMins":5},{"filterType":"ICEBERG_PARTS","limit":10},{"filterType":"MARKET_LOT_SIZE","minQty":"0.00000000","maxQty":"26681.27022837","stepSize":"0.00000000"},{"filterType":"MAX_NUM_ALGO_ORDERS","maxNumAlgoOrders":5}]},{"symbol":"EOSETH","status":"TRADING","baseAsset":"EOS","baseAssetPrecision":8,"quoteAsset":"ETH","quotePrecision":8,"baseCommissionPrecision":8,"quoteCommissionPrecision":8,"orderTypes":["LIMIT","LIMIT_MAKER","MARKET","STOP_LOSS_LIMIT","TAKE_PROFIT_LIMIT"],"icebergAllowed":true,"ocoAllowed":true,"quoteOrderQtyMarketAllowed":true,"isSpotTradingAllowed":true,"isMarginTradingAllowed":false,"filters":[{"filterType":"PRICE_FILTER","minPrice":"0.00000100","maxPrice":"1000.00000000","tickSize":"0.00000100"},{"filterType":"PERCENT_PRICE","multiplierUp":"5","multiplierDown":"0.2","avgPriceMins":5},{"filterType":"LOT_SIZE","minQty":"0.01000000","maxQty":"90000000.00000000","stepSize":"0.01000000"},{"filterType":"MIN_NOTIONAL","minNotional":"0.01000000","applyToMarket":true,"avgPriceMins":5},{"filterType":"ICEBERG_PARTS","limit":10},{"filterType":"MARKET_LOT_SIZE","minQty":"0.00000000","maxQty":"68667.68988927","stepSize":"0.00000000"},{"filterType":"MAX_NUM_ALGO_ORDERS","maxNumAlgoOrders":5}]},{"symbol":"SNTETH","status":"TRADING","baseAsset":"SNT","baseAssetPrecision":8,"quoteAsset":"ETH","quotePrecision":8,"baseCommissionPrecision":8,"quoteCommissionPrecision":8,"orderTypes":["LIMIT","LIMIT_MAKER","MARKET","STOP_LOSS_LIMIT","TAKE_PROFIT_LIMIT"],"icebergAllowed":true,"ocoAllowed":true,"quoteOrderQtyMarketAllowed":true,"isSpotTradingAllowed":true,"isMarginTradingAllowed":false,"filters":[{"filterType":"PRICE_FILTER","minPrice":"0.00000001","maxPrice":"1000.00000000","tickSize":"0.00000001"},{"filterType":"PERCENT_PRICE","multiplierUp":"5","multiplierDown":"0.2","avgPriceMins":5},{"filterType":"LOT_SIZE","minQty":"1.00000000","maxQty":"90000000.00000000","stepSize":"1.00000000"},{"filterType":"MIN_NOTIONAL","minNotional":"0.01000000","applyToMarket":true,"avgPriceMins":5},{"filterType":"ICEBERG_PARTS","limit":10},{"filterType":"MARKET_LOT_SIZE","minQty":"0.00000000","maxQty":"1962910.85121107","stepSize":"0.00000000"},{"filterType":"MAX_NUM_ALGO_ORDERS","maxNumAlgoOrders":5}]},{"symbol":"BNTETH","status":"TRADING","baseAsset":"BNT","baseAssetPrecision":8,"quoteAsset":"ETH","quotePrecision":8,"baseCommissionPrecision":8,"quoteCommissionPrecision":8,"orderTypes":["LIMIT","LIMIT_MAKER","MARKET","STOP_LOSS_LIMIT","TAKE_PROFIT_LIMIT"],"icebergAllowed":true,"ocoAllowed":true,"quoteOrderQtyMarketAllowed":true,"isSpotTradingAllowed":true,"isMarginTradingAllowed":false,"filters":[{"filterType":"PRICE_FILTER","minPrice":"0.00000100","maxPrice":"1000.00000000","tickSize":"0.00000100"},{"filterType":"PERCENT_PRICE","multiplierUp":"5","multiplierDown":"0.2","avgPriceMins":5},{"filterType":"LOT_SIZE","minQty":"0.01000000","maxQty":"90000000.00000000","stepSize":"0.01000000"},{"filterType":"MIN_NOTIONAL","minNotional":"0.01000000","applyToMarket":true,"avgPriceMins":5},{"filterType":"ICEBERG_PARTS","limit":10},{"filterType":"MARKET_LOT_SIZE","minQty":"0.00000000","maxQty":"155853.62004844","stepSize":"0.00000000"},{"filterType":"MAX_NUM_ALGO_ORDERS","maxNumAlgoOrders":5}]},{"symbol":"BCCBTC","status":"BREAK","baseAsset":"BCC","baseAssetPrecision":8,"quoteAsset":"BTC","quotePrecision":8,"baseCommissionPrecision":8,"quoteCommissionPrecision":8,"orderTypes":["LIMIT","LIMIT_MAKER","MARKET","STOP_LOSS_LIMIT","TAKE_PROFIT_LIMIT"],"icebergAllowed":true,"ocoAllowed":true,"quoteOrderQtyMarketAllowed":true,"isSpotTradingAllowed":true,"isMarginTradingAllowed":false,"filters":[{"filterType":"PRICE_FILTER","minPrice":"0.00000100","maxPrice":"100000.00000000","tickSize":"0.00000100"},{"filterType":"PERCENT_PRICE","multiplierUp":"5","multiplierDown":"0.2","avgPriceMins":5},{"filterType":"LOT_SIZE","minQty":"0.00100000","maxQty":"100000.00000000","stepSize":"0.00100000"},{"filterType":"MIN_NOTIONAL","minNotional":"0.00010000","applyToMarket":true,"avgPriceMins":5},{"filterType":"ICEBERG_PARTS","limit":10},{"filterType":"MAX_NUM_ALGO_ORDERS","maxNumAlgoOrders":5}]},{"symbol":"GASBTC","status":"TRADING","baseAsset":"GAS","baseAssetPrecision":8,"quoteAsset":"BTC","q06:29:17,447 root DEBUG 83 [DEBUG] SELECT * FROM ETHUSDT_OHLCV_30m ORDER BY timestamp DESC;
 
-03:37:00,453 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
-03:37:01,413 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /2crows HTTP/1.1" 200 11
-03:37:01,417 root DEBUG 83 [DEBUG] INSERT INTO twocrow_ETHUSDT_15m (timestamptwocrow, twocrowvalue) VALUES ('2020-03-10 03:30:00', 0);
+06:29:17,484 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:29:18,556 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:29:18,561 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m  stochrsi_valueFastK = '99.99999999999999', stochrsi_valueFastD = '66.66666666666664' WHERE timestamp = '2020-03-10 03:30:00-07';
 
-03:37:01,471 root DEBUG 83 [DEBUG] CREATE TABLE twocrow_ETHUSDT_15m (timestamptwocrow timestamp PRIMARY KEY NOT NULL,  twocrowvalue VARCHAR, FOREIGN KEY(timestamptwocrow) REFERENCES ETHUSDT_OHLCV_15m(timestamp));
-
-03:37:01,473 root DEBUG 83 [DEBUG] INSERT INTO twocrow_ETHUSDT_15m (timestamptwocrow, twocrowvalue) VALUES ('2020-03-10 03:30:00', 0);
-
-03:37:01,482 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
-03:37:02,460 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /2crows HTTP/1.1" 200 11
-03:37:02,462 root DEBUG 83 [DEBUG] INSERT INTO twocrow_ETHUSDT_15m (timestamptwocrow, twocrowvalue) VALUES ('2020-03-10 03:15:00', 0);
-
-03:37:02,464 root DEBUG 83 [DEBUG] SELECT * FROM ETHUSDT_OHLCV_15m ORDER BY timestamp DESC;
-
-03:37:02,472 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
-03:37:03,407 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /3blackcrows HTTP/1.1" 200 11
-03:37:03,409 root DEBUG 83 [DEBUG] INSERT INTO threeblackcrows_ETHUSDT_15m (timestampthreeblackcrows, threeblackcrowsvalue) VALUES ('2020-03-10 03:30:00', 0);
-
-03:37:03,427 root DEBUG 83 [DEBUG] CREATE TABLE threeblackcrows_ETHUSDT_15m (timestampthreeblackcrows timestamp PRIMARY KEY NOT NULL,  threeblackcrowsvalue VARCHAR, FOREIGN KEY(timestampthreeblackcrows) REFERENCES ETHUSDT_OHLCV_15m(timestamp));
-
-03:37:03,428 root DEBUG 83 [DEBUG] INSERT INTO threeblackcrows_ETHUSDT_15m (timestampthreeblackcrows, threeblackcrowsvalue) VALUES ('2020-03-10 03:30:00', 0);
-
-03:37:03,434 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
-03:37:04,406 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /3blackcrows HTTP/1.1" 200 11
-03:37:04,409 root DEBUG 83 [DEBUG] INSERT INTO threeblackcrows_ETHUSDT_15m (timestampthreeblackcrows, threeblackcrowsvalue) VALUES ('2020-03-10 03:15:00', 0);
-
-03:37:04,411 root DEBUG 83 [DEBUG] SELECT * FROM ETHUSDT_OHLCV_15m ORDER BY timestamp DESC;
-
-03:37:04,418 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
-03:37:05,380 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /3inside HTTP/1.1" 200 11
-03:37:05,382 root DEBUG 83 [DEBUG] INSERT INTO threeinside_ETHUSDT_15m (timestampthreeinside, threeinsidevalue) VALUES ('2020-03-10 03:30:00', 0);
-
-03:37:05,399 root DEBUG 83 [DEBUG] CREATE TABLE threeinside_ETHUSDT_15m (timestampthreeinside timestamp PRIMARY KEY NOT NULL,  threeinsidevalue VARCHAR, FOREIGN KEY(timestampthreeinside) REFERENCES ETHUSDT_OHLCV_15m(timestamp));
-
-03:37:05,399 root DEBUG 83 [DEBUG] INSERT INTO threeinside_ETHUSDT_15m (timestampthreeinside, threeinsidevalue) VALUES ('2020-03-10 03:30:00', 0);
-
-03:37:05,405 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
-03:37:06,388 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /3inside HTTP/1.1" 200 11
-03:37:06,391 root DEBUG 83 [DEBUG] INSERT INTO threeinside_ETHUSDT_15m (timestampthreeinside, threeinsidevalue) VALUES ('2020-03-10 03:15:00', 0);
-
-03:37:06,392 root DEBUG 83 [DEBUG] SELECT * FROM ETHUSDT_OHLCV_15m ORDER BY timestamp DESC;
-
-03:37:06,399 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
-03:37:07,379 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /3linestrike HTTP/1.1" 200 11
-03:37:07,382 root DEBUG 83 [DEBUG] INSERT INTO threelinestrike_ETHUSDT_15m (timestampthreelinestrike, threelinestrikevalue) VALUES ('2020-03-10 03:30:00', 0);
-
-03:37:07,398 root DEBUG 83 [DEBUG] CREATE TABLE threelinestrike_ETHUSDT_15m (timestampthreelinestrike timestamp PRIMARY KEY NOT NULL,  threelinestrikevalue VARCHAR, FOREIGN KEY(timestampthreelinestrike) REFERENCES ETHUSDT_OHLCV_15m(timestamp));
-
-03:37:07,399 root DEBUG 83 [DEBUG] INSERT INTO threelinestrike_ETHUSDT_15m (timestampthreelinestrike, threelinestrikevalue) VALUES ('2020-03-10 03:30:00', 0);
-
-03:37:07,405 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
-03:37:08,370 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /3linestrike HTTP/1.1" 200 11
-03:37:08,372 root DEBUG 83 [DEBUG] INSERT INTO threelinestrike_ETHUSDT_15m (timestampthreelinestrike, threelinestrikevalue) VALUES ('2020-03-10 03:15:00', 0);
-
-03:37:08,374 root DEBUG 83 [DEBUG] SELECT * FROM ETHUSDT_OHLCV_15m ORDER BY timestamp DESC;
-
-03:37:08,380 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
-03:37:09,320 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /3outside HTTP/1.1" 200 11
-03:37:09,322 root DEBUG 83 [DEBUG] INSERT INTO threeoutside_ETHUSDT_15m (timestampthreeoutside, threeoutsidevalue) VALUES ('2020-03-10 03:30:00', 0);
-
-03:37:09,325 root WARNING 93 [WARNING] column "threeoutsidevalue" of relation "threeoutside_ethusdt_15m" does not exist
-LINE 1: ... threeoutside_ETHUSDT_15m (timestampthreeoutside, threeoutsi...
-                                                             ^
+06:29:18,571 root WARNING 93 [WARNING] syntax error at or near "="
+LINE 1: UPDATE ETHUSDT_OHLCV_30m  stochrsi_valueFastK = '99.99999999...
+                                                      ^
 
 
-03:37:09,326 asyncio DEBUG 53 Using selector: SelectSelector
-03:37:09,500 root ERROR 106 [ERROR] The request to the Slack API failed.
-The server responded with: {'ok': False, 'error': 'not_authed'}
+06:29:18,573 asyncio DEBUG 53 Using selector: SelectSelector
+06:29:19,14 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1583846956.000100', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': '<!channel> *[ERROR]* ```syntax error at or near "="\nLINE 1: UPDATE ETHUSDT_OHLCV_30m  stochrsi_valueFastK = \'99.99999999...\n                                                      ^\n```', 'user': 'UURQ1SNF4', 'ts': '1583846956.000100', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+06:29:19,14 root ERROR 106 [ERROR] syntax error at or near "="
+LINE 1: UPDATE ETHUSDT_OHLCV_30m  stochrsi_valueFastK = '99.99999999...
+                                                      ^
 
-03:37:09,500 root WARNING 93 [WARNING] The request to the Slack API failed.
-The server responded with: {'ok': False, 'error': 'not_authed'}
 
+06:29:19,14 root WARNING 93 [WARNING] syntax error at or near "="
+LINE 1: UPDATE ETHUSDT_OHLCV_30m  stochrsi_valueFastK = '99.99999999...
+                                                      ^
+
+
+06:29:19,370 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1583846957.000200', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': '<!channel> *[WARNING]* ```syntax error at or near "="\nLINE 1: UPDATE ETHUSDT_OHLCV_30m  stochrsi_valueFastK = \'99.99999999...\n                                                      ^\n```', 'user': 'UURQ1SNF4', 'ts': '1583846957.000200', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+06:30:26,491 root DEBUG 83 [DEBUG] SELECT * FROM ETHUSDT_OHLCV_30m ORDER BY timestamp DESC;
+
+06:30:26,517 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:30:27,497 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:30:27,500 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '99.99999999999999', stochrsi_valueFastD = '66.66666666666664' WHERE timestamp = '2020-03-10 03:30:00-07';
+
+06:30:27,509 root WARNING 93 [WARNING] column "stochrsi_valuefastk" of relation "ethusdt_ohlcv_30m" does not exist
+LINE 1: UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '99.99999...
+                                     ^
+
+
+06:30:27,510 asyncio DEBUG 53 Using selector: SelectSelector
+06:30:29,13 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1583847026.000300', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': '<!channel> *[ERROR]* ```column "stochrsi_valuefastk" of relation "ethusdt_ohlcv_30m" does not exist\nLINE 1: UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = \'99.99999...\n                                     ^\n```', 'user': 'UURQ1SNF4', 'ts': '1583847026.000300', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+06:30:29,14 root ERROR 106 [ERROR] column "stochrsi_valuefastk" of relation "ethusdt_ohlcv_30m" does not exist
+LINE 1: UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '99.99999...
+                                     ^
+
+
+06:30:29,14 root WARNING 93 [WARNING] column "stochrsi_valuefastk" of relation "ethusdt_ohlcv_30m" does not exist
+LINE 1: UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '99.99999...
+                                     ^
+
+
+06:30:29,408 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1583847027.000400', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': '<!channel> *[WARNING]* ```column "stochrsi_valuefastk" of relation "ethusdt_ohlcv_30m" does not exist\nLINE 1: UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = \'99.99999...\n                                     ^\n```', 'user': 'UURQ1SNF4', 'ts': '1583847027.000400', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+06:31:25,367 root DEBUG 83 [DEBUG] SELECT * FROM ETHUSDT_OHLCV_30m ORDER BY timestamp DESC;
+
+06:31:25,395 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:31:26,407 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:31:26,409 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '99.99999999999999', stochrsi_valueFastD = '66.66666666666664' WHERE timestamp = '2020-03-10 03:30:00-07';
+
+06:31:26,420 root ERROR 106 [ERROR] module 'psycopg2.errors' has no attribute 'psycopg2'
+
+06:31:26,420 root WARNING 93 [WARNING] module 'psycopg2.errors' has no attribute 'psycopg2'
+
+06:31:26,421 asyncio DEBUG 53 Using selector: SelectSelector
+06:31:26,805 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1583847084.000500', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[WARNING]* ```module 'psycopg2.errors' has no attribute 'psycopg2'```", 'user': 'UURQ1SNF4', 'ts': '1583847084.000500', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+06:31:37,801 root DEBUG 83 [DEBUG] SELECT * FROM ETHUSDT_OHLCV_30m ORDER BY timestamp DESC;
+
+06:31:37,828 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:31:38,898 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:31:38,900 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '99.99999999999999', stochrsi_valueFastD = '66.66666666666664' WHERE timestamp = '2020-03-10 03:30:00-07';
+
+06:31:38,923 root DEBUG 83 [DEBUG] ALTER TABLE ETHUSDT_OHLCV_30m ADD  stochrsi_valueFastK VARCHAR(11); ALTER TABLE ETHUSDT_OHLCV_30m ADD  stochrsi_valueFastD VARCHAR(11); 
+
+06:31:38,924 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '99.99999999999999', stochrsi_valueFastD = '66.66666666666664' WHERE timestamp = '2020-03-10 03:30:00-07';
+
+06:31:38,928 root ERROR 106 [ERROR] value too long for type character varying(11)
+
+
+06:31:38,929 root WARNING 93 [WARNING] value too long for type character varying(11)
+
+
+06:31:38,930 asyncio DEBUG 53 Using selector: SelectSelector
+06:31:39,190 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1583847096.000600', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': '<!channel> *[WARNING]* ```value too long for type character varying(11)\n```', 'user': 'UURQ1SNF4', 'ts': '1583847096.000600', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+06:35:43,113 root DEBUG 83 [DEBUG] SELECT (timestamp, open, high, low, close, volume) FROM ETHUSDT_OHLCV_30m ORDER BY timestamp DESC;
+
+06:35:43,146 root WARNING 93 [WARNING] list index out of range
+
+06:35:43,147 asyncio DEBUG 53 Using selector: SelectSelector
+06:35:43,460 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1583847341.000700', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': '<!channel> *[ERROR]* ```list index out of range```', 'user': 'UURQ1SNF4', 'ts': '1583847341.000700', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+06:35:43,460 root ERROR 106 [ERROR] list index out of range
+
+06:35:43,460 root WARNING 93 [WARNING] list index out of range
+
+06:35:43,880 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1583847341.000800', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': '<!channel> *[WARNING]* ```list index out of range```', 'user': 'UURQ1SNF4', 'ts': '1583847341.000800', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+06:37:06,429 root DEBUG 83 [DEBUG] SELECT (timestamp, open, high, low, close, volume) FROM ETHUSDT_OHLCV_30m ORDER BY timestamp DESC;
+
+06:37:06,463 root WARNING 93 [WARNING] list index out of range
+
+06:37:06,464 asyncio DEBUG 53 Using selector: SelectSelector
+06:37:06,942 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1583847424.000900', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': '<!channel> *[ERROR]* ```list index out of range```', 'user': 'UURQ1SNF4', 'ts': '1583847424.000900', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+06:37:06,942 root ERROR 106 [ERROR] list index out of range
+
+06:37:06,942 root WARNING 93 [WARNING] list index out of range
+
+06:37:07,335 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1583847424.001000', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': '<!channel> *[WARNING]* ```list index out of range```', 'user': 'UURQ1SNF4', 'ts': '1583847424.001000', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+06:39:45,964 root DEBUG 83 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_30m ORDER BY timestamp DESC;
+
+06:39:45,990 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:39:46,932 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:39:46,934 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '99.99999999999999', stochrsi_valueFastD = '66.66666666666664' WHERE timestamp = '2020-03-10 03:30:00-07';
+
+06:39:46,949 root DEBUG 83 [DEBUG] ALTER TABLE ETHUSDT_OHLCV_30m ADD  stochrsi_valueFastK VARCHAR(20); ALTER TABLE ETHUSDT_OHLCV_30m ADD  stochrsi_valueFastD VARCHAR(20); 
+
+06:39:46,950 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '99.99999999999999', stochrsi_valueFastD = '66.66666666666664' WHERE timestamp = '2020-03-10 03:30:00-07';
+
+06:39:46,959 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:39:47,954 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:39:47,956 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '100', stochrsi_valueFastD = '50.57209278113737' WHERE timestamp = '2020-03-10 03:00:00-07';
+
+06:46:02,945 root DEBUG 83 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_30m ORDER BY timestamp DESC;
+
+06:46:02,967 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:46:03,987 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:46:03,989 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '99.99999999999999', stochrsi_valueFastD = '66.66666666666664' WHERE timestamp = '2020-03-10 03:30:00-07';
+
+06:46:08,729 root DEBUG 83 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_30m ORDER BY timestamp DESC;
+
+06:46:13,757 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:46:14,770 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:46:14,774 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '99.99999999999999', stochrsi_valueFastD = '66.66666666666664' WHERE timestamp = '2020-03-10 03:30:00-07';
+
+06:47:24,750 root DEBUG 83 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_30m ORDER BY timestamp DESC;
+
+06:47:27,16 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:47:28,14 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:47:28,18 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '99.99999999999999', stochrsi_valueFastD = '66.66666666666664' WHERE timestamp = '2020-03-10 03:30:00-07';
+
+06:48:11,111 root DEBUG 83 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_30m ORDER BY timestamp DESC;
+
+06:48:12,572 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:48:13,565 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:48:13,569 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '99.99999999999999', stochrsi_valueFastD = '66.66666666666664' WHERE timestamp = '2020-03-10 03:30:00-07';
+
+06:48:27,261 root DEBUG 83 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_30m ORDER BY timestamp DESC;
+
+06:48:43,680 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:48:44,658 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:48:44,662 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '99.99999999999999', stochrsi_valueFastD = '66.66666666666664' WHERE timestamp = '2020-03-10 03:30:00-07';
+
+06:49:46,160 root DEBUG 83 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_30m ORDER BY timestamp DESC;
+
+06:49:55,200 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:49:56,186 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:49:56,190 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '99.99999999999999', stochrsi_valueFastD = '66.66666666666664' WHERE timestamp = '2020-03-10 03:30:00-07';
+
+06:51:11,839 root DEBUG 83 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_30m ORDER BY timestamp DESC;
+
+06:52:40,333 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:52:41,303 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:52:52,669 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '99.99999999999999', stochrsi_valueFastD = '66.66666666666664' WHERE timestamp = '2020-03-10 03:30:00-07';
+
+06:53:29,521 root DEBUG 83 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_30m ORDER BY timestamp DESC;
+
+06:53:29,550 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:30,491 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:30,493 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '99.99999999999999', stochrsi_valueFastD = '66.66666666666664' WHERE timestamp = '2020-03-10 03:30:00-07';
+
+06:53:30,503 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:31,415 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:31,417 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '100', stochrsi_valueFastD = '50.57209278113737' WHERE timestamp = '2020-03-10 03:00:00-07';
+
+06:53:31,428 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:32,418 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 47
+06:53:32,421 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '0', stochrsi_valueFastD = '34.94098438371569' WHERE timestamp = '2020-03-10 02:30:00-07';
+
+06:53:32,434 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:33,414 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:33,416 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '51.71627834917453', stochrsi_valueFastD = '55.9015653394488' WHERE timestamp = '2020-03-10 02:00:00-07';
+
+06:53:33,424 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:34,420 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:34,422 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '53.106674798688715', stochrsi_valueFastD = '47.81658680902996' WHERE timestamp = '2020-03-10 01:30:00-07';
+
+06:53:34,430 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:35,349 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:35,352 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '62.881742857890536', stochrsi_valueFastD = '30.114361876862947' WHERE timestamp = '2020-03-10 01:00:00-07';
+
+06:53:35,360 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:36,355 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:36,358 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '27.46134277347726', stochrsi_valueFastD = '9.153780924492471' WHERE timestamp = '2020-03-10 00:30:00-07';
+
+06:53:36,365 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:36,684 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:36,688 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '0', stochrsi_valueFastD = '2.6766584963666014' WHERE timestamp = '2020-03-10 00:00:00-07';
+
+06:53:36,694 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:37,668 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 47
+06:53:37,670 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '0', stochrsi_valueFastD = '15.78622168502956' WHERE timestamp = '2020-03-09 23:30:00-07';
+
+06:53:37,676 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:38,654 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:38,657 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '8.029975478405357', stochrsi_valueFastD = '42.27413252360845' WHERE timestamp = '2020-03-09 23:00:00-07';
+
+06:53:38,663 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:39,583 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:39,585 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '39.328689587357445', stochrsi_valueFastD = '72.93080736863037' WHERE timestamp = '2020-03-09 22:30:00-07';
+
+06:53:39,592 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:40,617 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:40,619 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '79.46373251843565', stochrsi_valueFastD = '87.92376295571557' WHERE timestamp = '2020-03-09 22:00:00-07';
+
+06:53:40,630 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:40,944 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:40,947 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '100', stochrsi_valueFastD = '94.76918544919931' WHERE timestamp = '2020-03-09 21:30:00-07';
+
+06:53:40,953 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:41,924 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:41,926 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '84.3075563476945', stochrsi_valueFastD = '68.65674995558601' WHERE timestamp = '2020-03-09 21:00:00-07';
+
+06:53:41,934 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:42,265 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:42,268 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '100', stochrsi_valueFastD = '40.55423117216205' WHERE timestamp = '2020-03-09 20:30:00-07';
+
+06:53:42,280 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:43,245 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:43,248 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '21.662693516729814', stochrsi_valueFastD = '12.426676394196642' WHERE timestamp = '2020-03-09 20:00:00-07';
+
+06:53:43,256 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:44,260 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 47
+06:53:44,263 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '0', stochrsi_valueFastD = '5.205778556267035' WHERE timestamp = '2020-03-09 19:30:00-07';
+
+06:53:44,268 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:45,241 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:45,243 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '15.617335668815416', stochrsi_valueFastD = '36.422810207953425' WHERE timestamp = '2020-03-09 19:00:00-07';
+
+06:53:45,250 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:46,236 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 46
+06:53:46,238 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '0', stochrsi_valueFastD = '64.5503649853532' WHERE timestamp = '2020-03-09 18:30:00-07';
+
+06:53:46,246 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:47,207 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:47,209 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '93.65109495596235', stochrsi_valueFastD = '92.99065162282834' WHERE timestamp = '2020-03-09 18:00:00-07';
+
+06:53:47,214 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:48,224 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:48,226 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '100', stochrsi_valueFastD = '95.10695330429694' WHERE timestamp = '2020-03-09 17:30:00-07';
+
+06:53:48,232 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:48,568 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:48,571 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '85.32085991273621', stochrsi_valueFastD = '93.8677712468259' WHERE timestamp = '2020-03-09 17:00:00-07';
+
+06:53:48,575 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:49,569 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:49,571 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '100', stochrsi_valueFastD = '98.76081794260269' WHERE timestamp = '2020-03-09 16:30:00-07';
+
+06:53:49,579 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:49,918 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:49,920 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '96.28245382775', stochrsi_valueFastD = '91.09220679330997' WHERE timestamp = '2020-03-09 16:00:00-07';
+
+06:53:49,926 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:50,897 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:50,900 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '100', stochrsi_valueFastD = '58.998055516878345' WHERE timestamp = '2020-03-09 15:30:00-07';
+
+06:53:50,905 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:51,890 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:51,892 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '76.99416654998282', stochrsi_valueFastD = '29.84811476649755' WHERE timestamp = '2020-03-09 15:00:00-07';
+
+06:53:51,898 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:52,875 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:52,877 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '0', stochrsi_valueFastD = '37.516725916117714' WHERE timestamp = '2020-03-09 14:30:00-07';
+
+06:53:52,885 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:53,865 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:53,868 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '12.550177747351858', stochrsi_valueFastD = '70.85005924911732' WHERE timestamp = '2020-03-09 14:00:00-07';
+
+06:53:53,875 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:54,846 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:54,850 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '100', stochrsi_valueFastD = '99.99999999999996' WHERE timestamp = '2020-03-09 13:30:00-07';
+
+06:53:54,857 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:55,858 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:55,860 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '100', stochrsi_valueFastD = '100.00000000000006' WHERE timestamp = '2020-03-09 13:00:00-07';
+
+06:53:55,864 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:56,191 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:56,193 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '100', stochrsi_valueFastD = '85.4135529255766' WHERE timestamp = '2020-03-09 12:30:00-07';
+
+06:53:56,198 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:57,194 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:57,196 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '100', stochrsi_valueFastD = '56.02416368004944' WHERE timestamp = '2020-03-09 12:00:00-07';
+
+06:53:57,204 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:58,206 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:58,208 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '56.24065877926455', stochrsi_valueFastD = '31.41623689681967' WHERE timestamp = '2020-03-09 11:30:00-07';
+
+06:53:58,215 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:53:59,194 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:53:59,197 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '11.83183226418933', stochrsi_valueFastD = '25.173431684063342' WHERE timestamp = '2020-03-09 11:00:00-07';
+
+06:53:59,203 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:54:00,143 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:54:00,145 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '26.17621964656069', stochrsi_valueFastD = '42.828024101196796' WHERE timestamp = '2020-03-09 10:30:00-07';
+
+06:54:00,150 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:54:01,151 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:54:01,154 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '37.512243140692085', stochrsi_valueFastD = '64.70263718884677' WHERE timestamp = '2020-03-09 10:00:00-07';
+
+06:54:01,161 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:54:02,70 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:54:02,74 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '64.79560951723985', stochrsi_valueFastD = '53.3449548422968' WHERE timestamp = '2020-03-09 09:30:00-07';
+
+06:54:02,82 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:54:03,84 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:54:03,88 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '91.80005891148635', stochrsi_valueFastD = '31.746418336530578' WHERE timestamp = '2020-03-09 09:00:00-07';
+
+06:54:03,95 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:54:03,437 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:54:03,439 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '3.4391960981060112', stochrsi_valueFastD = '1.1463986993687179' WHERE timestamp = '2020-03-09 08:30:00-07';
+
+06:54:03,445 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:54:04,431 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:54:04,433 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '0', stochrsi_valueFastD = '-1.1842378929335004e-13' WHERE timestamp = '2020-03-09 08:00:00-07';
+
+06:54:04,442 root WARNING 93 [WARNING] value too long for type character varying(20)
+
+
+06:54:04,442 asyncio DEBUG 53 Using selector: SelectSelector
+06:54:04,832 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1583848442.000100', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': '<!channel> *[ERROR]* ```value too long for type character varying(20)\n```', 'user': 'UURQ1SNF4', 'ts': '1583848442.000100', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+06:54:04,832 root ERROR 106 [ERROR] value too long for type character varying(20)
+
+
+06:54:04,832 root WARNING 93 [WARNING] value too long for type character varying(20)
+
+
+06:54:05,227 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1583848442.000200', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': '<!channel> *[WARNING]* ```value too long for type character varying(20)\n```', 'user': 'UURQ1SNF4', 'ts': '1583848442.000200', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+06:56:47,310 root DEBUG 83 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_30m ORDER BY timestamp DESC;
+
+06:56:47,331 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:56:48,262 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:56:48,264 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '99.99999999999999', stochrsi_valueFastD = '66.66666666666664' WHERE timestamp = '2020-03-10 03:30:00-07';
+
+06:56:48,281 root DEBUG 83 [DEBUG] ALTER TABLE ETHUSDT_OHLCV_30m ADD  stochrsi_valueFastK VARCHAR; ALTER TABLE ETHUSDT_OHLCV_30m ADD  stochrsi_valueFastD VARCHAR; 
+
+06:56:48,283 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '99.99999999999999', stochrsi_valueFastD = '66.66666666666664' WHERE timestamp = '2020-03-10 03:30:00-07';
+
+06:56:48,294 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:56:49,293 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:56:49,295 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '100', stochrsi_valueFastD = '50.57209278113737' WHERE timestamp = '2020-03-10 03:00:00-07';
+
+06:56:49,300 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:56:50,246 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 47
+06:56:50,248 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '0', stochrsi_valueFastD = '34.94098438371569' WHERE timestamp = '2020-03-10 02:30:00-07';
+
+06:56:50,256 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:56:51,236 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:56:51,238 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '51.71627834917453', stochrsi_valueFastD = '55.9015653394488' WHERE timestamp = '2020-03-10 02:00:00-07';
+
+06:56:51,248 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:56:52,168 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:56:52,170 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '53.106674798688715', stochrsi_valueFastD = '47.81658680902996' WHERE timestamp = '2020-03-10 01:30:00-07';
+
+06:56:52,180 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:56:53,150 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:56:53,152 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '62.881742857890536', stochrsi_valueFastD = '30.114361876862947' WHERE timestamp = '2020-03-10 01:00:00-07';
+
+06:56:53,160 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:56:54,122 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:56:54,124 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '27.46134277347726', stochrsi_valueFastD = '9.153780924492471' WHERE timestamp = '2020-03-10 00:30:00-07';
+
+06:56:54,130 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:56:55,118 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:56:55,120 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '0', stochrsi_valueFastD = '2.6766584963666014' WHERE timestamp = '2020-03-10 00:00:00-07';
+
+06:56:55,130 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:56:56,59 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 47
+06:56:56,61 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '0', stochrsi_valueFastD = '15.78622168502956' WHERE timestamp = '2020-03-09 23:30:00-07';
+
+06:56:56,68 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:56:57,64 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:56:57,67 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '8.029975478405357', stochrsi_valueFastD = '42.27413252360845' WHERE timestamp = '2020-03-09 23:00:00-07';
+
+06:56:57,75 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:56:57,992 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:56:57,994 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '39.328689587357445', stochrsi_valueFastD = '72.93080736863037' WHERE timestamp = '2020-03-09 22:30:00-07';
+
+06:56:58,3 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:56:59,9 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:56:59,12 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '79.46373251843565', stochrsi_valueFastD = '87.92376295571557' WHERE timestamp = '2020-03-09 22:00:00-07';
+
+06:56:59,19 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:57:00,8 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:57:00,11 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '100', stochrsi_valueFastD = '94.76918544919931' WHERE timestamp = '2020-03-09 21:30:00-07';
+
+06:57:00,18 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:57:01,18 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:57:01,20 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '84.3075563476945', stochrsi_valueFastD = '68.65674995558601' WHERE timestamp = '2020-03-09 21:00:00-07';
+
+06:57:01,24 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:57:01,993 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:57:01,995 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '100', stochrsi_valueFastD = '40.55423117216205' WHERE timestamp = '2020-03-09 20:30:00-07';
+
+06:57:02,7 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:57:02,349 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:57:02,351 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '21.662693516729814', stochrsi_valueFastD = '12.426676394196642' WHERE timestamp = '2020-03-09 20:00:00-07';
+
+06:57:02,358 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:57:03,367 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 47
+06:57:03,370 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '0', stochrsi_valueFastD = '5.205778556267035' WHERE timestamp = '2020-03-09 19:30:00-07';
+
+06:57:03,376 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:57:04,377 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:57:04,379 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '15.617335668815416', stochrsi_valueFastD = '36.422810207953425' WHERE timestamp = '2020-03-09 19:00:00-07';
+
+06:57:04,385 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:57:05,380 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 46
+06:57:05,381 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '0', stochrsi_valueFastD = '64.5503649853532' WHERE timestamp = '2020-03-09 18:30:00-07';
+
+06:57:05,392 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:57:06,391 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:57:06,393 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '93.65109495596235', stochrsi_valueFastD = '92.99065162282834' WHERE timestamp = '2020-03-09 18:00:00-07';
+
+06:57:06,398 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:57:07,396 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:57:07,398 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '100', stochrsi_valueFastD = '95.10695330429694' WHERE timestamp = '2020-03-09 17:30:00-07';
+
+06:57:07,404 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:57:08,373 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:57:08,375 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '85.32085991273621', stochrsi_valueFastD = '93.8677712468259' WHERE timestamp = '2020-03-09 17:00:00-07';
+
+06:57:08,381 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:57:09,350 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:57:09,352 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '100', stochrsi_valueFastD = '98.76081794260269' WHERE timestamp = '2020-03-09 16:30:00-07';
+
+06:57:09,357 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:57:10,343 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:57:10,345 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '96.28245382775', stochrsi_valueFastD = '91.09220679330997' WHERE timestamp = '2020-03-09 16:00:00-07';
+
+06:57:10,350 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:57:11,326 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:57:11,328 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '100', stochrsi_valueFastD = '58.998055516878345' WHERE timestamp = '2020-03-09 15:30:00-07';
+
+06:57:11,335 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:57:12,316 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:57:12,318 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '76.99416654998282', stochrsi_valueFastD = '29.84811476649755' WHERE timestamp = '2020-03-09 15:00:00-07';
+
+06:57:12,324 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:57:13,291 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:57:13,293 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '0', stochrsi_valueFastD = '37.516725916117714' WHERE timestamp = '2020-03-09 14:30:00-07';
+
+06:57:13,299 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:57:14,264 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:57:14,267 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '12.550177747351858', stochrsi_valueFastD = '70.85005924911732' WHERE timestamp = '2020-03-09 14:00:00-07';
+
+06:57:14,276 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
+06:57:14,637 urllib3.connectionpool DEBUG 396 https://ta.taapi.io:443 "POST /stochrsi HTTP/1.1" 200 None
+06:57:14,639 root DEBUG 83 [DEBUG] UPDATE ETHUSDT_OHLCV_30m SET stochrsi_valueFastK = '100', stochrsi_valueFastD = '99.99999999999996' WHERE timestamp = '2020-03-09 13:30:00-07';
+
+06:57:14,647 urllib3.connectionpool DEBUG 824 Starting new HTTPS connection (1): ta.taapi.io
