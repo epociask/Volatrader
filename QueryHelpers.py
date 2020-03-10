@@ -9,7 +9,7 @@ clean100 = lambda val: val if val.find('100') == -1 else val.replace("2", "hundr
 getIndicatorName = lambda indicator: Indicator(indicator.value).name.lower()  # Gets indicator key from enum
 
 
-def getCreateIndicatorTableQuery(candleSize: Candle, pair: Pair, indicator: Indicator, indicatorVal: dict) -> str:
+def getModifyTableForIndicatorQuery(candleSize: Candle, pair: Pair, indicator: Indicator, indicatorVal: dict) -> str:
     """
     1
     @:param candleSize = Candle enum
@@ -52,18 +52,8 @@ def getInsertIndicatorsQueryString(indicator: Indicator, indicatorValues: dict, 
     return returnString
 
 
-# def getCreateIndicatorTableQuery(candleSize: Candle, pair: Pair, indicator: Indicator, indicatorVal: dict) -> str:
-#     delimeter = " VARCHAR, "
-#     indicatorName = getIndicatorName(indicator)
-#     keys = f"(timestamp{indicatorName} timestamp PRIMARY KEY NOT NULL, " + \
-#            (delimeter.join(indicatorVal.keys())
-#             if list(indicatorVal.keys())[0] != "value"
-#             else f" {indicatorName}value") + f" VARCHAR, FOREIGN KEY(timestamp{indicatorName}) REFERENCES {pair.value}_OHLCV_{candleSize.value}(timestamp))"
-#     return f"CREATE TABLE {indicatorName}_{pair.value}_{candleSize.value} {keys};"
-
-
 '''
-
+3
 '''
 
 
@@ -105,31 +95,15 @@ def getCandlesFromDBQuery(pair: Pair, candleSize: Candle, limit):
     return query + ';' if limit is None else query + f" LIMIT {limit};"
 
 
-'''
-7
-'''
-
-
-def getIndicatorDataQuery(pair, candleSize, indicator, limit):
-    return f"SELECT * FROM {indicator.value}_{pair.value.replace('/', '')}_{candleSize.value} ORDER BY timestamp " \
-           f"DESC LIMIT {limit};"
-
-
-'''
-8
-'''
-
-
-def getWhereEqualsQuery(lst):
-    s = "WHERE "
-    f = " ALTER TABLE mytable "
-
-    for index in range(len(lst)):
-        if index != 0:
-            s += f"{lst[0]}.timestamp = {lst[index]}.timestamp{lst[index][0: lst[index].find('_')]} " if index == 1 else f"AND {lst[0]}.timestamp = {lst[index]}.timestamp{lst[index][0: lst[index].find('_')]} "
-            f += f"DROP COLUMN timestamp{lst[index][0: lst[index].find('_')]} " if index == 1 else f", DROP COLUMN timestamp{lst[index][0: lst[index].find('_')]}"
-    s += ";"
-    f += ";"
-    return s, f
-
+def getIndicatorDataWithCandlesQuery(pair: Pair, candleSize: Candle, indicatorList, limit=None):
+    select = ""
+    notNull = []
+    for indicator in indicatorList:
+        for key, values in indicator.items():
+                for val in values:
+                    select += f" {key}_{val},"
+                    notNull.append(F"{key}_{val} IS NOT NULL")
+    print(notNull)
+    end = " AND ".join(e for e in notNull)
+    return f"SELECT OPEN, HIGH, LOW, CLOSE, VOLUME, {select} TIMESTAMP FROM {pair.value}_OHLCV_{candleSize.value}  WHERE {end} ORDER BY TIMESTAMP" +  (f" LIMIT {limit} ASC;" if limit is not None else " ASC;")
 

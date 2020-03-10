@@ -1,8 +1,9 @@
+import copy
 import datetime
 import decimal
 
 import ccxt
-
+from IndicatorConstants import candle
 from Enums import Indicator, Pair, Candle
 
 '''
@@ -17,7 +18,7 @@ from Enums import Indicator, Pair, Candle
 getLow = lambda ticker: str(ticker).find('.')  # used in getLowHighBounds
 getHigh = lambda ticker: (len(str(ticker)[str(ticker).find('.'): len(str(ticker))]))  # used in getLowHighBounds
 cleaner = lambda word: word if type(word) != decimal.Decimal else str(word)  # cleans bounds to be parsed easier
-cleanDate = lambda date: date[0 : 10]
+cleanDate = lambda date: date[0: 10]
 getIndicatorName = lambda indicator: Indicator(indicator.value).name
 dateFormat = lambda time: str(time) + "T00:00:00Z"
 
@@ -140,3 +141,30 @@ def fetchCandleData(api: ccxt.Exchange, pair: Pair, candleSize: Candle, args: (i
         candle = api.parse8601(dateFormat(arg))
         candles = api.fetchOHLCV(pair.value.replace("USDT", "/USDT"), candleSize.value, candle)
     return candles
+
+
+def cleanCandlesWithIndicators(data: list, indicators: list):
+    returnList = []
+    for row in data:
+        rowDict = {}
+        rowDict.update({"candle": candle.copy()})
+        # print(temp)
+        it = iter(row)
+        rowDict['candle']['open'] = str(next(it))
+        rowDict['candle']['high'] = str(next(it))
+        rowDict['candle']['low'] = str(next(it))
+        rowDict['candle']['close'] = str(next(it))
+        rowDict['candle']['volume'] = str(next(it))
+        indicators1 = indicators.copy()
+        for indicator in indicators1:
+            print(indicator)
+            rowDict.update(copy.deepcopy(indicator))
+            for key in indicator:
+                for val in indicator.values():
+                    for i in val:
+                        rowDict[key][i] = str(next(it))
+
+        rowDict['candle']['timestamp'] = str(next(it))
+
+        returnList.append(rowDict.copy())
+    return returnList

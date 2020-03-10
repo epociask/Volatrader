@@ -5,10 +5,9 @@ Helper script w/ all TAAPIO indicators to be referenced for referencing strats a
 
 def getIndicator(name):
     try:
-        return globals()[name]
-
+        return globals()[name].copy()
     except KeyError:
-        return {"value": None}
+        return {"value": None}.copy()
 
 
 accbands = {

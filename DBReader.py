@@ -4,7 +4,7 @@ from DBoperations import DBoperations
 import IndicatorConstants
 import QueryHelpers
 from Logger import logWarningToFile, logToSlack, logDebugToFile, logErrorToFile, MessageType
-
+from IndicatorConstants import getIndicator
 
 
 class DBReader(DBoperations):
@@ -72,61 +72,22 @@ class DBReader(DBoperations):
         @:returns candle & indicator data as dict from psql server
         """
 
+        l = [{e.value : getIndicator(e.value)} for e in indicators]
+        print(l)
         assert len(args) == 0 or len(args) == 1
 
-        x = []
-        timestamps = []
-
-        x.append(pair.value + "_OHLCV_" + candleSize.value)
-        for indicator in indicators:
-            x.append(indicator + "_" + pair.value + "_" + candleSize.value)
-            timestamps.append("timstamp" + indicator)
-        # TODO consoldiate and unit test w/ query helpers
-        s, col = QueryHelpers.getWhereEqualsQuery(x)
-        f = "CREATE TEMP TABLE mytable AS SELECT * FROM " + ", ".join(e for e in x) + " " + s + col
-
-        if len(args) is 0:
-            query = f + " SELECT * FROM mytable ORDER BY timestamp ASC;"
-
-        else:
-            query = f + f"SELECT * FROM mytable WHERE timestamp >= \'{args[0]}\' ORDER BY timestamp ASC;"
-
         try:
-            logDebugToFile(query)
+
+            query = QueryHelpers.getIndicatorDataWithCandlesQuery(pair, candleSize, l)
+            print(query)
             self.cur.execute(query)
-            data = self.cur.fetchall()
-            self.cur.execute("DROP TABLE mytable;")
+            return HelpfulOperators.cleanCandlesWithIndicators(self.cur.fetchall(), l)
 
         except Exception as e:
             logToSlack(e, tagChannel=True, messageType=MessageType.ERROR)
             raise e
 
-        l = []
 
-        for a in data:
-
-            # TODO functionalize this logic
-            indlist = []
-            c = IndicatorConstants.getIndicator('candle').copy()
-            if c is None:
-                return
-            d = {}
-            it2 = iter(indicators)
-            for indicator in indicators:
-                indlist.append(IndicatorConstants.getIndicator(indicator).copy())
-            it = iter(a)
-            c['timestamp'] = HelpfulOperators.cleaner(next(it))
-            c['open'] = HelpfulOperators.cleaner(next(it))
-            c['high'] = HelpfulOperators.cleaner(next(it))
-            c['low'] = HelpfulOperators.cleaner(next(it))
-            c['close'] = HelpfulOperators.cleaner(next(it))
-            c['volume'] = HelpfulOperators.cleaner(next(it))
-
-            d['candle'] = c
-            for ind in indlist:
-                for key in ind.keys():
-                    ind[key] = next(it)
-                d[next(it2)] = ind
-            l.append(d)
-
-        return l
+reader = DBReader()
+for val in reader.fetchCandlesWithIndicators(Pair.ETHUSDT, Candle.THIRTY_MINUTE, [Indicator.STOCHRSI]):
+    print(val)
