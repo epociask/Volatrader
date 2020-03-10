@@ -1,15 +1,14 @@
 import requests
-
-from Enums import Indicator
-
-'''
-Gets indicator values from json candle data from TAAPIO API
-@param indicatorName = name of indicator
-@param candleJSON = json representation of candle data 
-'''
+from Enums import Indicator, Pair
+from Logger import logErrorToFile, logToSlack
 
 
-def getIndicator(indicator: Indicator, candleJSON: list) -> list:
+def getIndicator(indicator: Indicator, candleJSON: list) -> (list, None):
+    """
+    Gets indicator values from json candle data from TAAPIO API
+    @:param indicatorName = name of indicator
+    @:param candleJSON = json representation of candle data
+    """
     endpoint = "https://ta.taapi.io/{}".format(indicator.value)
     print(f"------------------------------------- {indicator} -----------------------------")
     parameters = {
@@ -33,9 +32,9 @@ def getIndicator(indicator: Indicator, candleJSON: list) -> list:
         return result
 
     else:
-        print("Response status code : ", resp.status_code)
-        print(resp.headers)
-        print(resp.content)
+        err = f"TAAPIO response status code : {resp.status_code}  \n content: {resp.content}"
+        logErrorToFile(err)
+        logToSlack(err)
         raise Exception(resp.status_code + " " + resp.headers)
 
 

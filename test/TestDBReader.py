@@ -39,7 +39,6 @@ class TestDBReader(unittest.TestCase):
         pair = Pair.ETHUSDT
         candleSize = Candle.FIFTEEEN_MINUTE
         received = reader.fetchCandlesWithIndicators(pair, candleSize, ['threeoutside'])
-        print(received)
         self.assertIsNotNone(received)
         self.assertIsNotNone(received[0]['threeoutside']['value'])
         self.assertIsNotNone(received[0]['candle']['timestamp'])

@@ -2,7 +2,6 @@ from requests import Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 import json
 
-# Functional script because y not
 
 parameters1 = {
     'start': '1',

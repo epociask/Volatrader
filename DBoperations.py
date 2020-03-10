@@ -3,24 +3,34 @@ import HelpfulOperators
 import QueryHelpers
 from Enums import Candle, Pair
 from config import config
+from Logger import logToSlack, logDebugToFile
+
+
 class DBoperations:
+    """
+    Base database operations class for handling Database connection, commits, & ensuring connection
+    """
 
     def __init__(self):
         self.conn = None
         self.cur = None
-    '''
-    Commits cursor data to Database
-    '''
+
     def commit(self) -> None:
+        """"
+        Commits cursor data to Database
+        @:returns None
+        """
+
         print("Comitting to database\n")
         self.conn.commit()
         print("success :0")
-    '''
-    connects to DataBase
-    @returns None if connection is successful
-    @:returns Exception otherwise 
-    '''
+
     def connect(self) -> (None, Exception):
+        """
+        connects to DataBase
+        @:returns None if connection is successful
+        @:returns Exception otherwise
+        """
 
         try:
             params = config()
@@ -32,38 +42,41 @@ class DBoperations:
             print("Error : ", error)
             return error
 
-
         return None
-    '''
-    @returns connection status
-    '''
+
     def connStatus(self):
+        """
+        @:returns connection status
+        """
+
         return self.conn
 
-    '''
-    closes connection w/ database 
-    '''
     def terminateConnection(self):
+        """
+        closes connection w/ database
+        """
+
         self.conn.close()
 
-    '''
-    ensures connection is still bounded
-    '''
     def ensureConnection(self):
+        """
+         ensures connection is still bounded
+        """
+
         if self.connStatus() is None:
             self.connect()
 
-    '''
-    returns candle data as dict from psql server
-    '''
     def getCandleDataDescFromDB(self, candleSize: Candle, pair: Pair, limit=None) -> list:
+        """
+        returns candle data as dict from psql server
+        """
         try:
-            print("[info]   ", QueryHelpers.getCandlesFromDBQuery(pair, candleSize, limit))
-            self.cur.execute(QueryHelpers.getCandlesFromDBQuery(pair, candleSize, limit))
-            return(HelpfulOperators.convertCandlesToDict(self.cur.fetchall()))
+            query = QueryHelpers.getCandlesFromDBQuery(pair, candleSize, limit)
+            logDebugToFile(query)
+            self.cur.execute(query)
+            return HelpfulOperators.convertCandlesToDict(self.cur.fetchall())
 
 
         except Exception as e:
-            print("ERROR : ", e)
+            logToSlack(e)
             raise e
-
