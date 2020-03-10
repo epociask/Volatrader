@@ -7,17 +7,17 @@ from termcolor import colored
 from Enums import *
 
 
-'''
-main backtest function, prints backtest  results
-@param pair -> pair you wish to run backtest on
-@param candleSize -> size of candle you wish to use
-@param strategy -> Buying strategy that you wish to implement
-@param Stop-Loss percent
-@Param Take profit percent -> percent gain from buy-price at which you wish to sell
-'''
-
-# TODO add optional start time for args parameter
 def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProfitPercent, principle, *args):
+    """
+    main backtest function, prints backtest results
+    @:param pair -> pair you wish to run backtest on
+    @:param candleSize -> size of candle you wish to use
+    @:param strategy -> Buying strategy that you wish to implement
+    @:param Stop-Loss percent
+    @:param Take profit percent -> percent gain from buy-price at which you wish to sell
+    @:param args optional TIME ENUM to specify timeline to test strategy upon
+    """
+
     assert len(args) == 0 or len(args) == 1
     assert stopLossPercent in range(1, 100)
     assert takeProfitPercent in range(1, 100)

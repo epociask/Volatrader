@@ -1,12 +1,13 @@
 '''
 Helper script w/ all TAAPIO indicators to be referenced for referencing strats as dictionaries
 '''
-def getIndicator(name):
 
+
+def getIndicator(name):
     try:
         return globals()[name]
 
-    except Exception:
+    except KeyError:
         return {"value": None}
 
 
@@ -27,7 +28,6 @@ bbands = {
     "valueLowerBand": None,
 }
 
-
 candle = {
     'timestamp': None,
     'open': None,
@@ -36,7 +36,6 @@ candle = {
     'close': None,
     'volume': None,
 }
-
 
 di = {
     'plus_di': None,

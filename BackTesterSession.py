@@ -1,11 +1,10 @@
 from termcolor import colored
 from BackTesterSellLogic import Instance
 
-
-'''
-Class to hold buying and selling logic and execute each accordingly to price updates 
-'''
 class Session:
+    """
+    Class to hold buying and selling logic and execute each accordingly to price updates
+    """
 
     def __init__(self, pair, buyStrategy, takeProfitPercent, percentSL):
         self.pair = pair
@@ -23,26 +22,30 @@ class Session:
         self.results = []
         self.positiveTrades = 0
         self.NegativeTrades = 0
-    '''
-    @returns # of winning and # of losing trades
-    '''
+
     def getTradeData(self) -> (int, int):
+        """
+        @returns # of winning and # of losing trades
+        """
         return str(self.positiveTrades), str(self.NegativeTrades)
-    '''
-    Adds trade result to results list
-    updates winning and losing trade counts
-    '''
+
     def addResult(self) -> None:
+        """
+        Adds trade result to results list
+        updates winning and losing trade counts
+        @:returns None
+        """
         self.results.append({'buytime': self.buyTime, 'buyprice': self.buyPrice, 'selltime': self.sellTime,
                              'sellprice': self.sellPrice, 'profitloss': self.profitLoss})
         if self.profitLoss > 0:
             self.positiveTrades += 1
         else:
             self.NegativeTrades += 1
-    '''
-    resets after selling 
-    '''
+
     def reset(self) -> None:
+        """
+        reset function to reset class members after selling
+        """
         self.addResult()
         self.sellStrat.reset()
         self.buy = False
@@ -51,32 +54,37 @@ class Session:
         self.profitLoss = None
         self.sell = False
 
-    '''
-    Calculate profit loss function
-    '''
-    def calcPL(self) -> None:
 
+    def calcPL(self) -> None:
+        """
+        Calculate profit loss function
+        @:returns None
+        """
         self.profitLoss = (100 - (100 * (self.buyPrice / self.sellPrice))) if self.sellPrice > self.buyPrice else -(
                     100 - (100 * (self.sellPrice / self.buyPrice)))
-    '''
-    ToString method
-    '''
+
     def toString(self) -> str:
+        """
+        ToString method
+        @:returns toString representation of Session instance
+        """
 
         return "Buy Price {} time: {}\nSell Price {} time: {}\nProfit Loss {}\n".format(self.buyPrice, self.buyTime,
                                                                                         self.sellPrice, self.sellTime,
                                                                                         self.profitLoss)
-    '''
-    returns total profit-loss percentage after running strategy
-    '''
     def getTotalPL(self):
+        """
+        @:returns total profit-loss percentage after running strategy
+        """
 
         return sum(self.profitlosses)
 
-    '''
-    Uses sell logic instance to see if it's time to sell 
-    '''
+
     def checkForSell(self, data):
+        """
+        Uses sell logic instance to see if it's time to sell
+        @:returns boolean
+        """
         # print("Checking sell:::::::current price", data['candle']['close'])
         if self.sellStrat.run(float(data['candle']['close'])) or self.takeProfit <= float(data['candle']['close']):
             self.sellPrice = float(data['candle']['close'])
@@ -85,14 +93,14 @@ class Session:
 
         return False
 
-    '''
-    main function
-    @param data 
-    takes in @param data and makes buy/sell, do-nothing decisions accordingly 
-    '''
-    def update(self, data) -> None:
-        # print("Checking for ", data)
 
+    def update(self, data) -> None:
+        """
+        main function
+        @:param data
+        takes in @:param data and makes buy/sell or do-nothing decisions accordingly
+        @:returns None
+        """
         if not self.buy:
             self.buy, self.buyTime, self.buyPrice = self.buyStrat(data)
 
@@ -109,16 +117,19 @@ class Session:
                 self.profitlosses.append(self.profitLoss)
                 self.reset()
 
-    '''
-    @returns count of total trades 
-    '''
+
     def getTotalTrades(self) -> int:
+        """
+        @:returns count of total trades
+        """
         return len(self.profitlosses)
 
-    '''
-    @returns results in a dictionary 
-    '''
+
     def getResults(self) -> dict:
+        """
+        @:returns results in a dictionary
+        """
+
         return {
             "pair": self.pair.value,
             "tradeResults": self.results
