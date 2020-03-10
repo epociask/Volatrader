@@ -54,7 +54,7 @@ Enum to represent all TAAPIO indicator instances
 
 
 class Indicator(Enum):
-    TWOCROW = "2crows"
+    TWOCROWS = "2crows"
     THREEBLACKCROWS = '3blackcrows'
     THREEINSIDE = '3inside'
     THREELINESTRIKE = '3linestrike'
