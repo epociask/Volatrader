@@ -80,7 +80,7 @@ class TestQueryHelpers(unittest.TestCase):
         candleSize = Candle.FIFTEEEN_MINUTE
         indcator = Indicator.THREEOUTSIDE
         values = {"valuethreeoutside": 100}
-        expected = 'INSERT INTO threeoutside_ETHUSDT_15m (timestampthreeoutside, valuethreeoutside) VALUES (\'2020:01:01 00:00:00\', 100 );'
+        expected = 'INSERT INTO threeoutside_ETHUSDT_15m (timestampthreeoutside, valuethreeoutside) VALUES (\'2020:01:01 00:00:00\', 100);'
 
         actual = QueryHelpers.getInsertIndicatorsQueryString(indcator, values, '2020:01:01 00:00:00', candleSize, pair)
         self.assertEqual(actual, expected)

@@ -328,8 +328,3 @@ class DBwriter(DBoperations):
         for coin in dataDict:
             self.writeStaticMarketDataQuerys(coin)
 
-
-
-writer = DBwriter()
-
-writer.writeIndicatorForTable(Candle.FIFTEEEN_MINUTE, Pair.ETHUSDT, True, Indicator.SUB)
