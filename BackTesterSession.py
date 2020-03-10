@@ -3,7 +3,7 @@ from BackTesterSellLogic import Instance
 
 
 '''
-Class to hold buying and selling logic 
+Class to hold buying and selling logic and execute each accordingly to price updates 
 '''
 class Session:
 
@@ -87,7 +87,8 @@ class Session:
 
     '''
     main function
-    @param data takes in and makes buy/sell, do-nothing decisions accordingly 
+    @param data 
+    takes in @param data and makes buy/sell, do-nothing decisions accordingly 
     '''
     def update(self, data) -> None:
         # print("Checking for ", data)
