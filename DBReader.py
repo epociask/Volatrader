@@ -1,8 +1,17 @@
+import time
+from datetime import datetime
+
 from Enums import *
 import HelpfulOperators
 from DBoperations import DBoperations
 import IndicatorConstants
 import QueryHelpers
+
+'''
+DataBase reader class that performs read operations on coin-database
+@inherited from DBoperations  
+'''
+
 
 class DBReader(DBoperations):
 
@@ -10,11 +19,16 @@ class DBReader(DBoperations):
         super().__init__()
         super().connect()
 
-    # returns candle data as dict from psql server
-    def getTableData(self, candleSize: str, pair: str, args: list):
+    '''
+    Gets all table candle data for a given pair & candle size 
+    @param candleSize = Candle enum
+    @param pair = Pair enum 
+    @returns candle data as dict from psql server
+    '''
+
+    def getTableCandleData(self, candleSize: Candle, pair: Pair, args: list):
         try:
             self.cur.execute(QueryHelpers.getTableDataQuery(candleSize, pair, args))
-
             self.conn.commit()
             return HelpfulOperators.convertCandlesToDict(self.cur.fetchall())
 
@@ -22,20 +36,37 @@ class DBReader(DBoperations):
             print("ERROR : ", e)
             return None
 
+    '''
+    Gets all table indicator data for a given pair, candle size, & indicator name
+    @param candleSize = Candle enum
+    @param pair = Pair enum 
+    @param indicator = Indicator enum 
+    @param limit specifices how many table entries to obtain 
+    @returns indicator data as dict from psql server
+    '''
 
     def fetchIndicatorData(self, pair, candleSize, indicator, limit):
         try:
 
-            self.cur.execute(f'SELECT * FROM {indicator}_{pair.value.replace("/", "")}_{candleSize.value} ORDER BY timestamp DESC LIMIT {limit};')
+            self.cur.execute(
+                f'SELECT * FROM {indicator}_{pair.value.replace("/", "")}_{candleSize.value} ORDER BY timestamp DESC LIMIT {limit};')
             return self.cur.fetchall()
 
         except Exception as e:
             raise e
 
+    '''
+     Gets all table indicator data for a given pair, candle size, & list of indicators 
+     & groups values by timestamp
+     @param candleSize = Candle enum
+     @param pair = Pair enum 
+     @param indicators = list of indicators to pull out w/ candles 
+     @param args specifices how many table entries to obtain 
+     @returns candle & indicator data as dict from psql server
+     '''
     # TODO this can probably be consolidated with the getCandlesFromDB method with some conditional logic to
     #  consolidate space & reduce repetition in code operations
-
-    def fetchCandlesWithIndicators(self, pair, candleSize, indicators, *args):
+    def fetchCandlesWithIndicators(self, pair, candleSize, indicators, *args) -> list:
         assert len(args) == 0 or len(args) == 1
 
         x = []
@@ -45,8 +76,8 @@ class DBReader(DBoperations):
         for indicator in indicators:
             x.append(indicator + "_" + pair.value + "_" + candleSize.value)
             timestamps.append("timstamp" + indicator)
-
-        s, col = HelpfulOperators.makeEqualities(x)
+        # TODO consoldiate and unit test w/ query helpers
+        s, col = QueryHelpers.getWhereEqualsQuery(x)
         f = "CREATE TEMP TABLE mytable AS SELECT * FROM " + ", ".join(e for e in x) + " " + s + col
 
         if len(args) is 0:
@@ -67,6 +98,8 @@ class DBReader(DBoperations):
         l = []
         print("Data:::", data)
         for a in data:
+
+            # TODO functionalize this logic
             indlist = []
             c = IndicatorConstants.getIndicator('candle').copy()
             if c is None:
@@ -95,3 +128,11 @@ class DBReader(DBoperations):
 
 
 
+# inds = [QueryHelpers.clean2(QueryHelpers.clean100(QueryHelpers.clean3(e.value))) for e in Indicator]
+#
+# x = datetime.now()
+# print(x)
+# t = DBReader()
+# t.fetchCandlesWithIndicators(Pair.STXUSDT, Candle.FIFTEEEN_MINUTE, inds)
+#
+# print(datetime.now() - x)

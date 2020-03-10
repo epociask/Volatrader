@@ -1,8 +1,9 @@
 SIMPLE_BUY_STRAT_INDICATORS = ['threeoutside', 'invertedhammer']
 
 
-
-#returns strategy function with a list of indicators to use with it
+'''
+returns strategy function with a list of indicators to use with it
+'''
 def getStrat(name):
 
     return globals()[name], globals()[f"{name}_INDICATORS"]

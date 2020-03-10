@@ -9,7 +9,7 @@ from Enums import *
 x = DBReader()
 
 '''
-main backtest function
+main backtest function, prints backtest  results
 @param pair -> pair you wish to run backtest on
 @param candleSize -> size of candle you wish to use
 @param strategy -> Buying strategy that you wish to implement
