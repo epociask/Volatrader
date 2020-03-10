@@ -45,5 +45,5 @@ def writeSchedule(pair: Pair):
         schedule.run_pending()
 
 
-startCollection(Pair.ETHUSDT)
+# startCollection(Pair.ETHUSDT)
 writeIndicators(Pair.ETHUSDT, Candle.FIFTEEEN_MINUTE)
