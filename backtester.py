@@ -6,7 +6,6 @@ import strategies
 from termcolor import colored
 from Enums import *
 
-x = DBReader()
 
 '''
 main backtest function, prints backtest  results
@@ -29,13 +28,14 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
 
     strategy, indicators = strategies.getStrat(strategy)
     test = Session(pair, strategy, takeProfitPercent, stopLossPercent)
+    reader = DBReader()
 
     if len(args) is 0:
-        DataSet = x.fetchCandlesWithIndicators(pair, candleSize, indicators)
+        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators)
 
     else:
         timeNow = str(datetime.now())[0: -7]
-        DataSet = x.fetchCandlesWithIndicators(pair, candleSize, indicators, rewind(timeNow, args[0].value, 60))
+        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators, rewind(timeNow, args[0].value, 60))
     start = DataSet[0]['candle']['timestamp']
     finish = DataSet[-1]['candle']['timestamp']
     for data in DataSet:
@@ -73,4 +73,4 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
         attrs=['bold']))
 
 
-backTest(Pair.ETHUSDT, Candle.FIFTEEEN, "SIMPLE_BUY_STRAT", 2, 4, 10000, Time.MONTH)
+backTest(Pair.ETHUSDT, Candle.FIFTEEEN_MINUTE, "SIMPLE_BUY_STRAT", 2, 4, 10000, Time.MONTH)
