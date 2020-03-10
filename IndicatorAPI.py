@@ -33,9 +33,8 @@ def getIndicator(indicator: Indicator, candleJSON: list) -> list:
         return result
 
     else:
-        print("Response status code : ", resp.status_code)
-        print(resp.headers)
-        print(resp.content)
+        print("RESPONSE STATUS : ", resp.status_code)
+        print("RESPONSE HEADERS: ", resp.headers)
         raise Exception(resp.status_code + " " + resp.headers)
 
 

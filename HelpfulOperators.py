@@ -19,7 +19,7 @@ getHigh = lambda ticker: (len(str(ticker)[str(ticker).find('.'): len(str(ticker)
 cleanBounds = lambda bounds: bounds.replace("(", "").replace(")", "").replace(",", "").replace("[", "").replace("]",
                                                                                                                 "")  # cleans bounds to be parsed easier
 cleaner = lambda word: word if type(word) != decimal.Decimal else str(word)  # cleans bounds to be parsed easier
-getIndicatorName = lambda indicator: Indicator(indicator.value).name
+getIndicatorName = lambda indicator: Indicator(indicator.value).name.lower()  # Gets indicator key from enum
 dateFormat = lambda time: str(time) + "T00:00:00Z"
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
@@ -77,8 +77,6 @@ def getLowHighBounds(candles: list) -> (int, int):
     low = max(set(lows), key=lows.count)
     high = max(set(highs), key=highs.count) - 1
 
-    print(low)
-    print(high)
     return low, high
 
 
@@ -100,7 +98,6 @@ def convertCandlesToDict(candles: list) -> list:
         except Exception as e:
             print("Error", e)
 
-    print(new)
     return new
 
 

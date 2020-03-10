@@ -91,7 +91,6 @@ class DBwriter(DBoperations):
             raise TypeError("wrong parameters supplied into getCandleData()")
         try:
             candles = sorted(candles, key=lambda i: i['timestamp'], reverse=False)
-            print("Inserting candldes ::: ", candles)
             ts = str(candles[-1]['timestamp'])
 
             print("For timestamp :::::", ts)
