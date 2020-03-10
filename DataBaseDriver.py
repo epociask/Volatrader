@@ -30,4 +30,4 @@ def writeSchedule(pair: Pair):
     schedule.every(1).hour.do(writer.writeCandlesFromCCXT, (Candle.HOUR, pair, 2))
 
 
-startCollection(Pair.STXUSDT)
+# startCollection(Pair.STXUSDT)
