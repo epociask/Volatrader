@@ -22,7 +22,9 @@ jobs:
       - run:
           name: "Running unit tests"
           command: "python -m unittest test/*.py -v"
-
+      - run:
+          name: "Running  main script"
+          command: "python DataBaseDriver.py"
   deploy:
     docker:
       - image: circleci/python:3.7.3
