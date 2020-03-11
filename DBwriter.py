@@ -119,7 +119,7 @@ class DBwriter(DBoperations):
 
             if type(e) == psycopg2.errors.UndefinedColumn:
                 self.conn.rollback()
-                createTable = QueryHelpers.getCreateIndicatorTableQuery(candleSize, pair, indicator, indicatorValues)
+                createTable = QueryHelpers.getModifyTableForIndicatorQuery(candleSize, pair, indicator, indicatorValues)
                 self.cur.execute(createTable)
                 logDebugToFile(createTable)
                 self.conn.commit()
@@ -227,11 +227,11 @@ class DBwriter(DBoperations):
         print("Finshed :::: ;)")
       #  logDebugToFile("[SUCCESS] FINISHED WRITING CANDLE DATA")
 
-    """
-    writes static market metric data from CoinCapAPI to postgresql server
-    """
 
     def writeStaticMarketDataQuerys(self, coin, timeStamp):
+        """
+        writes static market metric data from CoinCapAPI to postgresql server
+        """
 
         if coin['platform'] is not None:
             js = coin['platform']['name']

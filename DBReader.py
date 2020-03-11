@@ -58,9 +58,7 @@ class DBReader(DBoperations):
             logToSlack(e, tagChannel=True, messageType=MessageType.ERROR)
             raise e
 
-    # TODO: can probably be consolidated with the getCandlesFromDB method with some conditional logic to
-    #  consolidate space & reduce repetition in code operations
-    def fetchCandlesWithIndicators(self, pair, candleSize, indicators, *args) -> list:
+    def fetchCandlesWithIndicators(self, pair, candleSize, indicators, *args) -> dict:
 
         """
         Gets all table indicator data for a given pair, candle size, & list of indicators
@@ -71,23 +69,17 @@ class DBReader(DBoperations):
         @:param args specifices how many table entries to obtain
         @:returns candle & indicator data as dict from psql server
         """
-
-        l = [{e.value : getIndicator(e.value)} for e in indicators]
-        print(l)
         assert len(args) == 0 or len(args) == 1
+
+        indicatorList = [{e.value: getIndicator(e.value)} for e in indicators]
 
         try:
 
-            query = QueryHelpers.getIndicatorDataWithCandlesQuery(pair, candleSize, l)
-            print(query)
+            query = QueryHelpers.getIndicatorDataWithCandlesQuery(pair, candleSize, indicatorList)
+            logDebugToFile(query)
             self.cur.execute(query)
-            return HelpfulOperators.cleanCandlesWithIndicators(self.cur.fetchall(), l)
+            return HelpfulOperators.cleanCandlesWithIndicators(self.cur.fetchall(), indicatorList)
 
         except Exception as e:
             logToSlack(e, tagChannel=True, messageType=MessageType.ERROR)
             raise e
-
-
-reader = DBReader()
-for val in reader.fetchCandlesWithIndicators(Pair.ETHUSDT, Candle.THIRTY_MINUTE, [Indicator.STOCHRSI]):
-    print(val)
