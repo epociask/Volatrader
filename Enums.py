@@ -1,11 +1,10 @@
 from enum import Enum
 
-'''
-Enum to represent all possible candle sizes
-'''
-
 
 class Candle(Enum):
+    """
+    Enum to represent all possible candle sizes
+    """
     ONE_MINUTE = "1m"
     FIVE_MINUTE = "5m"
     FIFTEEEN_MINUTE = "15m"
@@ -19,12 +18,10 @@ class Candle(Enum):
     THRE_WEEK = "3w"
 
 
-'''
-Enum to represent all base/quote currency pairs 
-'''
-
-
 class Pair(Enum):
+    """
+    Enum to represent all base/quote currency pairs
+    """
     ETHUSDT = "ETHUSDT"
     BTCUSDT = "BTCUSDT"
     STXUSDT = "STXUSDT"
@@ -33,12 +30,10 @@ class Pair(Enum):
     LTCUSDT = 'LTCUSDT'
 
 
-'''
-enum to represent all time instances 
-'''
-
-
 class Time(Enum):
+    """
+    enum to represent all time instances
+    """
     DAY = 24
     ONEWEEK = 168
     TWOWEEK = 336
@@ -48,12 +43,10 @@ class Time(Enum):
     THREEMONTH = 2100
 
 
-'''
-Enum to represent all TAAPIO indicator instances 
-'''
-
-
 class Indicator(Enum):
+    """
+    Enum to represent all TAAPIO indicator instances
+    """
     TWOCROW = "2crows"
     THREEBLACKCROWS = '3blackcrows'
     THREEINSIDE = '3inside'

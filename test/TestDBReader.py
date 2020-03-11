@@ -34,11 +34,11 @@ class TestDBReader(unittest.TestCase):
 
         received = HelpfulOperators.fetchCandleData(api, pair, candleSize, ['a'])
         self.assertIsNotNone(received)
-
-    def testFetchCandlesWithIndicators(self):
-        pair = Pair.ETHUSDT
-        candleSize = Candle.FIFTEEEN_MINUTE
-        received = reader.fetchCandlesWithIndicators(pair, candleSize, ['threeoutside'])
-        self.assertIsNotNone(received)
-        self.assertIsNotNone(received[0]['threeoutside']['value'])
-        self.assertIsNotNone(received[0]['candle']['timestamp'])
+    #
+    # def testFetchCandlesWithIndicators(self):
+    #     pair = Pair.ETHUSDT
+    #     candleSize = Candle.FIFTEEEN_MINUTE
+    #     received = reader.fetchCandlesWithIndicators(pair, candleSize, [Indi])
+    #     self.assertIsNotNone(received)
+    #     self.assertIsNotNone(received[0]['threeoutside']['value'])
+    #     self.assertIsNotNone(received[0]['candle']['timestamp'])

@@ -1,13 +1,12 @@
+"""
+Functional logger script to log data to either .txt file or Slack
+"""
 import logging
 from datetime import datetime
 from HelpfulOperators import cleanDate
 import slack
 import os
 from enum import *
-
-"""
-Functional logger script to log data to either .txt file or Slack
-"""
 
 class Channel(Enum):
     """
@@ -108,7 +107,7 @@ def logErrorToFile(error: str) -> None:
 
 def checkIfConfig() -> None:
     """
-    Checks if txt file has been configured yet ====> if it hasn't then configFile is called
+    Checks if txt file has been configured yet ====> if it hasn't then @configFile is called
     @:returns None
     """
     global configFile

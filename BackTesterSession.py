@@ -1,6 +1,7 @@
 from termcolor import colored
 from BackTesterSellLogic import Instance
 
+
 class Session:
     """
     Class to hold buying and selling logic and execute each accordingly to price updates
@@ -54,14 +55,13 @@ class Session:
         self.profitLoss = None
         self.sell = False
 
-
     def calcPL(self) -> None:
         """
         Calculate profit loss function
         @:returns None
         """
         self.profitLoss = (100 - (100 * (self.buyPrice / self.sellPrice))) if self.sellPrice > self.buyPrice else -(
-                    100 - (100 * (self.sellPrice / self.buyPrice)))
+                100 - (100 * (self.sellPrice / self.buyPrice)))
 
     def toString(self) -> str:
         """
@@ -72,13 +72,13 @@ class Session:
         return "Buy Price {} time: {}\nSell Price {} time: {}\nProfit Loss {}\n".format(self.buyPrice, self.buyTime,
                                                                                         self.sellPrice, self.sellTime,
                                                                                         self.profitLoss)
+
     def getTotalPL(self):
         """
         @:returns total profit-loss percentage after running strategy
         """
 
         return sum(self.profitlosses)
-
 
     def checkForSell(self, data):
         """
@@ -92,7 +92,6 @@ class Session:
             return True
 
         return False
-
 
     def update(self, data) -> None:
         """
@@ -117,13 +116,11 @@ class Session:
                 self.profitlosses.append(self.profitLoss)
                 self.reset()
 
-
     def getTotalTrades(self) -> int:
         """
         @:returns count of total trades
         """
         return len(self.profitlosses)
-
 
     def getResults(self) -> dict:
         """
