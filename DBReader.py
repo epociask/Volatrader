@@ -74,11 +74,15 @@ class DBReader(DBoperations):
 
         try:
 
-            query = QueryHelpers.getIndicatorDataWithCandlesQuery(pair, candleSize, indicatorList)
+            if len(args) == 0:
+                query = QueryHelpers.getIndicatorDataWithCandlesQuery(pair, candleSize, indicatorList)
+
+            else:
+                query = QueryHelpers.getIndicatorDataWithCandlesQuery(pair, candleSize, indicatorList, args[0])
             logDebugToFile(query)
             self.cur.execute(query)
             return HelpfulOperators.cleanCandlesWithIndicators(self.cur.fetchall(), indicatorList)
 
         except Exception as e:
-            logToSlack(e, tagChannel=True, messageType=MessageType.ERROR)
+            # logToSlack(e, tagChannel=True, messageType=MessageType.ERROR)
             raise e

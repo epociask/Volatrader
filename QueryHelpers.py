@@ -3,7 +3,6 @@ Helper script to functionalize query generation
 """
 from Enums import *
 
-
 clean3 = lambda val: val if val.find("3") == -1 else val.replace("3", "three")
 clean2 = lambda val: val if val.find('2') == -1 else val.replace("2", "two")
 clean100 = lambda val: val if val.find('100') == -1 else val.replace("2", "hundred")
@@ -37,14 +36,13 @@ def getInsertIndicatorsQueryString(indicator: Indicator, indicatorValues: dict, 
     @:returns query
     """
     returnString = f'UPDATE {clean2(clean3(clean100(pair.value)))}_OHLCV_{candleSize.value} SET'
-      # creates appropiate column names
+    # creates appropiate column names
     first = next(iter(indicatorValues))
     returnString += f' {clean2(clean3(clean100(indicator.value)))}_{first} = \'{indicatorValues[first]}\''
 
     for value in indicatorValues:
         if value is not first:
             returnString += f', {indicator.value}_{value} = \'{indicatorValues[value]}\''
-
 
     returnString += f" WHERE timestamp = '{timeStamp}';"
 
@@ -62,7 +60,6 @@ def getTableDataQuery(candleSize: Candle, pair: Pair, args: list) -> str:
     return f"SELECT (timestamp, open, high, low, close, volume) FROM {pair.value}_OHLCV_{candleSize.value} ORDER BY timestamp ASC LIMIT {str(args[0])};"
 
 
-
 def getCandleInsertQuery(candle: dict, pair: Pair, candleSize: Candle) -> str:
     """
     Creates and returns query that inserts OHLCV candle dictionary into table
@@ -74,7 +71,6 @@ def getCandleInsertQuery(candle: dict, pair: Pair, candleSize: Candle) -> str:
     return f"INSERT INTO {pair.value}_OHLCV_{candleSize.value}" \
            f"(timestamp, open, high, low, close, volume) VALUES " \
            f"(to_timestamp({int(candle['timestamp']) / 1000}), \'{candle['open']}\', \'{candle['high']}\', \'{candle['low']}\', \'{candle['close']}\', \'{candle['volume']}\');"
-
 
 
 def getCreateCandleTableQuery(low, high, pair: Pair, candleSize: Candle) -> str:
@@ -91,7 +87,6 @@ def getCreateCandleTableQuery(low, high, pair: Pair, candleSize: Candle) -> str:
     return f"CREATE TABLE {pair.value}_OHLCV_{candleSize.value}(timestamp TIMESTAMP PRIMARY KEY NOT NULL, " \
            f"open DECIMAL({lowHigh}), high  DECIMAL({lowHigh}), low DECIMAL({lowHigh}), " \
            f"close DECIMAL({lowHigh}), volume numeric(10));"
-
 
 
 def getCandlesFromDBQuery(pair: Pair, candleSize: Candle, limit: (int, None)):
@@ -119,9 +114,11 @@ def getIndicatorDataWithCandlesQuery(pair: Pair, candleSize: Candle, indicatorLi
     notNull = []
     for indicator in indicatorList:
         for key, values in indicator.items():
-                for val in values:
-                    select += f" {key}_{val},"
-                    notNull.append(F"{key}_{val} IS NOT NULL")
+            for val in values:
+                # cleanedval = clean100(clean2(clean3(val)))
+                select += f" {clean3(clean2(clean100(key)))}_{val},"
+                notNull.append(F"{clean2(clean3(clean100(key)))}_{val} IS NOT NULL")
     end = " AND ".join(e for e in notNull)
-    return f"SELECT OPEN, HIGH, LOW, CLOSE, VOLUME, {select} TIMESTAMP FROM {pair.value}_OHLCV_{candleSize.value}  WHERE {end} ORDER BY TIMESTAMP" +  (f" LIMIT {limit} ASC;" if limit is not None else " ASC;")
 
+    return f"SELECT OPEN, HIGH, LOW, CLOSE, VOLUME, {select} TIMESTAMP FROM {pair.value}_OHLCV_{candleSize.value}  WHERE {end} ORDER BY TIMESTAMP" + (
+        f" LIMIT {limit} ASC;" if limit is not None else " ASC;")
