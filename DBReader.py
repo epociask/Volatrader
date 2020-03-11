@@ -1,9 +1,8 @@
 from Enums import *
 import HelpfulOperators
 from DBoperations import DBoperations
-import IndicatorConstants
 import QueryHelpers
-from Logger import logWarningToFile, logToSlack, logDebugToFile, logErrorToFile, MessageType
+from Logger import  logToSlack, logDebugToFile, MessageType
 from IndicatorConstants import getIndicator
 
 
