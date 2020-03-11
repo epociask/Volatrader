@@ -36,10 +36,10 @@ def getInsertIndicatorsQueryString(indicator: Indicator, indicatorValues: dict, 
     @:param indicatorVal = dictionary of indicator values
     @:returns query
     """
-    returnString = f'UPDATE {pair.value}_OHLCV_{candleSize.value} SET'
+    returnString = f'UPDATE {clean2(clean3(clean100(pair.value)))}_OHLCV_{candleSize.value} SET'
       # creates appropiate column names
     first = next(iter(indicatorValues))
-    returnString += f' {indicator.value}_{first} = \'{indicatorValues[first]}\''
+    returnString += f' {clean2(clean3(clean100(indicator.value)))}_{first} = \'{indicatorValues[first]}\''
 
     for value in indicatorValues:
         if value is not first:

@@ -332,6 +332,3 @@ class DBwriter(DBoperations):
             self.writeStaticMarketDataQuerys(coin)
 
 
-
-writer = DBwriter()
-writer.writeIndicatorForTable(Candle.THIRTY_MINUTE, Pair.ETHUSDT, False, Indicator.STOCHRSI)

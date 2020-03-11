@@ -12,7 +12,7 @@ indicatorENUMS = [e for e in Indicator]
 
 def writeIndicators(pair: Pair, candeSize: Candle):
     for indicator in indicatorENUMS:
-        writer.writeIndicatorForTable(candeSize, pair, True, indicator)
+        writer.writeIndicatorForTable(candeSize, pair, True, indicator, 10)
 
 
 def startCollection(pair: Pair):
@@ -29,7 +29,7 @@ def startCollection(pair: Pair):
 
 
 def writeSchedule(pair: Pair):
-    schedule.every(1).seconds.do(writer.writeCandlesFromCCXT, Candle.ONE_MINUTE, pair, 3)
+    schedule.every(1).seconds.do(writer.writeCandlesFromCCXT, Candle.ONE_MINUTE, pair, 5)
     schedule.every(1).minutes.do(writer.writeCandlesFromCCXT, Candle.ONE_MINUTE, pair, 3)
     schedule.every(1).minutes.do(writeIndicators, Candle.ONE_MINUTE, pair)
     schedule.every(5).minutes.do(writer.writeCandlesFromCCXT, Candle.FIVE_MINUTE, pair, 2)
@@ -45,5 +45,5 @@ def writeSchedule(pair: Pair):
         schedule.run_pending()
 
 
-# startCollection(Pair.ETHUSDT)
-writeIndicators(Pair.ETHUSDT, Candle.FIFTEEEN_MINUTE)
+startCollection(Pair.ETHUSDT)
+writeSchedule(Pair.ETHUSDT)
