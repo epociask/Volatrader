@@ -53,7 +53,7 @@ class TestQueryHelpers(unittest.TestCase):
         candleSize = Candle.FIFTEEEN_MINUTE
         indcator = Indicator.THREEOUTSIDE
         values = {"valuethreeoutside": 100}
-        expected = "UPDATE ETHUSDT_OHLCV_15m SET 3outside_valuethreeoutside = '100' WHERE timestamp = \'2020:01:01 00:00:00\';"
+        expected = "UPDATE ETHUSDT_OHLCV_15m SET threeoutside_valuethreeoutside = '100' WHERE timestamp = \'2020:01:01 00:00:00\';"
 
         actual = QueryHelpers.getInsertIndicatorsQueryString(indcator, values, '2020:01:01 00:00:00', candleSize, pair)
         self.assertEqual(actual, expected)
