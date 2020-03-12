@@ -1,10 +1,10 @@
 from datetime import datetime
-from src.Helpers.HelpfulOperators import rewind
-from src.DB.DBReader import *
-from src.BackTest.BackTesterSession import Session
-from src import Strategies
+from Helpers.HelpfulOperators import rewind
+from DB.DBReader import *
+from BackTest.BackTesterSession import Session
+import Strategies
 from termcolor import colored
-from src.Helpers.Enums import *
+from Helpers.Enums import *
 
 
 def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProfitPercent, principle, *args):

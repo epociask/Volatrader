@@ -1,9 +1,9 @@
-from src.Helpers.Enums import *
-from src.Helpers import HelpfulOperators
-from src.DB import QueryHelpers
-from src.DB.DBoperations import DBoperations
-from src.Helpers.Logger import  logToSlack, logDebugToFile, MessageType
-from src.Helpers.IndicatorConstants import getIndicator
+from Helpers.Enums import *
+from Helpers import HelpfulOperators
+from DB import QueryHelpers
+from DB.DBoperations import DBoperations
+from Helpers.Logger import  logToSlack, logDebugToFile, MessageType
+from Helpers.IndicatorConstants import getIndicator
 
 
 class DBReader(DBoperations):

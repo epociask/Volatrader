@@ -3,7 +3,7 @@ Functional logger script to log data to either .txt file or Slack
 """
 import logging
 from datetime import datetime
-from src.Helpers.HelpfulOperators import cleanDate
+from Helpers.HelpfulOperators import cleanDate
 import slack
 import os
 from enum import *

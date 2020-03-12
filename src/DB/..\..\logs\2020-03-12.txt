@@ -1,0 +1,256 @@
+02:36:34,962 [DATABASE_LOGGER] DEBUG 89 [DEBUG] STARTING
+
+02:36:35,646 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583856000.0), '196.72', '198.42', '195.54', '198.03', '14967.11897');
+
+02:36:35,765 [DATABASE_LOGGER] DEBUG 89 [DEBUG] TABLE NOT FOUND, CREATING NEW ONE
+
+02:36:35,882 [DATABASE_LOGGER] DEBUG 89 [DEBUG] CREATE TABLE ETHUSDT_OHLCV_5m(timestamp TIMESTAMP PRIMARY KEY NOT NULL, open DECIMAL(5, 2), high  DECIMAL(5, 2), low DECIMAL(5, 2), close DECIMAL(5, 2), volume numeric(10));
+
+02:36:35,925 [DATABASE_LOGGER] DEBUG 89 [DEBUG] STARTING
+
+02:36:36,717 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583856000.0), '196.72', '198.42', '195.54', '198.03', '14967.11897');
+
+02:36:36,840 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583856300.0), '198.06', '198.95', '197.85', '198.48', '7011.10312');
+
+02:36:37,0 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583856600.0), '198.47', '198.91', '197.73', '198.41', '3610.94084');
+
+02:36:37,160 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583856900.0), '198.39', '199.74', '198.32', '199.44', '4818.99175');
+
+02:36:37,320 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583857200.0), '199.47', '199.98', '199.13', '199.95', '3268.47551');
+
+02:36:37,480 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583857500.0), '199.96', '199.96', '199.17', '199.27', '3704.84708');
+
+02:36:37,640 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583857800.0), '199.23', '199.23', '198.19', '198.67', '3279.37673');
+
+02:36:37,800 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583858100.0), '198.65', '199.65', '198.19', '199.58', '6118.0352');
+
+02:36:37,960 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583858400.0), '199.58', '199.6', '198.79', '199.45', '1421.79726');
+
+02:36:38,120 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583858700.0), '199.42', '199.45', '197.98', '198.5', '4901.29222');
+
+02:36:38,281 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583859000.0), '198.51', '198.82', '198.21', '198.81', '2484.46946');
+
+02:36:38,415 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583859300.0), '198.81', '199.4', '198.37', '199.26', '2600.23618');
+
+02:36:38,573 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583859600.0), '199.23', '199.28', '198.3', '198.35', '1337.25584');
+
+02:36:38,707 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583859900.0), '198.39', '199.75', '198.39', '199.73', '2406.64896');
+
+02:36:38,860 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583860200.0), '199.73', '200.6', '199.4', '200.27', '8252.22297');
+
+02:36:39,0 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583860500.0), '200.22', '200.29', '199.67', '200.01', '3490.67446');
+
+02:36:39,160 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583860800.0), '200.01', '200.25', '199.73', '200.23', '2792.82645');
+
+02:36:39,306 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583861100.0), '200.27', '200.53', '199.9', '200.36', '2835.54443');
+
+02:36:39,437 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583861400.0), '200.39', '200.41', '199.29', '199.87', '2438.27412');
+
+02:36:39,568 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583861700.0), '199.87', '199.87', '199.0', '199.19', '1134.33476');
+
+02:36:39,697 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583862000.0), '199.19', '199.69', '199.1', '199.57', '2234.51943');
+
+02:36:39,837 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583862300.0), '199.62', '199.81', '199.1', '199.13', '1713.71813');
+
+02:36:39,997 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583862600.0), '199.13', '199.5', '198.69', '199.21', '3113.75317');
+
+02:36:40,120 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583862900.0), '199.21', '201.6', '199.2', '201.23', '8738.64299');
+
+02:36:40,280 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583863200.0), '201.26', '201.3', '200.02', '200.65', '4701.62149');
+
+02:36:40,467 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583863500.0), '200.65', '200.96', '199.83', '200.19', '5843.65614');
+
+02:36:40,620 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583863800.0), '200.19', '200.21', '198.71', '199.08', '5274.79839');
+
+02:36:40,771 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583864100.0), '199.1', '199.54', '198.67', '199.04', '2283.25855');
+
+02:36:40,897 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583864400.0), '199.0', '199.36', '198.44', '199.24', '3167.02373');
+
+02:36:41,27 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583864700.0), '199.2', '199.35', '198.6', '198.96', '1490.09336');
+
+02:36:41,160 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583865000.0), '198.95', '200.31', '198.88', '199.27', '4845.09163');
+
+02:36:41,297 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583865300.0), '199.31', '199.36', '198.85', '199.16', '987.1329');
+
+02:36:41,436 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583865600.0), '199.23', '199.76', '198.62', '198.82', '1760.41797');
+
+02:36:41,593 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583865900.0), '198.84', '200.59', '198.59', '199.74', '10378.80231');
+
+02:36:41,697 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583866200.0), '199.74', '199.99', '199.12', '199.28', '1687.26919');
+
+02:36:41,837 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583866500.0), '199.22', '199.66', '199.16', '199.26', '1203.20778');
+
+02:36:41,988 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583866800.0), '199.27', '200.14', '198.9', '200.1', '3568.69036');
+
+02:36:42,120 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583867100.0), '200.11', '200.41', '199.78', '200.13', '1520.32308');
+
+02:36:42,257 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583867400.0), '200.13', '200.33', '200.0', '200.13', '1626.18168');
+
+02:36:42,387 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583867700.0), '200.06', '200.63', '199.89', '200.18', '2314.81853');
+
+02:36:42,507 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583868000.0), '200.18', '200.86', '200.17', '200.77', '2484.36875');
+
+02:36:42,645 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583868300.0), '200.77', '200.77', '200.05', '200.49', '3807.00109');
+
+02:36:42,805 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583868600.0), '200.49', '201.16', '200.2', '200.99', '2105.61169');
+
+02:36:42,937 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583868900.0), '200.99', '201.17', '200.72', '201.09', '2524.64233');
+
+02:36:43,91 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583869200.0), '201.1', '201.28', '200.71', '201.2', '1741.95743');
+
+02:36:43,217 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583869500.0), '201.2', '201.69', '201.15', '201.54', '2199.93082');
+
+02:36:43,377 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583869800.0), '201.53', '202.17', '201.49', '202.0', '2077.5538');
+
+02:36:43,517 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583870100.0), '201.99', '202.39', '201.71', '202.1', '3055.59569');
+
+02:36:43,660 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583870400.0), '202.13', '202.56', '200.83', '201.43', '8376.15336');
+
+02:36:43,811 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583870700.0), '201.43', '201.72', '200.84', '201.33', '2559.14269');
+
+02:36:43,960 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583871000.0), '201.34', '202.2', '201.21', '202.2', '2145.66752');
+
+02:36:44,101 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583871300.0), '202.19', '202.58', '201.69', '202.04', '2903.16789');
+
+02:36:44,225 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583871600.0), '202.11', '202.42', '201.59', '202.2', '1605.76621');
+
+02:36:44,360 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583871900.0), '202.22', '202.57', '201.94', '202.31', '2202.81165');
+
+02:36:44,520 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583872200.0), '202.32', '202.99', '202.32', '202.73', '1021.35002');
+
+02:36:44,681 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583872500.0), '202.74', '203.28', '202.74', '203.26', '1632.24538');
+
+02:36:44,827 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583872800.0), '203.25', '204.01', '203.22', '203.9', '4440.83659');
+
+02:36:44,951 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583873100.0), '203.96', '203.96', '202.53', '203.33', '4650.05904');
+
+02:36:45,80 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583873400.0), '203.33', '203.36', '202.67', '203.15', '1084.91771');
+
+02:36:45,249 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583873700.0), '203.1', '203.16', '202.43', '203.0', '1742.38019');
+
+02:36:45,386 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583874000.0), '202.97', '203.05', '202.7', '203.02', '3567.63752');
+
+02:36:45,517 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583874300.0), '203.03', '203.03', '202.58', '202.98', '1218.9443');
+
+02:36:45,660 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583874600.0), '202.98', '203.42', '202.95', '203.07', '2067.44003');
+
+02:36:45,820 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583874900.0), '203.07', '203.19', '202.87', '202.87', '1394.65933');
+
+02:36:45,988 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583875200.0), '202.87', '203.5', '202.84', '203.16', '1159.9509');
+
+02:36:46,120 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583875500.0), '203.16', '203.4', '203.1', '203.38', '507.36845');
+
+02:36:46,280 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583875800.0), '203.38', '203.58', '203.08', '203.13', '623.13049');
+
+02:36:46,440 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583876100.0), '203.15', '203.15', '202.43', '202.45', '782.34789');
+
+02:36:46,600 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583876400.0), '202.49', '202.57', '201.75', '202.57', '3587.86158');
+
+02:36:46,760 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583876700.0), '202.57', '202.77', '201.96', '201.98', '663.09322');
+
+02:36:46,920 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583877000.0), '201.99', '202.41', '201.98', '202.26', '372.76437');
+
+02:36:47,80 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583877300.0), '202.23', '202.63', '201.75', '202.57', '942.22192');
+
+02:36:47,195 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583877600.0), '202.6', '203.74', '202.56', '203.18', '5258.04869');
+
+02:36:47,320 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583877900.0), '203.2', '203.2', '202.92', '203.1', '995.18742');
+
+02:36:47,455 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583878200.0), '203.08', '203.17', '202.6', '202.97', '1071.17607');
+
+02:36:47,585 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583878500.0), '202.99', '203.17', '202.69', '203.1', '1455.06159');
+
+02:36:47,705 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583878800.0), '203.04', '203.1', '202.14', '202.47', '4344.4686');
+
+02:36:47,825 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583879100.0), '202.46', '202.71', '202.15', '202.28', '1463.89341');
+
+02:36:47,935 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583879400.0), '202.28', '203.33', '202.09', '202.93', '2625.21255');
+
+02:36:48,75 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583879700.0), '202.91', '203.23', '202.69', '203.09', '1468.1769');
+
+02:36:48,200 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583880000.0), '203.12', '203.55', '202.65', '202.66', '4150.6386');
+
+02:36:48,315 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583880300.0), '202.67', '202.89', '202.38', '202.76', '2090.04229');
+
+02:36:48,458 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583880600.0), '202.76', '202.82', '202.21', '202.39', '1511.72086');
+
+02:36:48,575 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583880900.0), '202.39', '203.32', '202.38', '203.22', '2825.6579');
+
+02:36:48,705 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583881200.0), '203.23', '203.25', '201.75', '201.76', '2795.89748');
+
+02:36:48,840 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583881500.0), '201.75', '201.88', '201.22', '201.4', '4968.08777');
+
+02:36:48,965 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583881800.0), '201.39', '201.54', '200.39', '200.8', '4909.23293');
+
+02:36:49,98 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583882100.0), '200.79', '200.8', '199.94', '200.31', '4135.11979');
+
+02:36:49,258 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583882400.0), '200.31', '202.14', '200.14', '201.17', '9631.30846');
+
+02:36:49,420 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583882700.0), '201.12', '202.13', '201.08', '201.83', '3367.69827');
+
+02:36:49,586 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583883000.0), '201.85', '201.95', '201.16', '201.28', '1448.35912');
+
+02:36:49,695 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583883300.0), '201.2', '201.73', '201.18', '201.33', '1884.61368');
+
+02:36:49,826 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583883600.0), '201.33', '201.47', '200.58', '200.75', '3240.05141');
+
+02:36:49,945 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583883900.0), '200.73', '201.23', '200.56', '201.06', '1621.01341');
+
+02:36:50,75 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583884200.0), '201.04', '201.04', '199.92', '200.39', '4071.58206');
+
+02:36:50,186 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583884500.0), '200.39', '200.7', '200.02', '200.7', '2936.27548');
+
+02:36:50,305 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583884800.0), '200.74', '200.76', '199.92', '200.33', '2214.73731');
+
+02:36:50,440 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583885100.0), '200.32', '201.45', '200.22', '201.43', '2372.55426');
+
+02:36:50,563 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583885400.0), '201.43', '201.68', '201.03', '201.22', '1925.26166');
+
+02:36:50,693 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583885700.0), '201.11', '201.46', '200.71', '200.71', '998.98514');
+
+02:36:50,815 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583886000.0), '200.71', '201.86', '200.64', '201.83', '1602.27306');
+
+02:36:50,965 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583886300.0), '201.87', '202.15', '201.71', '201.79', '1609.4748');
+
+02:36:51,115 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583886600.0), '201.78', '202.01', '201.6', '201.65', '2365.52105');
+
+02:36:51,225 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583886900.0), '201.7', '201.81', '201.21', '201.74', '1390.26161');
+
+02:36:51,345 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583887200.0), '201.72', '202.0', '201.44', '201.48', '1255.89732');
+
+02:36:51,455 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583887500.0), '201.54', '201.77', '201.37', '201.67', '1265.78871');
+
+02:36:51,585 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583887800.0), '201.61', '202.14', '201.43', '202.12', '1173.56245');
+
+02:36:51,745 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583888100.0), '202.13', '202.56', '202.13', '202.2', '1456.04115');
+
+02:36:51,880 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583888400.0), '202.18', '203.04', '202.17', '203.04', '3088.98258');
+
+02:36:51,995 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583888700.0), '203.01', '203.18', '202.38', '202.61', '1634.35695');
+
+02:36:52,106 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583889000.0), '202.59', '202.67', '201.99', '202.23', '2494.5494');
+
+02:36:52,225 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583889300.0), '202.22', '202.23', '201.3', '201.45', '2286.8188');
+
+02:36:52,360 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583889600.0), '201.46', '201.9', '201.39', '201.69', '1460.6014');
+
+02:36:52,475 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583889900.0), '201.69', '201.83', '201.28', '201.55', '967.07163');
+
+02:36:52,586 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583890200.0), '201.52', '201.77', '201.29', '201.59', '1182.70787');
+
+02:36:52,725 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583890500.0), '201.61', '201.86', '201.49', '201.57', '745.76211');
+
+02:36:52,841 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583890800.0), '201.57', '202.0', '201.49', '201.67', '1457.69286');
+
+02:36:52,955 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583891100.0), '201.7', '202.43', '201.52', '202.2', '1117.70976');
+
+02:36:53,80 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583891400.0), '202.16', '202.76', '202.02', '202.42', '3016.60732');
+
+02:36:53,195 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583891700.0), '202.42', '202.68', '202.19', '202.25', '781.45278');
+
+02:36:53,355 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583892000.0), '202.24', '202.38', '201.86', '202.01', '832.1535');
+
+02:36:53,480 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583892300.0), '202.02', '202.6', '202.0', '202.31', '900.11315');
+
+02:36:53,596 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583892600.0), '202.27', '202.28', '201.69', '201.85', '913.35609');
+

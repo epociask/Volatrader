@@ -1,5 +1,5 @@
 import ccxt
-from src.DB import DBoperations
+from DB import DBoperations
 import os
 
 '''

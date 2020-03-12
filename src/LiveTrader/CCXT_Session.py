@@ -1,6 +1,6 @@
-from src.authent import authList
-from src.authent import getExchangeInstance
-from src.LiveTrader.TrailingStopLoss import Session
+from authent import authList
+from authent import getExchangeInstance
+from LiveTrader.TrailingStopLoss import Session
 
 
 class Sessions:

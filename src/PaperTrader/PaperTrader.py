@@ -1,7 +1,7 @@
-from src.BackTest.BackTesterSession import Session
-from src.Helpers.Enums import Pair, Candle
-from src.DB.DBReader import DBReader
-from src.Strategies import strategies
+from BackTest.BackTesterSession import Session
+from Helpers.Enums import Pair, Candle
+from DB.DBReader import DBReader
+from Strategies import strategies
 import schedule
 
 convertToVal = lambda candleEnum: candleEnum.value[0 : len(candleEnum.value) - 2]

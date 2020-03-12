@@ -1,0 +1,54 @@
+02:39:05,682 [DATABASE_LOGGER] DEBUG 89 [DEBUG] STARTING
+
+02:39:06,403 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583856000.0), '196.72', '198.42', '195.54', '198.03', '14967.11897');
+
+02:39:06,404 [DATABASE_LOGGER] WARNING 100 [WARNING] 'NoneType' object has no attribute 'execute'
+
+02:39:06,413 asyncio DEBUG 58 Using selector: KqueueSelector
+02:39:07,254 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1584005946.000800', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[ERROR]* ```'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1584005946.000800', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+02:39:16,864 [DATABASE_LOGGER] DEBUG 89 [DEBUG] STARTING
+
+02:39:17,670 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583856000.0), '196.72', '198.42', '195.54', '198.03', '14967.11897');
+
+02:39:17,671 [DATABASE_LOGGER] WARNING 100 [WARNING] 'NoneType' object has no attribute 'execute'
+
+02:39:17,680 asyncio DEBUG 58 Using selector: KqueueSelector
+02:39:18,261 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1584005958.000900', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[ERROR]* ```'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1584005958.000900', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+02:39:33,842 [DATABASE_LOGGER] DEBUG 89 [DEBUG] STARTING
+
+02:39:34,482 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583856000.0), '196.72', '198.42', '195.54', '198.03', '14967.11897');
+
+02:39:34,567 [DATABASE_LOGGER] DEBUG 89 [DEBUG] UNIQUE VIOLATION
+
+02:39:34,627 [DATABASE_LOGGER] DEBUG 89 [DEBUG] STARTING
+
+02:39:35,637 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_15m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583556300.0), '242.87', '243.39', '242.68', '243.02', '3527.46231');
+
+02:39:35,801 [DATABASE_LOGGER] DEBUG 89 [DEBUG] TABLE NOT FOUND, CREATING NEW ONE
+
+02:39:35,908 [DATABASE_LOGGER] DEBUG 89 [DEBUG] CREATE TABLE ETHUSDT_OHLCV_15m(timestamp TIMESTAMP PRIMARY KEY NOT NULL, open DECIMAL(5, 2), high  DECIMAL(5, 2), low DECIMAL(5, 2), close DECIMAL(5, 2), volume numeric(10));
+
+02:39:35,961 [DATABASE_LOGGER] DEBUG 89 [DEBUG] STARTING
+
+02:39:36,613 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_15m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583556300.0), '242.87', '243.39', '242.68', '243.02', '3527.46231');
+
+02:39:36,788 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_15m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583557200.0), '243.04', '243.04', '242.0', '242.52', '5312.88594');
+
+02:39:36,940 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_15m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583558100.0), '242.5', '242.9', '242.01', '242.18', '2051.85099');
+
+02:39:37,106 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_15m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583559000.0), '242.13', '243.12', '242.0', '242.85', '3787.31263');
+
+02:39:37,227 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_15m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583559900.0), '242.88', '243.39', '242.52', '242.93', '2311.28586');
+
+02:39:37,346 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_15m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583560800.0), '242.93', '244.69', '242.86', '244.64', '5670.81448');
+
+02:39:37,468 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_15m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583561700.0), '244.6', '244.71', '243.13', '243.17', '4541.44724');
+
+02:40:07,882 [DATABASE_LOGGER] DEBUG 89 [DEBUG] STARTING
+
+02:40:08,479 [DATABASE_LOGGER] DEBUG 89 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1583856300.0), '198.06', '198.95', '197.85', '198.48', '7011.10312');
+
+02:40:08,573 [DATABASE_LOGGER] DEBUG 89 [DEBUG] UNIQUE VIOLATION
+
+02:40:08,628 [DATABASE_LOGGER] DEBUG 89 [DEBUG] STARTING
+
