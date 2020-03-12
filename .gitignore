@@ -3,3 +3,4 @@ __pycache__/
 .idea/
 src/DB/database.ini
 logs/
+*.tar.gz
