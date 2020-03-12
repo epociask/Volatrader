@@ -1,6 +1,4 @@
 # from DBwriter import DBwriter
-import unittest
-from Enums import *
 # writer = DBwriter()
 
 # class TestDBwriter(unittest.TestCase):

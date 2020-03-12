@@ -1,14 +1,14 @@
 import datetime
 import time
-from Enums import *
-from CMC_api import getMarketData, getMacroEconomicData
-from DBoperations import DBoperations
+from src.Helpers.Enums import *
+from src.API.CMC_api import getMarketData, getMacroEconomicData
+from src.DB.DBoperations import DBoperations
 import psycopg2
-import QueryHelpers
-import IndicatorAPI
-import HelpfulOperators
+from src.Helpers import HelpfulOperators
+from src.DB import QueryHelpers
+from src.API import IndicatorAPI
 import ccxt
-from Logger import logToSlack, logErrorToFile, MessageType, logDebugToFile
+from src.Helpers.Logger import logToSlack, logErrorToFile, MessageType, logDebugToFile
 
 
 class DBwriter(DBoperations):
@@ -53,6 +53,7 @@ class DBwriter(DBoperations):
         @:returns None
 
         """
+        print("writing indicators")
         assert len(args) == 0 or len(args) == 1
         if len(args) == 1:
             assert type(args[0]) == int
@@ -61,14 +62,16 @@ class DBwriter(DBoperations):
             candles = self.getCandleDataDescFromDB(candleSize, pair, None).copy()
 
         else:
+            print("Getting candles")
             candles = self.getCandleDataDescFromDB(candleSize, pair, args[0] + 300).copy()
         x = True
         err = True
         while x:
+            print("writing ind")
             try:
                 err = self.calculateAndInsertIndicatorEntry(candleSize, pair, indicator, candles[:300].copy(),
                                                             returnOnUNIQUEVIOLATION)
-                if err is None or len(candles) - 300 == 0:
+                if err is None or len(candles) - 301 == 0:
                     x = False
             except Exception as e:
                 logErrorToFile(e)
@@ -142,13 +145,14 @@ class DBwriter(DBoperations):
 
         return True
 
-    def writeCandlesFromCCXT(self, candleSize: Candle, pair: Pair, *args: (int, None)) -> (None, Exception):
+    def writeCandlesFromCCXT(self, candleSize: Candle, pair: Pair, returnOnUNIQUEVIOLATION, *args: (int, None)) -> (None, Exception):
 
         """
         writes candle data from CCXT Binance to PSQL table
         & creates table if it doesn't already exist
         @:param candleSize --> timelength of candle
         @:param pair --> Trading pair
+        @:param returnOnUNIQUEVIOLATION
         @:param args --> *optional ---> either limit of how many recent candles OR timestamp of data to get candles starting from
         timestamp format EX--> "2020-01-01"
         """
@@ -172,7 +176,7 @@ class DBwriter(DBoperations):
         last = candles[len(candles) - 1]
         for candle in candles:
             ts = candle['timestamp']
-            print(ts)
+            #print(ts)
             try:
                 insertQuery = QueryHelpers.getCandleInsertQuery(candle, pair, candleSize)
                # logDebugToFile(insertQuery)
@@ -183,6 +187,9 @@ class DBwriter(DBoperations):
                 if type(e) == psycopg2.errors.UniqueViolation:  # primary key timestamp already exists
                     logDebugToFile("UNIQUE VIOLATION")
                     self.conn.rollback()  # ignore and continue
+
+                    if returnOnUNIQUEVIOLATION:
+                        return
 
                 elif type(e) == psycopg2.errors.UndefinedTable:  # table not created yet, so lets make it
                     self.conn.rollback()
@@ -199,16 +206,6 @@ class DBwriter(DBoperations):
 
                     self.commit()
                     return self.writeCandlesFromCCXT(candleSize, pair, args)
-
-                elif type(e) == psycopg2.errors.NumericValueOutOfRange:
-
-                    self.conn.rollback()
-
-                    query = f"SELECT HIGH, LOW FROM BOUNDTABLE WHERE SYMBOL = '{pair}'"
-                    logDebugToFile(query)
-                    self.cur.execute(query)
-
-                    bounds = self.cur.fetchall()
 
                 else:
                     logToSlack(e, tagChannel=True, messageType=MessageType.ERROR)

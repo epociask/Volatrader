@@ -3,7 +3,7 @@ Functional logger script to log data to either .txt file or Slack
 """
 import logging
 from datetime import datetime
-from HelpfulOperators import cleanDate
+from src.Helpers.HelpfulOperators import cleanDate
 import slack
 import os
 from enum import *
@@ -63,7 +63,7 @@ def configureFile() -> None:
     """
     Configures basic configuration settings for txt log file
     """
-    logging.basicConfig(filename=f"logs\{cleanDate(str(datetime.now()))}.txt",
+    logging.basicConfig(filename=f"..\..\logs\{cleanDate(str(datetime.now()))}.txt",
                         filemode='a',
                         format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(lineno)d %(message)s',
                         datefmt='%H:%M:%S',

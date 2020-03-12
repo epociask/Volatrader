@@ -1,9 +1,9 @@
 import unittest
-from DBReader import DBReader
-from DBoperations import DBoperations
+from src.DB.DBReader import DBReader
+from src.DB.DBoperations import DBoperations
 import ccxt
-import HelpfulOperators
-from Enums import Pair, Candle
+from src.Helpers import HelpfulOperators
+from src.Helpers.Enums import Pair, Candle
 
 reader = DBReader()
 operator = DBoperations()

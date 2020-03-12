@@ -1,7 +1,7 @@
 # import unittest
 # from BackTesterSession import Session
 # from Enums import *
-# from strategies import *
+# from Strategies import *
 #
 # class TestBacktester(unittest.TestCase):
 #
