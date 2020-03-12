@@ -1,6 +1,6 @@
 import unittest
-from src.DB import QueryHelpers
-from src.Helpers.Enums import Candle, Pair, Indicator
+from DB import QueryHelpers
+from Helpers.Enums import Candle, Pair, Indicator
 
 
 class TestQueryHelpers(unittest.TestCase):

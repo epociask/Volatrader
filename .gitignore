@@ -1,5 +1,6 @@
 .vscode/
 __pycache__/
 .idea/
-src/DB/database.ini
+src/database.ini
 logs/
+ccxt-trader.tar.gz

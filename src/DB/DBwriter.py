@@ -1,14 +1,14 @@
 import datetime
 import time
-from src.Helpers.Enums import *
-from src.API.CMC_api import getMarketData, getMacroEconomicData
-from src.DB.DBoperations import DBoperations
+from Helpers.Enums import *
+from API.CMC_api import getMarketData, getMacroEconomicData
+from DB.DBoperations import DBoperations
 import psycopg2
-from src.Helpers import HelpfulOperators
-from src.DB import QueryHelpers
-from src.API import IndicatorAPI
+from Helpers import HelpfulOperators
+from DB import QueryHelpers
+from API import IndicatorAPI
 import ccxt
-from src.Helpers.Logger import logToSlack, logErrorToFile, MessageType, logDebugToFile
+from Helpers.Logger import logToSlack, logErrorToFile, MessageType, logDebugToFile
 
 
 class DBwriter(DBoperations):
@@ -102,7 +102,7 @@ class DBwriter(DBoperations):
             print(candles)
             ts = str(candles[-1]['timestamp'])
 
-            indicatorValues = IndicatorAPI.getIndicator(indicator, candles).copy()
+            indicatorValues = IndicatorAPI.getIndicator(indicator, candles)
 
             if indicatorValues is None:
                 return None

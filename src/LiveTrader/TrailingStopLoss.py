@@ -1,7 +1,7 @@
 import ccxt
-from src.authent import getPortfolio
-from src.authent import getCurrentPrice
-from src.authent import sell
+from authent import getPortfolio
+from authent import getCurrentPrice
+from authent import sell
 
 
 class Instance:

@@ -1,7 +1,7 @@
 """
 Helper script to functionalize query generation
 """
-from src.Helpers.Enums import *
+from Helpers.Enums import *
 
 
 clean3 = lambda val: val if val.find("3") == -1 else val.replace("3", "three")

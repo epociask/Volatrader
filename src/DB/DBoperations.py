@@ -1,9 +1,9 @@
 import psycopg2
-from src.Helpers import HelpfulOperators
-from src.DB import QueryHelpers
-from src.Helpers.Enums import Candle, Pair
-from src.DB.config import config
-from src.Helpers.Logger import logToSlack, logDebugToFile
+from Helpers import HelpfulOperators
+from DB import QueryHelpers
+from Helpers.Enums import Candle, Pair
+from DB.config import config
+from Helpers.Logger import logToSlack, logDebugToFile
 
 
 class DBoperations:
