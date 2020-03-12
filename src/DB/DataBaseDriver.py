@@ -18,11 +18,9 @@ def startCollection(pair: Pair):
     writer.writeCandlesFromCCXT(Candle.FIVE_MINUTE, pair, True)
     writer.writeCandlesFromCCXT(Candle.FIFTEEEN_MINUTE, pair, True)
     writer.writeCandlesFromCCXT(Candle.THIRTY_MINUTE, pair, True)
-    writer.writeCandlesFromCCXT(Candle.HOUR, pair, True)
     writeIndicators(pair, Candle.FIVE_MINUTE)
     writeIndicators(pair, Candle.FIFTEEEN_MINUTE)
     writeIndicators(pair, Candle.THIRTY_MINUTE)
-    writeIndicators(pair, Candle.HOUR)
 
 
 def writeSchedule(pair: Pair):
@@ -32,8 +30,6 @@ def writeSchedule(pair: Pair):
     schedule.every(15).minutes.do(writeIndicators, pair, Candle.FIFTEEEN_MINUTE)
     schedule.every(30).minutes.do(writer.writeCandlesFromCCXT, Candle.THIRTY_MINUTE, pair, True, 4)
     schedule.every(30).minutes.do(writeIndicators, pair, Candle.THIRTY_MINUTE)
-
-
 
     while True:
         try:
