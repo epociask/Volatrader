@@ -39,6 +39,7 @@ def writeSchedule(pair: Pair):
             schedule.run_pending()
         except Exception as e:
             logToSlack(f"DATABASE BREAKING ERROR :: \n{e}", tagChannel=True)
+            pass
 
 
 startCollection(Pair.ETHUSDT)

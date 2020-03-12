@@ -17,9 +17,6 @@ jobs:
       - run:
           name: "Creating DB config"
           command: "sh create_db.sh"
-      - run:
-          name: "Running unit tests"
-          command: "python -m unittest src/test/*.py -v"
 
   deploy:
     docker:
@@ -32,9 +29,6 @@ jobs:
       - run:
           name: "Creating DB config"
           command: "sh create_db.sh"
-      - run:
-          name: "Running unit tests"
-          command: "python -m unittest src/test/*.py -v"
       - run:
           name: "Deploying to Amazon EC2 Instance"
           command: "sh deploy.sh"

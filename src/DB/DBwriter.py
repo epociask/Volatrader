@@ -102,7 +102,7 @@ class DBwriter(DBoperations):
             print(candles)
             ts = str(candles[-1]['timestamp'])
 
-            indicatorValues = IndicatorAPI.getIndicator(indicator, candles).copy()
+            indicatorValues = IndicatorAPI.getIndicator(indicator, candles)
 
             if indicatorValues is None:
                 return None
