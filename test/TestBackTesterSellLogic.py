@@ -1,6 +1,6 @@
 import unittest
-from BackTesterSellLogic import Instance
-from Enums import Pair
+from src.BackTest.BackTesterSellLogic import Instance
+from src.Helpers.Enums import Pair
 
 class TestBackTesterSellLogic(unittest.TestCase):
 

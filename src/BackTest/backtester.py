@@ -1,10 +1,10 @@
 from datetime import datetime
-from HelpfulOperators import rewind
-from DBReader import *
-from BackTesterSession import Session
-import strategies
+from src.Helpers.HelpfulOperators import rewind
+from src.DB.DBReader import *
+from src.BackTest.BackTesterSession import Session
+from src import Strategies
 from termcolor import colored
-from Enums import *
+from src.Helpers.Enums import *
 
 
 def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProfitPercent, principle, *args):
@@ -26,16 +26,16 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
 
     takeProfitPercent = f"0{takeProfitPercent}" if takeProfitPercent - 10 <= 0 else f"{takeProfitPercent}"
 
-    strategy, indicators = strategies.getStrat(strategy)
+    strategy, indicators = Strategies.getStrat(strategy)
     test = Session(pair, strategy, takeProfitPercent, stopLossPercent)
     reader = DBReader()
 
-    # if len(args) is 0:
-    DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators)
+    if len(args) is 0:
+        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators)
 
-    # else:
-    #     timeNow = str(datetime.now())[0: -7]
-    #     DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators, rewind(timeNow, args[0].value, 60))
+    else:
+        timeNow = str(datetime.now())[0: -7]
+        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators, rewind(timeNow, args[0].value, 60))
     start = DataSet[0]['candle']['timestamp']
     finish = DataSet[-1]['candle']['timestamp']
     for data in DataSet:

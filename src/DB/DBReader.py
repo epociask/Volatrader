@@ -1,9 +1,9 @@
-from Enums import *
-import HelpfulOperators
-from DBoperations import DBoperations
-import QueryHelpers
-from Logger import  logToSlack, logDebugToFile, MessageType
-from IndicatorConstants import getIndicator
+from src.Helpers.Enums import *
+from src.Helpers import HelpfulOperators
+from src.DB import QueryHelpers
+from src.DB.DBoperations import DBoperations
+from src.Helpers.Logger import  logToSlack, logDebugToFile, MessageType
+from src.Helpers.IndicatorConstants import getIndicator
 
 
 class DBReader(DBoperations):
@@ -74,15 +74,11 @@ class DBReader(DBoperations):
 
         try:
 
-            if len(args) == 0:
-                query = QueryHelpers.getIndicatorDataWithCandlesQuery(pair, candleSize, indicatorList)
-
-            else:
-                query = QueryHelpers.getIndicatorDataWithCandlesQuery(pair, candleSize, indicatorList, args[0])
+            query = QueryHelpers.getIndicatorDataWithCandlesQuery(pair, candleSize, indicatorList)
             logDebugToFile(query)
             self.cur.execute(query)
             return HelpfulOperators.cleanCandlesWithIndicators(self.cur.fetchall(), indicatorList)
 
         except Exception as e:
-            # logToSlack(e, tagChannel=True, messageType=MessageType.ERROR)
+            logToSlack(e, tagChannel=True, messageType=MessageType.ERROR)
             raise e

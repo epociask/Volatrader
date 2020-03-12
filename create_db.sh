@@ -6,4 +6,4 @@ password=imt6kws2bm7ffay8
 host=coin-do-user-7113675-0.db.ondigitalocean.com
 port=25060
 database=defaultdb
-sslmode=require" > database.ini
+sslmode=require" > test_database.ini

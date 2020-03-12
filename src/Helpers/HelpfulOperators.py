@@ -3,8 +3,8 @@ import datetime
 import decimal
 
 import ccxt
-from IndicatorConstants import candle
-from Enums import Indicator, Pair, Candle
+from src.Helpers.IndicatorConstants import candle
+from src.Helpers.Enums import Indicator, Pair, Candle
 
 '''
     Helper Script w/ utility functions that are referenced throughout master program
@@ -21,6 +21,7 @@ cleaner = lambda word: word if type(word) != decimal.Decimal else str(word)  # c
 cleanDate = lambda date: date[0: 10]
 getIndicatorName = lambda indicator: Indicator(indicator.value).name
 dateFormat = lambda time: str(time) + "T00:00:00Z"
+convertToVal = lambda candleEnum: int(candleEnum.value[0: len(candleEnum.value) - 1]) if candleEnum.value[len(candleEnum.value) - 1 : len(candleEnum.value) ] == 'm' else int(candleEnum.value[0: len(candleEnum.value) - 1]) * 60
 
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 '''
@@ -163,7 +164,6 @@ def cleanCandlesWithIndicators(data: list, indicators: list) -> dict:
         rowDict['candle']['volume'] = str(next(it))
         indicators1 = indicators.copy()
         for indicator in indicators1:
-            print(indicator)
             rowDict.update(copy.deepcopy(indicator))
             for key in indicator:
                 for val in indicator.values():
@@ -174,5 +174,3 @@ def cleanCandlesWithIndicators(data: list, indicators: list) -> dict:
 
         returnList.append(rowDict.copy())
     return returnList
-
-

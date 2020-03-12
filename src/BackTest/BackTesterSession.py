@@ -1,5 +1,5 @@
 from termcolor import colored
-from BackTesterSellLogic import Instance
+from src.BackTest.BackTesterSellLogic import Instance
 
 
 class Session:
