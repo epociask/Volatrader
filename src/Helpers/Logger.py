@@ -33,7 +33,7 @@ class MessageType(Enum):
 configFile = None  # initally none, redefined in local scope of checkIfConfig()
 slack_token = os.environ.get('SLACK_API_TOKEN')
 client = slack.WebClient(token=slack_token)
-
+logger = None
 
 
 def logToSlack(message, channel: Channel = Channel.DEBUG, tagChannel=False,
@@ -68,9 +68,15 @@ def configureFile() -> None:
                         format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(lineno)d %(message)s',
                         datefmt='%H:%M:%S',
                         level=logging.DEBUG)
-
-
-
+    global logger
+    logger = logging.getLogger("[DATABASE_LOGGER]")
+    logger.setLevel(logging.DEBUG)
+    requestLogger = logging.getLogger("requests")
+    requestLogger.setLevel(logging.ERROR)
+    urllibLogger = logging.getLogger("urllib3")
+    urllibLogger.setLevel(logging.ERROR)
+    ccxtLogger = logging.getLogger("ccxt")
+    ccxtLogger.setLevel(logging.ERROR)
 def logDebugToFile(data: str) -> None:
     """
     Logs debug data to txt file in logs directory
@@ -79,7 +85,8 @@ def logDebugToFile(data: str) -> None:
     """
 
     checkIfConfig()
-    logging.debug(f'[DEBUG] {data}\n')
+    global logger
+    logger.debug(f'[DEBUG] {data}\n')
 
 
 def logWarningToFile(warning: str) -> None:
@@ -89,7 +96,8 @@ def logWarningToFile(warning: str) -> None:
     @:returns Nothing
     """
     checkIfConfig()
-    logging.warning(f'[WARNING] {warning}\n')
+    global logger
+    logger.warning(f'[WARNING] {warning}\n')
 
 
 
@@ -102,7 +110,8 @@ def logErrorToFile(error: str) -> None:
     """
 
     checkIfConfig()
-    logging.error(f'[ERROR] {error}\n')
+    global logger
+    logger.error(f'[ERROR] {error}\n')
 
 
 def checkIfConfig() -> None:

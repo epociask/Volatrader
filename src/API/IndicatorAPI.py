@@ -33,7 +33,7 @@ def getIndicator(indicator: Indicator, candleJSON: list) -> (list, None):
 
     else:
         err = f"TAAPIO response status code : {resp.status_code}  \n content: {resp.content}"
-        logErrorToFile(err)
+        # logErrorToFile(err)
         logToSlack(err)
         raise Exception(resp.status_code + " " + resp.headers)
 

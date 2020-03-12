@@ -74,7 +74,7 @@ class DBwriter(DBoperations):
                 if err is None or len(candles) - 301 == 0:
                     x = False
             except Exception as e:
-                logErrorToFile(e)
+                #logErrorToFile(e)
                 logToSlack(e, messageType=MessageType.WARNING, tagChannel=True)
                 raise e
             candles.pop(0)
@@ -146,7 +146,7 @@ class DBwriter(DBoperations):
         return True
 
     def writeCandlesFromCCXT(self, candleSize: Candle, pair: Pair, returnOnUNIQUEVIOLATION, *args: (int, None)) -> (None, Exception):
-
+        logDebugToFile("STARTING")
         """
         writes candle data from CCXT Binance to PSQL table
         & creates table if it doesn't already exist
@@ -175,11 +175,9 @@ class DBwriter(DBoperations):
 
         last = candles[len(candles) - 1]
         for candle in candles:
-            ts = candle['timestamp']
-            #print(ts)
             try:
                 insertQuery = QueryHelpers.getCandleInsertQuery(candle, pair, candleSize)
-               # logDebugToFile(insertQuery)
+                logDebugToFile(insertQuery)
                 self.cur.execute(insertQuery)
 
             except Exception as e:
@@ -217,12 +215,11 @@ class DBwriter(DBoperations):
 
             ts = HelpfulOperators.dateFormat(HelpfulOperators.convertNumericTimeToString(int(last['timestamp'])))
             if str(args[0]) != ts:
-                logDebugToFile(f"{args[0]} ---> {ts}")
+                # logDebugToFile(f"{args[0]} ---> {ts}")
                 self.writeCandlesFromCCXT(candleSize, pair, ts)
                 return
 
-        print("Finshed :::: ;)")
-      #  logDebugToFile("[SUCCESS] FINISHED WRITING CANDLE DATA")
+        logDebugToFile("[SUCCESS] FINISHED WRITING CANDLE DATA")
 
 
     def writeStaticMarketDataQuerys(self, coin, timeStamp):
