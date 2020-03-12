@@ -1,14 +1,17 @@
 from BackTesterSession import Session
-from Enums import Pair,Candle
+from Enums import Pair, Candle
 from DBReader import DBReader
 import strategies
 import schedule
 
-def executeLogic(sess: Session, candleSize: Candle):
-    schedule.every(sess)
+convertToVal = lambda candleEnum: candleEnum.value[0 : len(candleEnum.value) - 2]
+reader = DBReader()
+
+
+def executeLogic(sess: Session, candleSize: Candle, indicators: list):
+    schedule.every(int(convertToVal(candleSize)/2)).minutes.do(sess.update,)
 
 def PaperTrader(pair: Pair, candleSize: Candle, strategy, stopLossPercent: int, takeProfitPercent: int, principle: int):
-    reader = DBReader()
     takeProfitPercent = f"0{takeProfitPercent}" if takeProfitPercent - 10 <= 0 else f"{takeProfitPercent}"
 
     strategy, indicators = strategies.getStrat(strategy)
@@ -17,3 +20,6 @@ def PaperTrader(pair: Pair, candleSize: Candle, strategy, stopLossPercent: int, 
         data = reader.fetchCandlesWithIndicators(pair, candleSize, indicators, 1)
         test.update(data)
 
+
+x = [e.value for e in Pair]
+print(x)
