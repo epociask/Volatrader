@@ -1,7 +1,7 @@
 import schedule
-from src.Helpers.Enums import *
-from src.DB.DBwriter import DBwriter
-from src.Helpers.Logger import logToSlack
+from Helpers.Enums import *
+from DB.DBwriter import DBwriter
+from Helpers.Logger import logToSlack
 
 writer = DBwriter()
 

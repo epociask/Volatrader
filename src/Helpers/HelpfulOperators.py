@@ -3,8 +3,8 @@ import datetime
 import decimal
 
 import ccxt
-from src.Helpers.IndicatorConstants import candle
-from src.Helpers.Enums import Indicator, Pair, Candle
+from Helpers.IndicatorConstants import candle
+from Helpers.Enums import Indicator, Pair, Candle
 
 '''
     Helper Script w/ utility functions that are referenced throughout master program

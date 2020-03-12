@@ -1,6 +1,6 @@
 import unittest
 
-from src.Helpers.HelpfulOperators import getLowHighBounds
+from Helpers.HelpfulOperators import getLowHighBounds
 
 class TestHelpfulOperators(unittest.TestCase):
 

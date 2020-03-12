@@ -38,7 +38,9 @@ jobs:
       - run:
           name: "Running unit tests"
           command: "python -m unittest test/*.py -v"
-      - heroku/deploy-via-git
+      - run:
+          name: "Deploying to Amazon EC2 Instance"
+          command: "sh deploy.sh"
 
 workflows:
   heroku_deploy:

@@ -1,6 +1,6 @@
 import requests
-from src.Helpers.Enums import Indicator
-from src.Helpers.Logger import logErrorToFile, logToSlack
+from Helpers.Enums import Indicator
+from Helpers.Logger import logErrorToFile, logToSlack
 
 
 def getIndicator(indicator: Indicator, candleJSON: list) -> (list, None):
