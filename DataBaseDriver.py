@@ -1,5 +1,4 @@
 import time
-
 import schedule
 from Enums import *
 from DBwriter import DBwriter
@@ -28,22 +27,11 @@ def startCollection(pair: Pair):
     writeIndicators(pair, Candle.HOUR)
 
 
-def writeSchedule(pair: Pair):
-    schedule.every(1).seconds.do(writer.writeCandlesFromCCXT, Candle.ONE_MINUTE, pair, 5)
-    schedule.every(1).minutes.do(writer.writeCandlesFromCCXT, Candle.ONE_MINUTE, pair, 3)
-    schedule.every(1).minutes.do(writeIndicators, Candle.ONE_MINUTE, pair)
-    schedule.every(5).minutes.do(writer.writeCandlesFromCCXT, Candle.FIVE_MINUTE, pair, 2)
-    schedule.every(5).minutes.do(writeIndicators, Candle.FIVE_MINUTE, pair)
-    schedule.every(15).minutes.do(writer.writeCandlesFromCCXT, Candle.FIFTEEEN_MINUTE, pair, 2)
-    schedule.every(15).minutes.do(writeIndicators, Candle.FIFTEEEN_MINUTE, pair)
-    schedule.every(30).minutes.do(writer.writeCandlesFromCCXT, Candle.THIRTY_MINUTE, pair, 2)
-    schedule.every(30).minutes.do(writeIndicators, Candle.THIRTY_MINUTE, pair)
-    schedule.every(1).hour.do(writer.writeCandlesFromCCXT, Candle.HOUR, pair, 2)
-    schedule.every(1).hour.do(writeIndicators, Candle.HOUR, pair)
+def writeSchedule(pair: Pair, candleSize: Candle) -> None:
+    schedule.every(1).seconds.do(writer.writeCandlesFromCCXT, candleSize, pair, 3)
+    schedule.every(1).minutes.do(writer.writeCandlesFromCCXT, candleSize, pair, 3)
 
     while True:
         schedule.run_pending()
 
 
-startCollection(Pair.ETHUSDT)
-writeSchedule(Pair.ETHUSDT)

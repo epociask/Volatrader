@@ -174,3 +174,5 @@ def cleanCandlesWithIndicators(data: list, indicators: list) -> dict:
 
         returnList.append(rowDict.copy())
     return returnList
+
+

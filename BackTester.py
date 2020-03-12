@@ -30,12 +30,12 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     test = Session(pair, strategy, takeProfitPercent, stopLossPercent)
     reader = DBReader()
 
-    if len(args) is 0:
-        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators)
+    # if len(args) is 0:
+    DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators)
 
-    else:
-        timeNow = str(datetime.now())[0: -7]
-        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators, rewind(timeNow, args[0].value, 60))
+    # else:
+    #     timeNow = str(datetime.now())[0: -7]
+    #     DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators, rewind(timeNow, args[0].value, 60))
     start = DataSet[0]['candle']['timestamp']
     finish = DataSet[-1]['candle']['timestamp']
     for data in DataSet:
