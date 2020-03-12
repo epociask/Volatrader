@@ -8,13 +8,13 @@ from src.Helpers.Enums import Pair, Candle
 reader = DBReader()
 operator = DBoperations()
 
-
-class TestDBOperations(unittest.TestCase):
-
-    def testEquality(self):
-        expected = None
-        actual = operator.connect()
-        self.assertEqual(expected, actual)
+#
+# class TestDBOperations(unittest.TestCase):
+#
+#     def testEquality(self):
+#         expected = None
+#         actual = operator.connect()
+#         self.assertEqual(expected, actual)
 
 
 class TestDBReader(unittest.TestCase):
