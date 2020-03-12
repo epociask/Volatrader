@@ -9,9 +9,12 @@ writer = DBwriter()
 indicatorENUMS = [e for e in Indicator]
 
 
-def writeIndicators(pair: Pair, candeSize: Candle):
+def writeIndicators(pair: Pair, candleSize: Candle, limit=None):
     for indicator in indicatorENUMS:
-        writer.writeIndicatorForTable(candeSize, pair, True, indicator)
+        if limit is None:
+            writer.writeIndicatorForTable(candleSize, pair, True, indicator)
+        else:
+            writer.writeIndicatorForTable(candleSize, pair, True, indicator, limit)
 
 
 def startCollection(pair: Pair):
@@ -25,11 +28,11 @@ def startCollection(pair: Pair):
 
 def writeSchedule(pair: Pair):
     schedule.every(5).minutes.do(writer.writeCandlesFromCCXT, Candle.FIVE_MINUTE, pair, True, 4)
-    schedule.every(5).minutes.do(writeIndicators, pair, Candle.FIVE_MINUTE)
+    schedule.every(5).minutes.do(writeIndicators, pair, Candle.FIVE_MINUTE, limit=2)
     schedule.every(15).minutes.do(writer.writeCandlesFromCCXT, Candle.FIFTEEEN_MINUTE, pair, True, 4)
-    schedule.every(15).minutes.do(writeIndicators, pair, Candle.FIFTEEEN_MINUTE)
+    schedule.every(15).minutes.do(writeIndicators, pair, Candle.FIFTEEEN_MINUTE, limit=2)
     schedule.every(30).minutes.do(writer.writeCandlesFromCCXT, Candle.THIRTY_MINUTE, pair, True, 4)
-    schedule.every(30).minutes.do(writeIndicators, pair, Candle.THIRTY_MINUTE)
+    schedule.every(30).minutes.do(writeIndicators, pair, Candle.THIRTY_MINUTE, limit=2)
 
     while True:
         try:
