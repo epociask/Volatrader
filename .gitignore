@@ -2,5 +2,6 @@
 __pycache__/
 .idea/
 src/database.ini
-logs/
+logs/*.txt
 ccxt-trader.tar.gz
+.DS_Store
