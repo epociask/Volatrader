@@ -69,9 +69,9 @@ class DBwriter(DBoperations):
         while x:
             print("writing ind")
             try:
-                err = self.calculateAndInsertIndicatorEntry(candleSize, pair, indicator, candles[:300].copy(),
+                err = self.calculateAndInsertIndicatorEntry(candleSize, pair, indicator, candles[:300],
                                                             returnOnUNIQUEVIOLATION)
-                if err is None or len(candles) - 301 == 0:
+                if err is None or len(candles) - 300 == 0:
                     x = False
             except Exception as e:
                 #logErrorToFile(e)
