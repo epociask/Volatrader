@@ -63,7 +63,7 @@ def configureFile() -> None:
     """
     Configures basic configuration settings for txt log file
     """
-    logging.basicConfig(filename=f"{os.path.join('../logs/', cleanDate(str(datetime.now())))}.txt",
+    logging.basicConfig(filename=os.path.join('../logs/', cleanDate(str(datetime.now())) + ".txt"),
                         filemode='a',
                         format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(lineno)d %(message)s',
                         datefmt='%H:%M:%S',
