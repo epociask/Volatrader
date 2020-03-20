@@ -36,6 +36,30 @@ client = slack.WebClient(token=slack_token)
 logger = None
 
 
+def configureFile() -> None:
+    """
+    Configures basic configuration settings for txt log file
+    """
+
+    cwd = os.getcwd()
+    logdir = os.path.join(cwd, 'logs/')
+
+    logging.basicConfig(filename=os.path.join(logdir, cleanDate(str(datetime.now())) + ".txt"),
+                        filemode='a',
+                        format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(lineno)d %(message)s',
+                        datefmt='%H:%M:%S',
+                        level=logging.DEBUG)
+    global logger
+    logger = logging.getLogger("[DATABASE_LOGGER]")
+    logger.setLevel(logging.DEBUG)
+    requestLogger = logging.getLogger("requests")
+    requestLogger.setLevel(logging.ERROR)
+    urllibLogger = logging.getLogger("urllib3")
+    urllibLogger.setLevel(logging.ERROR)
+    ccxtLogger = logging.getLogger("ccxt")
+    ccxtLogger.setLevel(logging.ERROR)
+
+
 def logToSlack(message, channel: Channel = Channel.DEBUG, tagChannel=False,
                messageType: MessageType = MessageType.WARNING):
     """"
@@ -59,24 +83,6 @@ def logToSlack(message, channel: Channel = Channel.DEBUG, tagChannel=False,
     )
 
 
-def configureFile() -> None:
-    """
-    Configures basic configuration settings for txt log file
-    """
-    logging.basicConfig(filename=os.path.join('../logs/', cleanDate(str(datetime.now())) + ".txt"),
-                        filemode='a',
-                        format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(lineno)d %(message)s',
-                        datefmt='%H:%M:%S',
-                        level=logging.DEBUG)
-    global logger
-    logger = logging.getLogger("[DATABASE_LOGGER]")
-    logger.setLevel(logging.DEBUG)
-    requestLogger = logging.getLogger("requests")
-    requestLogger.setLevel(logging.ERROR)
-    urllibLogger = logging.getLogger("urllib3")
-    urllibLogger.setLevel(logging.ERROR)
-    ccxtLogger = logging.getLogger("ccxt")
-    ccxtLogger.setLevel(logging.ERROR)
 def logDebugToFile(data: str) -> None:
     """
     Logs debug data to txt file in logs directory

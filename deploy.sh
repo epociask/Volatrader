@@ -4,4 +4,4 @@ scp -o StrictHostKeyChecking=no ccxt-trader.tar.gz ec2-user@ec2-34-219-56-114.us
 scp -o StrictHostKeyChecking=no requirements.txt ec2-user@ec2-34-219-56-114.us-west-2.compute.amazonaws.com:/home/ec2-user
 
 ssh -o StrictHostKeyChecking=no ec2-user@ec2-34-219-56-114.us-west-2.compute.amazonaws.com tar -xvzf ccxt-trader.tar.gz
-ssh -o StrictHostKeyChecking=no ec2-user@ec2-34-219-56-114.us-west-2.compute.amazonaws.com python3.7 /home/ec2-user/src/DataBaseDriver.py
+ssh -o StrictHostKeyChecking=no -t ec2-user@ec2-34-219-56-114.us-west-2.compute.amazonaws.com "cd src/ ; python3.7 DataBaseDriver.py &"
