@@ -85,7 +85,6 @@ class Session:
         Uses sell logic instance to see if it's time to sell
         @:returns boolean
         """
-        # print("Checking sell:::::::current price", data['candle']['close'])
         if self.sellStrat.run(float(data['candle']['close'])) or self.takeProfit <= float(data['candle']['close']):
             self.sellPrice = float(data['candle']['close'])
             self.sellTime = data['candle']['timestamp']
