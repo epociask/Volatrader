@@ -1,4 +1,4 @@
-from BackTest.BackTesterSession import Session
+from Helpers.Session import Session
 from Helpers.Enums import Pair, Candle
 from DB.DBReader import DBReader
 from Strategies import strategies

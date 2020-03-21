@@ -61,7 +61,7 @@ def configureFile() -> None:
 
 
 
-    
+
 def logToSlack(message, channel: Channel = Channel.DEBUG, tagChannel=False,
                messageType: MessageType = MessageType.WARNING):
     """"
