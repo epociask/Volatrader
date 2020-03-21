@@ -1,9 +1,11 @@
-'''
+
+"""
 Helper script w/ all TAAPIO indicators to be referenced for referencing strats as dictionaries
-'''
+"""
+from Helpers.Enums import Indicator
 
 
-def getIndicator(name):
+def getIndicator(name:  Indicator):
     try:
         return globals()[name].copy()
     except KeyError:

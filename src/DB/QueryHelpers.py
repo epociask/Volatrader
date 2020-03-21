@@ -120,6 +120,7 @@ def getIndicatorDataWithCandlesQuery(pair: Pair, candleSize: Candle, indicatorLi
     for indicator in indicatorList:
         for key, values in indicator.items():
                 for val in values:
+                    key = clean100(clean3(clean2(key)))
                     select += f" {key}_{val},"
                     notNull.append(F"{key}_{val} IS NOT NULL")
     end = " AND ".join(e for e in notNull)

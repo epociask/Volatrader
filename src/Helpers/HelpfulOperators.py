@@ -144,13 +144,15 @@ def fetchCandleData(api: ccxt.Exchange, pair: Pair, candleSize: Candle, args: (i
     return candles
 
 
-def cleanCandlesWithIndicators(data: list, indicators: list) -> dict:
+def cleanCandlesWithIndicators(data: list, indicators: list) -> list:
     """
 
     :param data: data that's to be reformatted
     :param indicators: indicators that are used in data
     :return: clean/reformatted data that can easily be accessible
     """
+
+
     returnList = []
     for row in data:
         rowDict = {}

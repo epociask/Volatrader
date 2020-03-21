@@ -70,7 +70,7 @@ class DBReader(DBoperations):
         """
         assert len(args) == 0 or len(args) == 1
 
-        indicatorList = [{e.value: getIndicator(e.value)} for e in indicators]
+        indicatorList = [{e.value : getIndicator(e)} for e in indicators]
 
         try:
 

@@ -1,8 +1,8 @@
 from datetime import datetime
 from Helpers.HelpfulOperators import rewind
 from DB.DBReader import *
-from BackTest.BackTesterSession import Session
-import Strategies
+from Helpers.Session import Session
+from Strategies import strategies
 from termcolor import colored
 from Helpers.Enums import *
 
@@ -26,7 +26,7 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
 
     takeProfitPercent = f"0{takeProfitPercent}" if takeProfitPercent - 10 <= 0 else f"{takeProfitPercent}"
 
-    strategy, indicators = Strategies.getStrat(strategy)
+    strategy, indicators = strategies.getStrat(strategy)
     test = Session(pair, strategy, takeProfitPercent, stopLossPercent)
     reader = DBReader()
 
@@ -38,6 +38,7 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
         DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators, rewind(timeNow, args[0].value, 60))
     start = DataSet[0]['candle']['timestamp']
     finish = DataSet[-1]['candle']['timestamp']
+    print("Dataset :::: ", DataSet)
     for data in DataSet:
         print(colored(data, "blue", attrs=['blink']))
         test.update(data)
