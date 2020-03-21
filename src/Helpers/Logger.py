@@ -60,8 +60,6 @@ def configureFile() -> None:
     ccxtLogger.setLevel(logging.ERROR)
 
 
-
-    
 def logToSlack(message, channel: Channel = Channel.DEBUG, tagChannel=False,
                messageType: MessageType = MessageType.WARNING):
     """"
@@ -83,7 +81,6 @@ def logToSlack(message, channel: Channel = Channel.DEBUG, tagChannel=False,
         channel=channel.value,
         text=f'{"<!channel>" if tagChannel else ""} *[{messageType.value.upper()}]* ```{message}```'
     )
-
 
 
 def logDebugToFile(data: str) -> None:
