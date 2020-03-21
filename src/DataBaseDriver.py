@@ -66,4 +66,15 @@ def writeSchedule(pair: Pair) -> None:
             writeSchedule(pair)
 
 
-writeIndicators(Pair.ETHUSDT, Candle.FIVE_MINUTE, 2)
+# 2892 5m ticks = 9 days
+# 864 15m ticks = 9 days
+# 432 30m ticks = 9 days
+
+writer.writeCandlesFromCCXT(Candle.FIVE_MINUTE, Pair.ETHUSDT, False, 2892)
+writer.writeCandlesFromCCXT(Candle.FIFTEEEN_MINUTE, Pair.ETHUSDT, False, 1164)
+writer.writeCandlesFromCCXT(Candle.THIRTY_MINUTE, Pair.ETHUSDT, False, 732)
+
+writeIndicators(Pair.ETHUSDT, Candle.FIVE_MINUTE, 2592)
+writeIndicators(Pair.ETHUSDT, Candle.FIFTEEEN_MINUTE, 864)
+writeIndicators(Pair.ETHUSDT, Candle.THIRTY_MINUTE, 432)
+writeSchedule(Pair.ETHUSDT)
