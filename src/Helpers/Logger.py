@@ -63,11 +63,14 @@ def configureFile() -> None:
     """
     Configures basic configuration settings for txt log file
     """
-    logging.basicConfig(filename=f"{os.path.join('../../logs/', cleanDate(str(datetime.now())))}.txt",
+
+    cwd = os.getcwd()
+    logdir = os.path.join(cwd, 'logs/')
+
+    logging.basicConfig(filename=os.path.join(logdir, cleanDate(str(datetime.now())) + ".txt"),
                         filemode='a',
                         format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(lineno)d %(message)s',
                         datefmt='%H:%M:%S',
-
                         level=logging.DEBUG)
     global logger
     logger = logging.getLogger("[DATABASE_LOGGER]")
@@ -77,7 +80,7 @@ def configureFile() -> None:
     urllibLogger = logging.getLogger("urllib3")
     urllibLogger.setLevel(logging.ERROR)
     ccxtLogger = logging.getLogger("ccxt")
-    ccxtLogger.setLevel(logging.ERROR)
+    
 def logDebugToFile(data: str) -> None:
     """
     Logs debug data to txt file in logs directory
