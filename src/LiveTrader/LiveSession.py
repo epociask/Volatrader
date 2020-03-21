@@ -4,7 +4,7 @@ from LiveTrader.TrailingStopLoss import Session
 from Helpers.Logger import logDebugToFile
 
 
-class LiveBinanceSession:
+class LiveSession:
 
     def __init__(self):
         self.sessions = []
@@ -37,6 +37,6 @@ class LiveBinanceSession:
             session.run()
 
 
-test = LiveBinanceSession()
+test = LiveSession()
 test.start()
 test.run()

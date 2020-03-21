@@ -8,7 +8,6 @@ import slack
 import os
 from enum import *
 
-
 class Channel(Enum):
     """
     Enum used to represent different slack channels
@@ -64,10 +63,11 @@ def configureFile() -> None:
     """
     Configures basic configuration settings for txt log file
     """
-    logging.basicConfig(filename=f"{os.path.join('../../logs/', cleanDate(str(datetime.now())))}.txt",
+    logging.basicConfig(filename=f"{os.path.join('../logs/', cleanDate(str(datetime.now())))}.txt",
                         filemode='a',
                         format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(lineno)d %(message)s',
                         datefmt='%H:%M:%S',
+
                         level=logging.DEBUG)
     global logger
     logger = logging.getLogger("[DATABASE_LOGGER]")
@@ -78,8 +78,6 @@ def configureFile() -> None:
     urllibLogger.setLevel(logging.ERROR)
     ccxtLogger = logging.getLogger("ccxt")
     ccxtLogger.setLevel(logging.ERROR)
-
-
 def logDebugToFile(data: str) -> None:
     """
     Logs debug data to txt file in logs directory
@@ -101,6 +99,8 @@ def logWarningToFile(warning: str) -> None:
     checkIfConfig()
     global logger
     logger.warning(f'[WARNING] {warning}\n')
+
+
 
 
 def logErrorToFile(error: str) -> None:
@@ -132,3 +132,4 @@ def resetConfig() -> None:
     """
     global configFile
     configFile = None
+

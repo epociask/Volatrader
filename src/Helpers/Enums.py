@@ -18,6 +18,12 @@ class Candle(Enum):
     THRE_WEEK = "3w"
 
 
+class SessionType(Enum):
+    BACKTEST = 0
+    PAPERTRADE = 1
+    LIVETRADE = 2
+
+
 class Pair(Enum):
     """
     Enum to represent all base/quote currency pairs

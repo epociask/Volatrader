@@ -19,3 +19,7 @@ def SIMPLE_BUY_STRAT(data):
         return True, buyTime, buyPrice
 
     return False, None, None
+
+
+def TEST_BUY_STRAT(data):
+    return True, float(data['candle']['close']), data['candle']['timestamp']

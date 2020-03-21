@@ -1,5 +1,6 @@
 from termcolor import colored
 from BackTest.BackTesterSellLogic import Instance
+from Helpers.Enums import *
 
 
 class Session:
@@ -7,7 +8,7 @@ class Session:
     Class to hold buying and selling logic and execute each accordingly to price updates
     """
 
-    def __init__(self, pair, buyStrategy, takeProfitPercent, percentSL):
+    def __init__(self, pair, buyStrategy, takeProfitPercent, percentSL, type: SessionType):
         self.pair = pair
         self.sellStrat = Instance(pair)
         self.sellStrat.setStopLossPercent(percentSL)
@@ -23,6 +24,7 @@ class Session:
         self.results = []
         self.positiveTrades = 0
         self.NegativeTrades = 0
+        self.type = type
 
     def getTradeData(self) -> (int, int):
         """

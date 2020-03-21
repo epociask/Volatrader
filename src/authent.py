@@ -8,7 +8,7 @@ import os
 
 binance = {
     "PUBLIC": os.environ.get('BINANCE_API_KEY'),
-    "PRIVATE": os.environ.get('BINANCE_SECRET_KEY'),
+    "PRIVATE": os.environ.get('BINANCE_PRIVATE_KEY'),
     "NAME": 'binance'
 }
 
