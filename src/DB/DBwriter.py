@@ -67,7 +67,7 @@ class DBwriter(DBoperations):
         x = True
         err = True
         while x:
-            print("writing ind")
+            print("writing ind, CANDLE LENGTH: ", len(candles))
             try:
                 err = self.calculateAndInsertIndicatorEntry(candleSize, pair, indicator, candles[:300],
                                                             returnOnUNIQUEVIOLATION)
