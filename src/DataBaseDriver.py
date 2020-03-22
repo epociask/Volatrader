@@ -3,6 +3,7 @@ from Helpers.Enums import *
 from DB.DBwriter import DBwriter
 from Helpers.Logger import logToSlack
 from datetime import datetime
+from multiprocessing import Process
 writer = DBwriter()
 
 """
@@ -65,10 +66,15 @@ def writeSchedule(pair: Pair) -> None:
             logToSlack(f"DATABASE BREAKING ERROR :: \n{e}", tagChannel=True)
             writeSchedule(pair)
 
+def main():
+    p1 = Process(target=writeSchedule, args=(Pair.ETHUSDT, 5, Candle.FIVE_MINUTE,))
+    p2 = Process(target=writeSchedule, args=(Pair.ETHUSDT, 15, Candle.FIFTEEEN_MINUTE,))
+    p3 = Process(target=writeSchedule, args=(Pair.ETHUSDT, 30, Candle.THIRTY_MINUTE,))
+    time = int(str(datetime.now())[14:16])
 
 # 2892 5m ticks = 9 days
 # 864 15m ticks = 9 days
-# 432 30m ticks = 9 days
+
 
 writer.writeCandlesFromCCXT(Candle.FIVE_MINUTE, Pair.ETHUSDT, False, 2892)
 writer.writeCandlesFromCCXT(Candle.FIFTEEEN_MINUTE, Pair.ETHUSDT, False, 1164)
