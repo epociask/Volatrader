@@ -55,8 +55,8 @@ def writeSchedule(pair: Pair, timeStep, candleSize: Candle) -> None:
     :param pair: Pair enum
     :returns: Nothing
     """
-    schedule.every(timeStep).minutes.do(writer.writeCandlesFromCCXT, candleSize, pair, True, 4)
-    schedule.every(timeStep).minutes.do(writeIndicators, pair, candleSize, limit=2)
+    schedule.every(timeStep).seconds.do(writer.writeCandlesFromCCXT, candleSize, pair, True, 4)
+    schedule.every(timeStep).seconds.do(writeIndicators, pair, candleSize, limit=2)
 
     while True:
         try:
