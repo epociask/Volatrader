@@ -1,6 +1,7 @@
 import datetime
 import time
 from Helpers.Enums import *
+from Helpers.Session import Session
 from API.CMC_api import getMarketData, getMacroEconomicData
 from DB.DBoperations import DBoperations
 import psycopg2
@@ -8,7 +9,7 @@ from Helpers import HelpfulOperators
 from DB import QueryHelpers
 from API import IndicatorAPI
 import ccxt
-from Helpers.Logger import logToSlack, MessageType, logDebugToFile
+from Helpers.Logger import logToSlack, MessageType, logDebugToFile, logErrorToFile
 from multiprocessing import Lock
 
 writeCandlesLock = Lock()
@@ -24,6 +25,27 @@ class DBwriter(DBoperations):
         super().__init__()
         self.connect()
 
+
+    def writeBackTestData(self, session: Session, startTimeStamp: str, finishTimeStamp: str):
+        """
+
+        :param session:
+        :param startTimeStamp:
+        :param finishTimeStamp:
+        :return:
+        """
+        query = QueryHelpers.getInsertBackTestDataQuery(session, startTimeStamp, finishTimeStamp)
+        try:
+            logDebugToFile(query)
+            self.cur.execute(query)
+
+        except Exception as e:
+            logErrorToFile(e)
+
+
+            if type(e) == psycopg2.errors.UndefinedTable:
+                createTableQuery = ""
+            raise e
     def writeCandleData(self, candleSize: Candle, pair: Pair, *args):
         """
         wrapper function of getCCXTcandledata to write candle data from CCXT to POSTGRESQL server
