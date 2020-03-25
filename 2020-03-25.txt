@@ -1,4 +1,4 @@
-15:53:42,978 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 1;
+5:53:42,978 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 1;
 
 16:21:26,903 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 1;
 
