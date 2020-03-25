@@ -5,7 +5,6 @@ from Helpers.Enums import Candle, Pair
 from DB.config import config
 from Helpers.Logger import logToSlack, logDebugToFile
 from multiprocessing import Lock
-muxLock = Lock()
 
 
 class DBoperations:
@@ -16,6 +15,7 @@ class DBoperations:
     def __init__(self):
         self.conn = None
         self.cur = None
+        self.lock = Lock()
 
     def commit(self) -> None:
         """"
@@ -72,18 +72,17 @@ class DBoperations:
         """
         returns candle data as dict from psql server
         """
-        global muxLock
         try:
             query = QueryHelpers.getCandlesFromDBQuery(pair, candleSize, limit)
             logDebugToFile(query)
-            muxLock.acquire()
+            self.lock.acquire()
             self.cur.execute(query)
             temp = self.cur.fetchall()
-            muxLock.release()
+            self.lock.release()
             return HelpfulOperators.convertCandlesToDict(temp)
 
 
         except Exception as e:
             logToSlack(e)
-            muxLock.release()
+            self.lock.release()
             raise e

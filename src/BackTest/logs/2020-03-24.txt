@@ -1,0 +1,2 @@
+13:13:07,763 [DATABASE_LOGGER] DEBUG 96 [DEBUG] SELECT OPEN, HIGH, LOW, CLOSE, VOLUME,  threeoutside_value, invertedhammer_value, TIMESTAMP FROM ETHUSDT_OHLCV_15m  WHERE threeoutside_value IS NOT NULL AND invertedhammer_value IS NOT NULL ORDER BY TIMESTAMP ASC;
+

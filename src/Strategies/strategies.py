@@ -1,7 +1,7 @@
 from Helpers.Enums import Indicator
 
 SIMPLE_BUY_STRAT_INDICATORS = [Indicator.THREEOUTSIDE, Indicator.INVERTEDHAMMER]
-
+TEST_BUY_STRAT_INDICATORS = []
 '''
 returns strategy function with a list of indicators to use with it
 '''

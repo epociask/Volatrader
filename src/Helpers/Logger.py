@@ -80,7 +80,7 @@ def logToSlack(message, channel: Channel = Channel.DEBUG, tagChannel=False,
 
     client.chat_postMessage(
         channel=channel.value,
-        text=f'{"<!channel>" if tagChannel else ""} *[{messageType.value.upper()}]* ```{message}```'
+        text=f'{"<!channel>" if tagChannel else ""} *[{messageType.value.upper()}]* ```{os.environ.get("DATABASE_NAME")}{message}```'
     )
 
 

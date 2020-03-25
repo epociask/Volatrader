@@ -1,0 +1,42 @@
+00:01:14,831 [DATABASE_LOGGER] DEBUG 96 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True); ON CONFLICT UPDATE SET EXCLUDED.AVAILABLE = True WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+00:01:37,639 [DATABASE_LOGGER] DEBUG 96 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True); ON CONFLICT(PAIR_CANDLE)UPDATE SET EXCLUDED.AVAILABLE = True WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+00:01:52,9 [DATABASE_LOGGER] DEBUG 96 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE)UPDATE SET EXCLUDED.AVAILABLE = True WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+00:02:07,733 [DATABASE_LOGGER] DEBUG 96 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) UPDATE SET EXCLUDED.AVAILABLE = True WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+00:02:09,121 [DATABASE_LOGGER] DEBUG 96 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) UPDATE SET EXCLUDED.AVAILABLE = True WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+00:02:34,948 [DATABASE_LOGGER] DEBUG 96 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET EXCLUDED.AVAILABLE = True WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+00:03:19,192 [DATABASE_LOGGER] DEBUG 96 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+00:12:40,0 [DATABASE_LOGGER] WARNING 107 [WARNING] syntax error at or near "m"
+LINE 1: ...T AVAILABLE FROM SHARED WHERE ETHUSDT = PAIR AND 5m = CANDLE...
+                                                             ^
+
+
+00:12:40,1 asyncio DEBUG 53 Using selector: SelectSelector
+00:12:40,414 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585113161.022300', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': ' *[WARNING]* ```Ethen Local syntax error at or near "m"\nLINE 1: ...T AVAILABLE FROM SHARED WHERE ETHUSDT = PAIR AND 5m = CANDLE...\n                                                             ^\n```', 'user': 'UURQ1SNF4', 'ts': '1585113161.022300', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+00:13:35,717 [DATABASE_LOGGER] WARNING 107 [WARNING] column "ethusdt" does not exist
+LINE 1: SELECT AVAILABLE FROM SHARED WHERE ETHUSDT = PAIR AND CANDLE...
+                                           ^
+
+
+00:13:35,718 asyncio DEBUG 53 Using selector: SelectSelector
+00:13:35,966 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585113217.022400', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': ' *[WARNING]* ```Ethen Local column "ethusdt" does not exist\nLINE 1: SELECT AVAILABLE FROM SHARED WHERE ETHUSDT = PAIR AND CANDLE...\n                                           ^\n```', 'user': 'UURQ1SNF4', 'ts': '1585113217.022400', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+00:14:09,73 [DATABASE_LOGGER] WARNING 107 [WARNING] column "pair" does not exist
+LINE 1: SELECT AVAILABLE FROM SHARED WHERE 'ETHUSDT_5m' = PAIR AND C...
+                                                          ^
+
+
+00:14:09,74 asyncio DEBUG 53 Using selector: SelectSelector
+00:14:09,373 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585113250.022600', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': ' *[WARNING]* ```Ethen Local column "pair" does not exist\nLINE 1: SELECT AVAILABLE FROM SHARED WHERE \'ETHUSDT_5m\' = PAIR AND C...\n                                                          ^\n```', 'user': 'UURQ1SNF4', 'ts': '1585113250.022600', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+00:14:32,303 [DATABASE_LOGGER] WARNING 107 [WARNING] column "candle" does not exist
+LINE 1: ... FROM SHARED WHERE 'ETHUSDT_5m' = PAIR_CANDLE AND CANDLE = '...
+                                                             ^
+
+
+00:14:32,304 asyncio DEBUG 53 Using selector: SelectSelector
+00:14:32,545 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585113273.022700', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': ' *[WARNING]* ```Ethen Local column "candle" does not exist\nLINE 1: ... FROM SHARED WHERE \'ETHUSDT_5m\' = PAIR_CANDLE AND CANDLE = \'...\n                                                             ^\n```', 'user': 'UURQ1SNF4', 'ts': '1585113273.022700', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}

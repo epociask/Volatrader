@@ -1,5 +1,5 @@
-from authent import authList
-from authent import getExchangeInstance
+from Helpers.authent import authList
+from Helpers.authent import getExchangeInstance
 from LiveTrader.TrailingStopLoss import Session
 from Helpers.Logger import logDebugToFile
 

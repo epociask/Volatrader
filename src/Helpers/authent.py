@@ -1,6 +1,7 @@
 import ccxt
 from DB import DBoperations
 import os
+from Helpers.Enums import Pair, Candle
 
 '''
     Holds public/private key authentification for our api Exchange data
@@ -57,11 +58,11 @@ def getPortfolio(exchange: ccxt.Exchange) -> dict:
 
 
 # gets current price of currency from given exchange
-def getCurrentPrice(pair: str) -> (float, Exception):
+def getCurrentPrice(pair: Pair, candleSize: Candle) -> (float, Exception):
     x = DBoperations()
     x.connect()
     try:
-        candles = x.getCandleDataFromDB('1m', pair, 1)
+        candles = x.getCandleDataFromDB(candleSize.value, pair.value, 1)
         return candles[0]['close']
     except Exception as e:
         raise e
