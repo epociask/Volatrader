@@ -379,6 +379,3 @@ class DBwriter(DBoperations):
         for coin in dataDict:
             self.writeStaticMarketDataQuerys(coin)
 
-
-writer = DBwriter()
-writer.updateSharedTable(Pair.ETHUSDT, Candle.FIVE_MINUTE, True)
