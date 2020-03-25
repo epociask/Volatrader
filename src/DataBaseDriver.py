@@ -3,6 +3,8 @@ from Helpers.Enums import *
 from DB.DBwriter import DBwriter
 from Helpers.Logger import logToSlack
 from datetime import datetime
+from multiprocessing import Process
+import time
 writer = DBwriter()
 
 """
@@ -27,7 +29,7 @@ def writeIndicators(pair: Pair, candleSize: Candle, limit=None) -> None:
         else:
             writer.writeIndicatorForTable(candleSize, pair, True, indicator, limit)
 
-    logToSlack(f"[WRITE INDICATORS TIME] {datetime.now()-ts}")
+    logToSlack(f"[WRITE INDICATORS TIME] {datetime.now() - ts}")
 
 
 def startCollection(pair: Pair, date=None) -> None:
@@ -47,16 +49,14 @@ def startCollection(pair: Pair, date=None) -> None:
     writeIndicators(pair, Candle.FIFTEEEN_MINUTE)
 
 
-def writeSchedule(pair: Pair) -> None:
+def writeSchedule(pair: Pair, timeStep, candleSize: Candle) -> None:
     """
     Schedule to write candle & indicator data
     :param pair: Pair enum
     :returns: Nothing
     """
-    schedule.every(5).minutes.do(writer.writeCandlesFromCCXT, Candle.FIVE_MINUTE, pair, True, 4)
-    schedule.every(5).minutes.do(writeIndicators, pair, Candle.FIVE_MINUTE, limit=2)
-    schedule.every(15).minutes.do(writer.writeCandlesFromCCXT, Candle.FIFTEEEN_MINUTE, pair, True, 4)
-    schedule.every(15).minutes.do(writeIndicators, pair, Candle.FIFTEEEN_MINUTE, limit=2)
+    schedule.every(timeStep).seconds.do(writer.writeCandlesFromCCXT, candleSize, pair, True, 4)
+    schedule.every(timeStep).seconds.do(writeIndicators, pair, candleSize, limit=2)
 
     while True:
         try:
@@ -66,15 +66,25 @@ def writeSchedule(pair: Pair) -> None:
             writeSchedule(pair)
 
 
-# 2892 5m ticks = 9 days
-# 864 15m ticks = 9 days
-# 432 30m ticks = 9 days
+def main():
+    """
+    Main function for Driver script...
+    :returns: Nothing
+    """
+    p1 = Process(target=writeSchedule, args=(Pair.ETHUSDT, 5, Candle.FIVE_MINUTE,))
+    p2 = Process(target=writeSchedule, args=(Pair.ETHUSDT, 15, Candle.FIFTEEEN_MINUTE,))
+    p3 = Process(target=writeSchedule, args=(Pair.ETHUSDT, 30, Candle.THIRTY_MINUTE,))
+    time = int(str(datetime.now())[14:16])
 
-writer.writeCandlesFromCCXT(Candle.FIVE_MINUTE, Pair.ETHUSDT, False, 2892)
-writer.writeCandlesFromCCXT(Candle.FIFTEEEN_MINUTE, Pair.ETHUSDT, False, 1164)
-writer.writeCandlesFromCCXT(Candle.THIRTY_MINUTE, Pair.ETHUSDT, False, 732)
+    # if time == 0 or time == 30:  # ensure time is either 0th or 30th minute to make calls appropiately w/ candle release times ... ex: 8:00 , 8:30
+    p1.start()
+    p2.start()
+    p3.start()
 
-writeIndicators(Pair.ETHUSDT, Candle.FIVE_MINUTE, 2592)
-writeIndicators(Pair.ETHUSDT, Candle.FIFTEEEN_MINUTE, 864)
-writeIndicators(Pair.ETHUSDT, Candle.THIRTY_MINUTE, 432)
-writeSchedule(Pair.ETHUSDT)
+    # else:
+    #     time.sleep(60)
+    #     main()
+
+
+if __name__ == '__main__':
+    main()

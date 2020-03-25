@@ -7,7 +7,7 @@ from termcolor import colored
 from Helpers.Enums import *
 
 
-def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProfitPercent, principle, *args):
+def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProfitPercent, principle, *args) -> Session:
     """
     main backtest function, prints backtest results
     @:param pair -> pair you wish to run backtest on
@@ -22,12 +22,12 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     assert stopLossPercent in range(1, 100)
     assert takeProfitPercent in range(1, 100)
     assert type(pair) is Pair
-    assert(type(candleSize)) is Candle
+    assert (type(candleSize)) is Candle
 
     takeProfitPercent = f"0{takeProfitPercent}" if takeProfitPercent - 10 <= 0 else f"{takeProfitPercent}"
-
-    strategy, indicators = strategies.getStrat(strategy)
-    test = Session(pair, strategy, takeProfitPercent, stopLossPercent)
+    stratString = strategy
+    strategy, indicators = strategies.getStrat(stratString)
+    backTestingSession = Session(pair, strategy, takeProfitPercent, stopLossPercent, stratString)
     reader = DBReader()
 
     if len(args) is 0:
@@ -41,28 +41,30 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     print("Dataset :::: ", DataSet)
     for data in DataSet:
         print(colored(data, "blue", attrs=['blink']))
-        test.update(data)
+        backTestingSession.update(data)
     print(colored(
         "\n\n"
         "------------------------------------------------------------------------------------------------------------\n",
         attrs=['bold']))
 
+    endingPrice = float(principle + float(principle * (backTestingSession.getTotalPL() * .01)))
+    endVal = colored("\t\tEnding Price: ", attrs=['bold']) + "$" + (
+        colored(str(endingPrice), "blue") if float(endingPrice) > float(principle) else colored(str(endingPrice),
+                                                                                                "red"))
 
-
-    endingPrice = float(principle + float(principle * (test.getTotalPL()*.01)))
-    endVal = colored("\t\tEnding Price: ", attrs=['bold']) + "$" + (colored(str(endingPrice), "blue") if float(endingPrice) > float(principle) else colored(str(endingPrice), "red"))
-
-    gainCount, lossCount = test.getTradeData()
+    gainCount, lossCount = backTestingSession.getTradeData()
 
     print(
         colored("\t\t Starting Principle Amount: $", attrs=['bold']) + str(principle) + "\n" +
         endVal +
         "\n\t\t" + colored("Total Profit Loss: ", attrs=['bold']) + (
-            colored(f"+%{str(test.getTotalPL())}", "green", attrs=['underline']) if test.getTotalPL() > 0 else colored(
-                str(f"%{test.getTotalPL()}%"), "red")) +
+            colored(f"+%{str(backTestingSession.getTotalPL())}", "green",
+                    attrs=['underline']) if backTestingSession.getTotalPL() > 0 else colored(
+                str(f"%{backTestingSession.getTotalPL()}%"), "red")) +
         colored("\n\t    Total Trades: ",
-                attrs=['bold']) + f"{colored(test.getTotalTrades(), 'magenta', attrs=['underline'])}"
-                                  "\n\t\t" + colored("Starting Time:  ", attrs=['bold']) + colored(start, attrs=["underline"]) +
+                attrs=['bold']) + f"{colored(backTestingSession.getTotalTrades(), 'magenta', attrs=['underline'])}"
+                                  "\n\t\t" + colored("Starting Time:  ", attrs=['bold']) + colored(start, attrs=[
+            "underline"]) +
         "\n\t\t" + colored("Finish: ", attrs=['bold']) + colored(finish, attrs=["underline"]) +
         colored("\n\t\t Number of profitable trades: ", attrs=['bold']) + f'{colored(str(gainCount), "blue")}' +
         "\n\t\t" + colored("Number of unprofitable trades: ", attrs=['bold']) + colored((lossCount), "red") +
@@ -72,6 +74,8 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
         "\n"
         "------------------------------------------------------------------------------------------------------------\n",
         attrs=['bold']))
+
+    return backTestingSession, start, finish
 
 
 backTest(Pair.ETHUSDT, Candle.FIFTEEEN_MINUTE, "SIMPLE_BUY_STRAT", 2, 4, 10000, Time.MONTH)

@@ -4,6 +4,7 @@ from DB import QueryHelpers
 from Helpers.Enums import Candle, Pair
 from DB.config import config
 from Helpers.Logger import logToSlack, logDebugToFile
+from multiprocessing import Lock
 
 
 class DBoperations:
@@ -14,6 +15,7 @@ class DBoperations:
     def __init__(self):
         self.conn = None
         self.cur = None
+        self.lock = Lock()
 
     def commit(self) -> None:
         """"
@@ -73,10 +75,13 @@ class DBoperations:
         try:
             query = QueryHelpers.getCandlesFromDBQuery(pair, candleSize, limit)
             logDebugToFile(query)
+            self.lock.acquire()
             self.cur.execute(query)
-            return HelpfulOperators.convertCandlesToDict(self.cur.fetchall())
-
+            temp = self.cur.fetchall()
+            self.lock.release()
+            return HelpfulOperators.convertCandlesToDict(temp)
 
         except Exception as e:
             logToSlack(e)
+            muxLock.release()
             raise e

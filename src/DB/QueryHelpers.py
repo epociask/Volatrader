@@ -2,7 +2,7 @@
 Helper script to functionalize query generation
 """
 from Helpers.Enums import *
-
+from Helpers.Session import Session
 
 clean3 = lambda val: val if val.find("3") == -1 else val.replace("3", "three")
 clean2 = lambda val: val if val.find('2') == -1 else val.replace("2", "two")
@@ -126,3 +126,24 @@ def getIndicatorDataWithCandlesQuery(pair: Pair, candleSize: Candle, indicatorLi
     end = " AND ".join(e for e in notNull)
     return f"SELECT OPEN, HIGH, LOW, CLOSE, VOLUME, {select} TIMESTAMP FROM {pair.value}_OHLCV_{candleSize.value}  WHERE {end} ORDER BY TIMESTAMP" +  (f" LIMIT {limit} ASC;" if limit is not None else " ASC;")
 
+
+def getInsertBackTestDataQuery(session: Session, candleSize: Candle, start: str, finish: str):
+    """
+    Creates & returns query that inserts into backtesting table in  DB
+    :param session: finshed instance of Session class
+    :param start: Start timestamp
+    :param finish: Finish timestamp
+    :return:
+    """
+    pos, neg = session.getTradeData()
+    return f"INSERT INTO BACKTEST_TABLE (PAIR, CANDLESIZE, STRATEGY, POSTIVE_TRADES, NEGATIVE_TRADES, START_TIME, FINISH_TIME, STOP_LOSS_PERCENT, TAKE_PROFIT_PERCENT, PROFIT_LOSS) " \
+           f"VALUES ({session.pair.value}, {candleSize}, {session.stratString}, {session.positiveTrades}, {session.negativeTrades}, {start}, {finish}, {str(session.getStopLossPercent())}, {str(session.getTakeProfitPercent())}, {session.getTotalPL()});"
+
+def getCreateBackTestTableQuery() -> str:
+    return f"CREATE TABLE BACKTEST_TABLE (pkey UUID NOT NULL DEFAULT uuid_generate_v1(), " \
+           f"PAIR VARCHAR, CANDLESIZE VARCHAR, STRATEGY VARCHAR, POSTIVE_TRADES VARCHAR, NEGATIVE_TRADES VARCHAR, START_TIME VARCHAR, FINISH_TIME VARCHAR, " \
+           f"STOP_LOSS_PERCENT VARCHAR, TAKE_PROFIT_PERCENT VARCHAR, PROFIT_LOSS VARCHAR " \
+           f", CONSTRAINT pkey_tbl PRIMARY KEY ( pkey ));"
+
+
+print(getCreateBackTestTableQuery())

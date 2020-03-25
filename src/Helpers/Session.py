@@ -8,13 +8,16 @@ class Session:
     Class to hold buying and selling logic and execute each accordingly to price updates
     """
 
-    def __init__(self, pair, buyStrategy, takeProfitPercent, percentSL, type: SessionType):
+    def __init__(self, pair, buyStrategy, takeProfitPercent, percentSL, type: SessionType, stratString: str):
         self.pair = pair
         self.sellStrat = Instance(pair)
         self.sellStrat.setStopLossPercent(percentSL)
         self.profitlosses = []
+        self.stratString = stratString
         self.buy = False
         self.buyPrice = 0
+        self.buyTime = ""
+        self.sellTime = ""
         self.takeProfit = 0
         self.sellPrice = 0
         self.profitLoss = None
@@ -25,6 +28,19 @@ class Session:
         self.positiveTrades = 0
         self.NegativeTrades = 0
         self.type = type
+
+
+    def getStopLossPercent(self):
+        """
+        :returns: Percent stop loss
+        """
+        return self.sellStrat.percentStopLoss
+
+    def getTakeProfitPercent(self):
+        """
+        :returns: percent take profit
+        """
+        return self.takeProfitPercent
 
     def getTradeData(self) -> (int, int):
         """
@@ -38,6 +54,7 @@ class Session:
         updates winning and losing trade counts
         @:returns None
         """
+
         self.results.append({'buytime': self.buyTime, 'buyprice': self.buyPrice, 'selltime': self.sellTime,
                              'sellprice': self.sellPrice, 'profitloss': self.profitLoss})
         if self.profitLoss > 0:
