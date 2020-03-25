@@ -2,8 +2,9 @@ from Helpers.Enums import *
 from Helpers import HelpfulOperators
 from DB import QueryHelpers
 from DB.DBoperations import DBoperations
-from Helpers.Logger import  logToSlack, logDebugToFile, MessageType
+from Helpers.Logger import logToSlack, logDebugToFile, MessageType
 from Helpers.IndicatorConstants import getIndicator
+import re
 
 
 class DBReader(DBoperations):
@@ -70,15 +71,37 @@ class DBReader(DBoperations):
         """
         assert len(args) == 0 or len(args) == 1
 
-        indicatorList = [{e.value : getIndicator(e)} for e in indicators]
+        indicatorList = [{e.value: getIndicator(e)} for e in indicators]
 
         try:
+            if len(args) == 0:
+                query = QueryHelpers.getIndicatorDataWithCandlesQuery(pair, candleSize, indicatorList)
 
-            query = QueryHelpers.getIndicatorDataWithCandlesQuery(pair, candleSize, indicatorList)
+            else:
+                query = QueryHelpers.getIndicatorDataWithCandlesQuery(pair, candleSize, indicatorList, args[0])
+            print(query)
             logDebugToFile(query)
+            self.lock.acquire()
             self.cur.execute(query)
+            self.lock.release()
             return HelpfulOperators.cleanCandlesWithIndicators(self.cur.fetchall(), indicatorList)
 
         except Exception as e:
+            self.lock.release()
             logToSlack(e, tagChannel=True, messageType=MessageType.ERROR)
             raise e
+
+    def fetchRowFromSharedTable(self, pair: Pair, candleSize: Candle):
+
+        try:
+            query = QueryHelpers.getFetchFromSharedTableQuery(pair, candleSize)
+            self.lock.acquire()
+            self.cur.execute(query)
+            data = self.cur.fetchall()
+            self.lock.release()
+            return "".join(e for e in re.findall("[TrueFalse]", str(data))) #hehe
+        except Exception as e:
+            self.lock.release()
+            logToSlack(e)
+            raise e
+

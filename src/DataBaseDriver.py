@@ -1,8 +1,11 @@
-import schedule
 from Helpers.Enums import *
 from DB.DBwriter import DBwriter
 from Helpers.Logger import logToSlack
 from datetime import datetime
+from multiprocessing import Process
+from threading import Thread
+import time
+
 writer = DBwriter()
 
 """
@@ -19,7 +22,7 @@ def writeIndicators(pair: Pair, candleSize: Candle, limit=None) -> None:
     :param limit: limit on how many rows to write for specific indicator
     :returns: Nothing
     """
-
+    logToSlack(f"[STARTING INDICATOR WRITE FOR {pair.value}/{candleSize.value}]")
     ts = datetime.now()
     for indicator in indicatorENUMS:
         if limit is None:
@@ -27,54 +30,81 @@ def writeIndicators(pair: Pair, candleSize: Candle, limit=None) -> None:
         else:
             writer.writeIndicatorForTable(candleSize, pair, True, indicator, limit)
 
-    logToSlack(f"[WRITE INDICATORS TIME] {datetime.now()-ts}")
+    logToSlack(f"[INDICATOR WRITE TIME {pair.value}/{candleSize.value}] {datetime.now() - ts}")
 
 
 def startCollection(pair: Pair, date=None) -> None:
     """
     starts data collection by writing 500 most recent candles & writing indicator values
+    :param date:
     :param pair: Pair enum
     :returns: Nothing
     """
     if date is None:
-        writer.writeCandlesFromCCXT(Candle.FIVE_MINUTE, pair, True)
-        writer.writeCandlesFromCCXT(Candle.FIFTEEEN_MINUTE, pair, True)
+        count5 = writer.writeCandlesFromCCXT(Candle.FIVE_MINUTE, pair, True)
+        count15 = writer.writeCandlesFromCCXT(Candle.FIFTEEEN_MINUTE, pair, True)
+        count30 = writer.writeCandlesFromCCXT(Candle.THIRTY_MINUTE, pair, True)
 
     else:
-        writer.writeCandlesFromCCXT(Candle.FIVE_MINUTE, pair, date)
-        writer.writeCandlesFromCCXT(Candle.FIFTEEEN_MINUTE, pair, date)
-    writeIndicators(pair, Candle.FIVE_MINUTE)
-    writeIndicators(pair, Candle.FIFTEEEN_MINUTE)
+        count5 = writer.writeCandlesFromCCXT(Candle.FIVE_MINUTE, pair, True, date)
+        count15 = writer.writeCandlesFromCCXT(Candle.FIFTEEEN_MINUTE, pair, True, date)
+        count30 = writer.writeCandlesFromCCXT(Candle.THIRTY_MINUTE, pair, True, date)
+
+    if count5 is not None:
+        writeIndicators(pair, Candle.FIVE_MINUTE, count5)
+
+    else:
+        writeIndicators(pair, Candle.FIVE_MINUTE)
+
+    if count15 is not None:
+        writeIndicators(pair, Candle.FIFTEEEN_MINUTE, count15)
+
+    else:
+        writeIndicators(pair, Candle.FIFTEEEN_MINUTE, count15)
+
+    if count30 is not None:
+        writeIndicators(pair, Candle.THIRTY_MINUTE, count30)
+
+    else:
+        writeIndicators(pair, Candle.THIRTY_MINUTE, count30)
 
 
-def writeSchedule(pair: Pair) -> None:
+def writeSchedule(pair: Pair, timeStep, candleSize: Candle) -> None:
     """
     Schedule to write candle & indicator data
+    :param timeStep:
+    :param candleSize:
     :param pair: Pair enum
     :returns: Nothing
     """
-    schedule.every(5).minutes.do(writer.writeCandlesFromCCXT, Candle.FIVE_MINUTE, pair, True, 4)
-    schedule.every(5).minutes.do(writeIndicators, pair, Candle.FIVE_MINUTE, limit=2)
-    schedule.every(15).minutes.do(writer.writeCandlesFromCCXT, Candle.FIFTEEEN_MINUTE, pair, True, 4)
-    schedule.every(15).minutes.do(writeIndicators, pair, Candle.FIFTEEEN_MINUTE, limit=2)
-
     while True:
+
         try:
-            schedule.run_pending()
+            t = int(str(datetime.now())[14:16])
+            if t % timeStep == 0 or t == 0:
+                time.sleep(10)
+                writer.writeCandlesFromCCXT(candleSize, pair, True, 1)
+                writeIndicators(pair, candleSize, limit=0)
+
         except Exception as e:
             logToSlack(f"DATABASE BREAKING ERROR :: \n{e}", tagChannel=True)
-            writeSchedule(pair)
+            writeSchedule(pair, timeStep, candleSize)
 
 
-# 2892 5m ticks = 9 days
-# 864 15m ticks = 9 days
-# 432 30m ticks = 9 days
+def main():
+    """
+    Main function for Driver script...
+    :returns: Nothing
+    """
+    p1 = Thread(target=writeSchedule, args=(Pair.ETHUSDT, 5, Candle.FIVE_MINUTE,))
+    p2 = Thread(target=writeSchedule, args=(Pair.ETHUSDT, 15, Candle.FIFTEEEN_MINUTE,))
+    p3 = Thread(target=writeSchedule, args=(Pair.ETHUSDT, 30, Candle.THIRTY_MINUTE,))
 
-writer.writeCandlesFromCCXT(Candle.FIVE_MINUTE, Pair.ETHUSDT, False, 2892)
-writer.writeCandlesFromCCXT(Candle.FIFTEEEN_MINUTE, Pair.ETHUSDT, False, 1164)
-writer.writeCandlesFromCCXT(Candle.THIRTY_MINUTE, Pair.ETHUSDT, False, 732)
+    p1.start()
+    p2.start()
+    p3.start()
 
-writeIndicators(Pair.ETHUSDT, Candle.FIVE_MINUTE, 2592)
-writeIndicators(Pair.ETHUSDT, Candle.FIFTEEEN_MINUTE, 864)
-writeIndicators(Pair.ETHUSDT, Candle.THIRTY_MINUTE, 432)
-writeSchedule(Pair.ETHUSDT)
+
+
+if __name__ == '__main__':
+    main()

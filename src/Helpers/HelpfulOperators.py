@@ -1,7 +1,6 @@
 import copy
-import datetime
 import decimal
-
+import datetime
 import ccxt
 from Helpers.IndicatorConstants import candle
 from Helpers.Enums import Indicator, Pair, Candle
@@ -176,3 +175,15 @@ def cleanCandlesWithIndicators(data: list, indicators: list) -> list:
 
         returnList.append(rowDict.copy())
     return returnList
+
+#
+# ts = 25
+# while True:
+#         print(str(datetime.now()))
+#         print(fetchCandleData(ccxt.binance(), Pair.ETHUSDT, Candle.FIVE_MINUTE, [1]))
+#
+
+
+
+
+
