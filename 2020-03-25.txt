@@ -1,0 +1,56 @@
+15:53:42,978 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 1;
+
+16:21:26,903 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 1;
+
+16:22:08,462 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT OPEN, HIGH, LOW, CLOSE, VOLUME,  threeoutside_value, invertedhammer_value, TIMESTAMP FROM ETHUSDT_OHLCV_5m  WHERE threeoutside_value IS NOT NULL AND invertedhammer_value IS NOT NULL ORDER BY TIMESTAMP ASC;
+
+16:24:51,322 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT OPEN, HIGH, LOW, CLOSE, VOLUME,  threeoutside_value, invertedhammer_value, TIMESTAMP FROM ETHUSDT_OHLCV_5m  WHERE threeoutside_value IS NOT NULL AND invertedhammer_value IS NOT NULL ORDER BY TIMESTAMP ASC;
+
+16:24:51,422 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT OPEN, HIGH, LOW, CLOSE, VOLUME,  threeoutside_value, invertedhammer_value, TIMESTAMP FROM ETHUSDT_OHLCV_5m  WHERE threeoutside_value IS NOT NULL AND invertedhammer_value IS NOT NULL ORDER BY TIMESTAMP ASC;
+
+16:28:48,122 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT OPEN, HIGH, LOW, CLOSE, VOLUME,  threeoutside_value, invertedhammer_value, TIMESTAMP FROM ETHUSDT_OHLCV_5m  WHERE threeoutside_value IS NOT NULL AND invertedhammer_value IS NOT NULL ORDER BY TIMESTAMP ASC;
+
+16:28:48,231 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT OPEN, HIGH, LOW, CLOSE, VOLUME,  threeoutside_value, invertedhammer_value, TIMESTAMP FROM ETHUSDT_OHLCV_5m  WHERE threeoutside_value IS NOT NULL AND invertedhammer_value IS NOT NULL ORDER BY TIMESTAMP ASC;
+
+16:47:28,721 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 1;
+
+16:49:03,15 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT OPEN, HIGH, LOW, CLOSE, VOLUME,  threeoutside_value, invertedhammer_value, TIMESTAMP FROM ETHUSDT_OHLCV_5m  WHERE threeoutside_value IS NOT NULL AND invertedhammer_value IS NOT NULL ORDER BY TIMESTAMP ASC;
+
+16:54:06,732 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 1;
+
+16:57:49,507 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 1;
+
+16:59:21,641 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 1;
+
+17:00:19,740 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 1;
+
+17:01:40,809 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT OPEN, HIGH, LOW, CLOSE, VOLUME,  threeoutside_value, invertedhammer_value, TIMESTAMP FROM ETHUSDT_OHLCV_5m  WHERE threeoutside_value IS NOT NULL AND invertedhammer_value IS NOT NULL ORDER BY TIMESTAMP ASC;
+
+17:01:56,84 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT OPEN, HIGH, LOW, CLOSE, VOLUME,  threeoutside_value, invertedhammer_value, TIMESTAMP FROM ETHUSDT_OHLCV_5m  WHERE threeoutside_value IS NOT NULL AND invertedhammer_value IS NOT NULL ORDER BY TIMESTAMP ASC;
+
+17:02:35,105 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT OPEN, HIGH, LOW, CLOSE, VOLUME,  threeoutside_value, invertedhammer_value, TIMESTAMP FROM ETHUSDT_OHLCV_5m  WHERE threeoutside_value IS NOT NULL AND invertedhammer_value IS NOT NULL ORDER BY TIMESTAMP ASC;
+
+17:03:37,302 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT OPEN, HIGH, LOW, CLOSE, VOLUME,  threeoutside_value, invertedhammer_value, TIMESTAMP FROM ETHUSDT_OHLCV_5m  WHERE threeoutside_value IS NOT NULL AND invertedhammer_value IS NOT NULL ORDER BY TIMESTAMP DESC;
+
+17:06:47,284 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT OPEN, HIGH, LOW, CLOSE, VOLUME,  threeoutside_value, invertedhammer_value, TIMESTAMP FROM ETHUSDT_OHLCV_5m  WHERE threeoutside_value IS NOT NULL AND invertedhammer_value IS NOT NULL ORDER BY TIMESTAMP DESC;
+
+17:08:32,719 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT OPEN, HIGH, LOW, CLOSE, VOLUME,  threeoutside_value, invertedhammer_value, TIMESTAMP FROM ETHUSDT_OHLCV_5m  WHERE threeoutside_value IS NOT NULL AND invertedhammer_value IS NOT NULL ORDER BY TIMESTAMP LIMIT 0 DESC;
+
+17:08:32,733 [DATABASE_LOGGER] WARNING 105 [WARNING] syntax error at or near "DESC"
+LINE 1: ...tedhammer_value IS NOT NULL ORDER BY TIMESTAMP LIMIT 0 DESC;
+                                                                  ^
+
+
+17:08:32,735 asyncio DEBUG 53 Using selector: SelectSelector
+17:08:33,127 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585174113.048200', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': '<!channel> *[ERROR]* ```Ethen Local syntax error at or near "DESC"\nLINE 1: ...tedhammer_value IS NOT NULL ORDER BY TIMESTAMP LIMIT 0 DESC;\n                                                                  ^\n```', 'user': 'UURQ1SNF4', 'ts': '1585174113.048200', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+17:08:55,778 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT OPEN, HIGH, LOW, CLOSE, VOLUME,  threeoutside_value, invertedhammer_value, TIMESTAMP FROM ETHUSDT_OHLCV_5m  WHERE threeoutside_value IS NOT NULL AND invertedhammer_value IS NOT NULL ORDER BY TIMESTAMP LIMIT 1 DESC;
+
+17:08:55,789 [DATABASE_LOGGER] WARNING 105 [WARNING] syntax error at or near "DESC"
+LINE 1: ...tedhammer_value IS NOT NULL ORDER BY TIMESTAMP LIMIT 1 DESC;
+                                                                  ^
+
+
+17:08:55,790 asyncio DEBUG 53 Using selector: SelectSelector
+17:08:56,74 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585174136.048400', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': '<!channel> *[ERROR]* ```Ethen Local syntax error at or near "DESC"\nLINE 1: ...tedhammer_value IS NOT NULL ORDER BY TIMESTAMP LIMIT 1 DESC;\n                                                                  ^\n```', 'user': 'UURQ1SNF4', 'ts': '1585174136.048400', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+17:09:35,238 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT OPEN, HIGH, LOW, CLOSE, VOLUME,  threeoutside_value, invertedhammer_value, TIMESTAMP FROM ETHUSDT_OHLCV_5m  WHERE threeoutside_value IS NOT NULL AND invertedhammer_value IS NOT NULL ORDER BY TIMESTAMP DESC LIMIT 1;
+

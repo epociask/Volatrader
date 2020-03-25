@@ -6,7 +6,6 @@ import schedule
 from Helpers.authent import getCurrentPrice
 
 convertToVal = lambda candleEnum: candleEnum.value[0: len(candleEnum.value) - 2]
-reader = DBReader()
 
 
 class PaperTrader:
@@ -15,21 +14,26 @@ class PaperTrader:
         self.takeProfitPercent = None
         self.strategy = None
         self.tradingSession = None
+        self.reader = DBReader()
 
-    def paperTrade(self, pair: Pair, candleSize: Candle, strategy, stopLossPercent: int, takeProfitPercent: int,
+    def trade(self, pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int, takeProfitPercent: int,
                    principle: int):
         self.pair = pair
         self.candleSize = candleSize
         self.takeProfitPercent = f"0{takeProfitPercent}" if takeProfitPercent - 10 <= 0 else f"{takeProfitPercent}"
         self.stratName = strategy
-        self.strategy, indicators = strategies.getStrat(strategy)
-        self.tradingSession = Session(pair, strategy, takeProfitPercent, stopLossPercent, self.stratName,
+        self.strategy, self.indicators = strategies.getStrat(self.stratName)
+        print(strategy)
+        self.tradingSession = Session(pair, self.strategy, takeProfitPercent, stopLossPercent, self.stratName,
                                       SessionType.PAPERTRADE)
+        self.principle = principle
         self.start()
 
     def start(self):
         while True:
-            data = reader.getCandleDataDescFromDB(self.candleSize, self.pair, 1)
-            self.tradingSession.update()
+            data = self.reader.fetchCandlesWithIndicators(self.pair, self.candleSize, self.indicators, 1)
+            self.tradingSession.update(data[0])
 
-    paperTrade(Pair.ETHUSDT, Candle.FIVE_MINUTE, "TEST_BUY_STRAT", 1, 2, 1000)
+
+paper_trader = PaperTrader()
+paper_trader.trade(Pair.ETHUSDT, Candle.FIVE_MINUTE, "SIMPLE_BUY_STRAT", 1, 2, 1000)

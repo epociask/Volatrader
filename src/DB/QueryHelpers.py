@@ -121,7 +121,7 @@ def getIndicatorDataWithCandlesQuery(pair: Pair, candleSize: Candle, indicatorLi
                 notNull.append(F"{key}_{val} IS NOT NULL")
     end = " AND ".join(e for e in notNull)
     return f"SELECT OPEN, HIGH, LOW, CLOSE, VOLUME, {select} TIMESTAMP FROM {pair.value}_OHLCV_{candleSize.value}  WHERE {end} ORDER BY TIMESTAMP" + (
-        f" LIMIT {limit} ASC;" if limit is not None else " ASC;")
+        f" DESC LIMIT {limit};" if limit is not None else " DESC;")
 
 
 # def getInsertBackTestDataQuery(session:, candleSize: Candle, start: str, finish: str):

@@ -41,10 +41,8 @@ def configureFile() -> None:
     Configures basic configuration settings for txt log file
     """
 
-    cwd = os.getcwd()
-    logdir = os.path.join(cwd, 'logs/')
-
-    logging.basicConfig(filename=os.path.join(logdir, cleanDate(str(datetime.now())) + ".txt"),
+    logDir ="../../" + cleanDate(str(datetime.now())) + ".txt"
+    logging.basicConfig(filename= logDir,
                         filemode='a',
                         format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(lineno)d %(message)s',
                         datefmt='%H:%M:%S',
@@ -80,7 +78,7 @@ def logToSlack(message, channel: Channel = Channel.DEBUG, tagChannel=False,
 
     client.chat_postMessage(
         channel=channel.value,
-        text=f'{"<!channel>" if tagChannel else ""} *[{messageType.value.upper()}]* ```{os.environ.get("DATABASE_NAME")}{message}```'
+        text=f'{"<!channel>" if tagChannel else ""} *[{messageType.value.upper()}]* ```[{str(os.environ.get("DATABASE_NAME")).upper()}]{message}```'
     )
 
 

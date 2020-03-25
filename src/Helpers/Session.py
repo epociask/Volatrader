@@ -114,7 +114,7 @@ class Session:
         return False
 
     def checkForPaperTradeSell(self):
-        currentPrice  = getCurrentPrice(self.pair)
+        currentPrice = getCurrentPrice(self.pair)
 
         if currentPrice == self.prev1mCandle and self.prev1mCandle is not None:
 
@@ -124,7 +124,6 @@ class Session:
                 return True
 
         return False
-        
 
     def update(self, data) -> None:
         """

@@ -74,8 +74,12 @@ class DBReader(DBoperations):
         indicatorList = [{e.value: getIndicator(e)} for e in indicators]
 
         try:
+            if len(args) == 0:
+                query = QueryHelpers.getIndicatorDataWithCandlesQuery(pair, candleSize, indicatorList)
 
-            query = QueryHelpers.getIndicatorDataWithCandlesQuery(pair, candleSize, indicatorList)
+            else:
+                query = QueryHelpers.getIndicatorDataWithCandlesQuery(pair, candleSize, indicatorList, args[0])
+            print(query)
             logDebugToFile(query)
             self.lock.acquire()
             self.cur.execute(query)
