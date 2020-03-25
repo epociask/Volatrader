@@ -105,7 +105,3 @@ class DBReader(DBoperations):
             logToSlack(e)
             raise e
 
-
-reader = DBReader()
-x = reader.fetchRowFromSharedTable(Pair.ETHUSDT, Candle.FIVE_MINUTE)
-print(x)
