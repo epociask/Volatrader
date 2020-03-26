@@ -35,9 +35,6 @@ jobs:
       - run:
           name: "Running unit tests"
           command: "python -m unittest src/test/*.py -v"
-      - add_ssh_keys:
-          fingerprints:
-            - "3a:6f:31:6d:f5:bc:f2:fb:d7:b8:11:21:aa:e8:b9:65"
       - run:
           name: "Deploying to Amazon EC2 Instance"
           command: "sh deploy.sh"
