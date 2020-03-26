@@ -38,9 +38,6 @@ jobs:
       - run:
           name: "Deploying to Amazon EC2 Instance"
           command: "sh deploy.sh"
-      - run:
-          name: "Running database driver on EC2"
-          command: "ssh -o StrictHostKeyChecking=no ec2-user@ec2-34-219-56-114.us-west-2.compute.amazonaws.com python3.7 /home/ec2-user/src/DatabaseDriver.py &"
 
 workflows:
   heroku_deploy:

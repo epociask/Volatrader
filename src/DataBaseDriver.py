@@ -2,7 +2,6 @@ from Helpers.Enums import *
 from DB.DBwriter import DBwriter
 from Helpers.Logger import logToSlack
 from datetime import datetime
-from multiprocessing import Process
 from threading import Thread
 import time
 

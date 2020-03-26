@@ -1,10 +1,10 @@
 tar -zcvf ccxt-trader.tar.gz src/
 
-scp -o StrictHostKeyChecking=no ccxt-trader.tar.gz ec2-user@ec2-34-219-56-114.us-west-2.compute.amazonaws.com:/home/ec2-user
-scp -o StrictHostKeyChecking=no requirements.txt ec2-user@ec2-34-219-56-114.us-west-2.compute.amazonaws.com:/home/ec2-user
+scp -o StrictHostKeyChecking=no ccxt-trader.tar.gz root@159.65.75.241:/root/
+scp -o StrictHostKeyChecking=no requirements.txt root@159.65.75.241:/root/
 
-ssh -o StrictHostKeyChecking=no ec2-user@ec2-34-219-56-114.us-west-2.compute.amazonaws.com tar -xvzf ccxt-trader.tar.gz
-ssh -o StrictHostKeyChecking=no ec2-user@ec2-34-219-56-114.us-west-2.compute.amazonaws.com 'touch src/database.ini ; echo "
+ssh -o StrictHostKeyChecking=no root@159.65.75.241 tar -xvzf ccxt-trader.tar.gz
+ssh -o StrictHostKeyChecking=no root@159.65.75.241 'touch src/database.ini ; echo "
 [postgresql]
 user=doadmin
 password=imt6kws2bm7ffay8
@@ -13,4 +13,4 @@ port=25060
 database=defaultdb
 sslmode=require" > src/database.ini'
 
-ssh -o StrictHostKeyChecking=no ec2-user@ec2-34-219-56-114.us-west-2.compute.amazonaws.com "cd src/ ; nohup python3.8 DataBaseDriver.py >/dev/null 2>&1 &"
+ssh -o StrictHostKeyChecking=no root@e159.65.75.241 "cd src/ ; nohup python3.8 DataBaseDriver.py >/dev/null 2>&1 &"
