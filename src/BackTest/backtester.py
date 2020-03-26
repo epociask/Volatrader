@@ -27,7 +27,7 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     takeProfitPercent = f"0{takeProfitPercent}" if takeProfitPercent - 10 <= 0 else f"{takeProfitPercent}"
     stratString = strategy
     strategy, indicators = strategies.getStrat(stratString)
-    backTestingSession = Session(pair, strategy, takeProfitPercent, stopLossPercent, stratString)
+    backTestingSession = Session(pair, strategy, takeProfitPercent, stopLossPercent, stratString, SessionType.BACKTEST)
     reader = DBReader()
 
     if len(args) is 0:
@@ -35,7 +35,7 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
 
     else:
         timeNow = str(datetime.now())[0: -7]
-        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators, rewind(timeNow, args[0].value, 60))
+        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators, rewind(timeNow, args[0].value, 5))
     start = DataSet[0]['candle']['timestamp']
     finish = DataSet[-1]['candle']['timestamp']
     print("Dataset :::: ", DataSet)
@@ -78,4 +78,4 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     return backTestingSession, start, finish
 
 
-backTest(Pair.ETHUSDT, Candle.FIFTEEEN_MINUTE, "SIMPLE_BUY_STRAT", 2, 4, 10000, Time.MONTH)
+backTest(Pair.ETHUSDT, Candle.FIVE_MINUTE, "SIMPLE_BUY_STRAT", 2, 4, 10000, Time.DAY)

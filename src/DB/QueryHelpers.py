@@ -2,7 +2,7 @@
 Helper script to functionalize query generation
 """
 from Helpers.Enums import *
-from Helpers.Session import Session
+from Helpers import *
 
 clean3 = lambda val: val if val.find("3") == -1 else val.replace("3", "three")
 clean2 = lambda val: val if val.find('2') == -1 else val.replace("2", "two")
@@ -37,14 +37,13 @@ def getInsertIndicatorsQueryString(indicator: Indicator, indicatorValues: dict, 
     @:returns query
     """
     returnString = f'UPDATE {clean2(clean3(clean100(pair.value)))}_OHLCV_{candleSize.value} SET'
-      # creates appropiate column names
+    # creates appropiate column names
     first = next(iter(indicatorValues))
     returnString += f' {clean2(clean3(clean100(indicator.value)))}_{first} = \'{indicatorValues[first]}\''
 
     for value in indicatorValues:
         if value is not first:
             returnString += f', {indicator.value}_{value} = \'{indicatorValues[value]}\''
-
 
     returnString += f" WHERE timestamp = '{timeStamp}';"
 
@@ -62,7 +61,6 @@ def getTableDataQuery(candleSize: Candle, pair: Pair, args: list) -> str:
     return f"SELECT (timestamp, open, high, low, close, volume) FROM {pair.value}_OHLCV_{candleSize.value} ORDER BY timestamp ASC LIMIT {str(args[0])};"
 
 
-
 def getCandleInsertQuery(candle: dict, pair: Pair, candleSize: Candle) -> str:
     """
     Creates and returns query that inserts OHLCV candle dictionary into table
@@ -74,7 +72,6 @@ def getCandleInsertQuery(candle: dict, pair: Pair, candleSize: Candle) -> str:
     return f"INSERT INTO {pair.value}_OHLCV_{candleSize.value}" \
            f"(timestamp, open, high, low, close, volume) VALUES " \
            f"(to_timestamp({int(candle['timestamp']) / 1000}), \'{candle['open']}\', \'{candle['high']}\', \'{candle['low']}\', \'{candle['close']}\', \'{candle['volume']}\');"
-
 
 
 def getCreateCandleTableQuery(low, high, pair: Pair, candleSize: Candle) -> str:
@@ -91,7 +88,6 @@ def getCreateCandleTableQuery(low, high, pair: Pair, candleSize: Candle) -> str:
     return f"CREATE TABLE {pair.value}_OHLCV_{candleSize.value}(timestamp TIMESTAMP PRIMARY KEY NOT NULL, " \
            f"open DECIMAL({lowHigh}), high  DECIMAL({lowHigh}), low DECIMAL({lowHigh}), " \
            f"close DECIMAL({lowHigh}), volume numeric(10));"
-
 
 
 def getCandlesFromDBQuery(pair: Pair, candleSize: Candle, limit: (int, None)):
@@ -119,25 +115,26 @@ def getIndicatorDataWithCandlesQuery(pair: Pair, candleSize: Candle, indicatorLi
     notNull = []
     for indicator in indicatorList:
         for key, values in indicator.items():
-                for val in values:
-                    key = clean100(clean3(clean2(key)))
-                    select += f" {key}_{val},"
-                    notNull.append(F"{key}_{val} IS NOT NULL")
+            for val in values:
+                key = clean100(clean3(clean2(key)))
+                select += f" {key}_{val},"
+                notNull.append(F"{key}_{val} IS NOT NULL")
     end = " AND ".join(e for e in notNull)
-    return f"SELECT OPEN, HIGH, LOW, CLOSE, VOLUME, {select} TIMESTAMP FROM {pair.value}_OHLCV_{candleSize.value}  WHERE {end} ORDER BY TIMESTAMP" +  (f" LIMIT {limit} ASC;" if limit is not None else " ASC;")
+    return f"SELECT OPEN, HIGH, LOW, CLOSE, VOLUME, {select} TIMESTAMP FROM {pair.value}_OHLCV_{candleSize.value}  WHERE {end} ORDER BY TIMESTAMP" + (
+        f" DESC LIMIT {limit};" if limit is not None else " DESC;")
 
 
-def getInsertBackTestDataQuery(session: Session, candleSize: Candle, start: str, finish: str):
-    """
-    Creates & returns query that inserts into backtesting table in  DB
-    :param session: finshed instance of Session class
-    :param start: Start timestamp
-    :param finish: Finish timestamp
-    :return:
-    """
-    pos, neg = session.getTradeData()
-    return f"INSERT INTO BACKTEST_TABLE (PAIR, CANDLESIZE, STRATEGY, POSTIVE_TRADES, NEGATIVE_TRADES, START_TIME, FINISH_TIME, STOP_LOSS_PERCENT, TAKE_PROFIT_PERCENT, PROFIT_LOSS) " \
-           f"VALUES ({session.pair.value}, {candleSize}, {session.stratString}, {session.positiveTrades}, {session.negativeTrades}, {start}, {finish}, {str(session.getStopLossPercent())}, {str(session.getTakeProfitPercent())}, {session.getTotalPL()});"
+# def getInsertBackTestDataQuery(session:, candleSize: Candle, start: str, finish: str):
+#     """
+#     Creates & returns query that inserts into backtesting table in  DB
+#     :param session: finshed instance of Session class
+#     :param start: Start timestamp
+#     :param finish: Finish timestamp
+#     :return:
+#     """
+#     return f"INSERT INTO BACKTEST_TABLE (PAIR, CANDLESIZE, STRATEGY, POSTIVE_TRADES, NEGATIVE_TRADES, START_TIME, FINISH_TIME, STOP_LOSS_PERCENT, TAKE_PROFIT_PERCENT, PROFIT_LOSS) " \
+#            f"VALUES ({session.pair.value}, {candleSize}, {session.stratString}, {session.positiveTrades}, {session.negativeTrades}, {start}, {finish}, {str(session.getStopLossPercent())}, {str(session.getTakeProfitPercent())}, {session.getTotalPL()});"
+#
 
 def getCreateBackTestTableQuery() -> str:
     return f"CREATE TABLE BACKTEST_TABLE (pkey UUID NOT NULL DEFAULT uuid_generate_v1(), " \
@@ -146,4 +143,21 @@ def getCreateBackTestTableQuery() -> str:
            f", CONSTRAINT pkey_tbl PRIMARY KEY ( pkey ));"
 
 
-print(getCreateBackTestTableQuery())
+#
+# def getInsertRowIntoSharedTableQuery(pair: Pair, candleSize: Candle, b: bool):
+#     return
+
+def getFetchFromSharedTableQuery(pair: Pair, candleSize: Candle):
+    return f"SELECT AVAILABLE FROM SHARED WHERE \'{pair.value}_{candleSize.value}\' = PAIR_CANDLE;"
+
+
+def getUpdateRowInSharedTableQuery(pair: Pair, candleSize: Candle, b: bool):
+    """
+
+    :param pair:
+    :param candleSize:
+    :param b:
+    :return:
+    """
+    return f"INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES (\'{pair.value}_{candleSize.value}\', {b}) ON CONFLICT(PAIR_CANDLE)" \
+           f" DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = \'{pair.value}_{candleSize.value}\';"

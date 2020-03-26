@@ -12,8 +12,6 @@ import ccxt
 from Helpers.Logger import logToSlack, MessageType, logDebugToFile, logErrorToFile
 from multiprocessing import Lock
 
-writeCandlesLock = Lock()
-writeIndicatorsLock = Lock()
 
 class DBwriter(DBoperations):
     """
@@ -24,7 +22,6 @@ class DBwriter(DBoperations):
     def __init__(self):
         super().__init__()
         self.connect()
-
 
     def writeBackTestData(self, session: Session, startTimeStamp: str, finishTimeStamp: str):
         """
@@ -42,10 +39,10 @@ class DBwriter(DBoperations):
         except Exception as e:
             logErrorToFile(e)
 
-
             if type(e) == psycopg2.errors.UndefinedTable:
                 createTableQuery = ""
             raise e
+
     def writeCandleData(self, candleSize: Candle, pair: Pair, *args):
         """
         wrapper function of getCCXTcandledata to write candle data from CCXT to POSTGRESQL server
@@ -86,6 +83,8 @@ class DBwriter(DBoperations):
 
         else:
             print("Getting candles")
+            if args[0] == 0:
+                self.updateSharedTable(pair, candleSize, False)
             candles = self.getCandleDataDescFromDB(candleSize, pair, args[0] + 300).copy()
         x = True
         err = True
@@ -101,6 +100,8 @@ class DBwriter(DBoperations):
                 raise e
             candles.pop(0)
         print("Reached end of possible calculating range of data set for indicators")
+        if args[0] == 0:
+            self.updateSharedTable(pair, candleSize, True)
         return
 
     def calculateAndInsertIndicatorEntry(self, candleSize: Candle, pair: Pair, indicator: Indicator, candles: list,
@@ -116,18 +117,17 @@ class DBwriter(DBoperations):
         & creates table if it doesn't already exist
         :rtype: bool
         """
-        global writeIndicatorsLock
         if candles is None:
-             raise TypeError("wrong parameters supplied into getCandleData()")
+            raise TypeError("wrong parameters supplied into getCandleData()")
         try:
             candles = sorted(candles, key=lambda i: i['timestamp'], reverse=False)
-            print(candles)
             ts = str(candles[-1]['timestamp'])
+
+            print(candles)
 
             indicatorValues = IndicatorAPI.getIndicator(indicator, candles)
 
             if indicatorValues is None:
-                writeIndicatorsLock.release()
                 return None
 
         except Exception as e:
@@ -138,10 +138,10 @@ class DBwriter(DBoperations):
 
             query = QueryHelpers.getInsertIndicatorsQueryString(indicator, indicatorValues, ts, candleSize, pair)
             logDebugToFile(query)
-            writeIndicatorsLock.acquire()
+            self.lock.acquire()
             self.cur.execute(query)
             self.conn.commit()
-            writeIndicatorsLock.release()
+            self.lock.release()
 
         except Exception as e:
 
@@ -151,19 +151,19 @@ class DBwriter(DBoperations):
                 self.cur.execute(createTable)
                 logDebugToFile(createTable)
                 self.conn.commit()
-                writeIndicatorsLock.release()
+                self.lock.release()
 
                 insert = QueryHelpers.getInsertIndicatorsQueryString(indicator, indicatorValues, ts, candleSize, pair)
                 logDebugToFile(insert)
-                writeIndicatorsLock.acquire()
+                self.lock.acquire()
                 self.cur.execute(insert)
                 self.conn.commit()
-                writeIndicatorsLock.release()
+                self.lock.release()
 
             elif type(e) == psycopg2.errors.UniqueViolation:
                 logDebugToFile("UNIQUE VIOLATION")
                 self.conn.rollback()
-                writeIndicatorsLock.release()
+                self.lock.release()
 
                 if returnOnUNIQUEVIOLATION is True:
                     return None
@@ -174,9 +174,8 @@ class DBwriter(DBoperations):
         return True
 
     def writeCandlesFromCCXT(self, candleSize: Candle, pair: Pair, returnOnUNIQUEVIOLATION, *args: (int, None)) -> (
-    None, Exception):
-        global writeCandlesLock
-        logDebugToFile("STARTING")
+            None, Exception):
+        logDebugToFile("Starting write candles fucntion")
         """
         writes candle data from CCXT Binance to PSQL table
         & creates table if it doesn't already exist
@@ -191,7 +190,7 @@ class DBwriter(DBoperations):
         assert len(args) == 0 or len(args) == 1
 
         try:
-            writeCandlesLock.acquire()
+            self.lock.acquire()
 
             if len(args) != 0:
                 candles = HelpfulOperators.fetchCandleData(api, pair, candleSize, args)
@@ -199,7 +198,7 @@ class DBwriter(DBoperations):
             else:
                 candles = HelpfulOperators.fetchCandleData(api, pair, candleSize, [500])
 
-            writeCandlesLock.release()
+            self.lock.release()
 
             candles = HelpfulOperators.convertCandlesToDict(candles)
 
@@ -209,22 +208,23 @@ class DBwriter(DBoperations):
             raise e
 
         last = candles[len(candles) - 1]
+        count = 0
         for candle in candles:
             try:
                 insertQuery = QueryHelpers.getCandleInsertQuery(candle, pair, candleSize)
                 logDebugToFile(insertQuery)
-                writeCandlesLock.acquire()
+                self.lock.acquire()
                 self.cur.execute(insertQuery)
-                writeCandlesLock.release()
+                self.lock.release()
             except Exception as e:
 
                 if type(e) == psycopg2.errors.UniqueViolation:  # primary key timestamp already exists
                     logDebugToFile("UNIQUE VIOLATION")
                     self.conn.rollback()  # ignore and continue
-                    writeCandlesLock.release()
+                    self.lock.release()
 
                     if returnOnUNIQUEVIOLATION:
-                        return
+                        return count
 
                 elif type(e) == psycopg2.errors.UndefinedTable:  # table not created yet, so lets make it
                     self.conn.rollback()
@@ -239,15 +239,19 @@ class DBwriter(DBoperations):
                     logDebugToFile(createTableQuery)
 
                     self.commit()
-                    writeCandlesLock.release()
+                    self.lock.release()
                     return self.writeCandlesFromCCXT(candleSize, pair, args)
 
                 else:
                     logToSlack(e, tagChannel=True, messageType=MessageType.ERROR)
-                    writeCandlesLock.release()
+                    self.lock.release()
                     raise e
+            count += 1
 
+            self.lock.acquire()
             self.commit()
+            self.lock.release()
+
 
         if len(args) != 0 and type(args[0]) == str:
 
@@ -258,6 +262,21 @@ class DBwriter(DBoperations):
                 return
 
         logDebugToFile("[SUCCESS] FINISHED WRITING CANDLE DATA")
+
+    def updateSharedTable(self, pair: Pair, candleSize: Candle, value: bool):
+
+        try:
+            q = QueryHelpers.getUpdateRowInSharedTableQuery(pair, candleSize, value)
+            logDebugToFile(q)
+            self.lock.acquire()
+            self.cur.execute(q)
+            print("NOW HERE")
+            self.commit()
+            self.lock.release()
+        except Exception as e:
+            logToSlack(e)
+            raise e
+
 
 
     def writeStaticMarketDataQuerys(self, coin, timeStamp):
@@ -362,3 +381,4 @@ class DBwriter(DBoperations):
         dataDict = getMarketData()
         for coin in dataDict:
             self.writeStaticMarketDataQuerys(coin)
+

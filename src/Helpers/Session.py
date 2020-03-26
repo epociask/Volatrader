@@ -1,6 +1,7 @@
 from termcolor import colored
 from BackTest.BackTesterSellLogic import Instance
 from Helpers.Enums import *
+from Helpers.authent import getCurrentPrice
 
 
 class Session:
@@ -8,7 +9,7 @@ class Session:
     Class to hold buying and selling logic and execute each accordingly to price updates
     """
 
-    def __init__(self, pair, buyStrategy, takeProfitPercent, percentSL, type: SessionType, stratString: str):
+    def __init__(self, pair, buyStrategy, takeProfitPercent, percentSL, stratString: str, sessionType: Enum):
         self.pair = pair
         self.sellStrat = Instance(pair)
         self.sellStrat.setStopLossPercent(percentSL)
@@ -27,8 +28,8 @@ class Session:
         self.results = []
         self.positiveTrades = 0
         self.NegativeTrades = 0
-        self.type = type
-
+        self.type = sessionType
+        self.prevData = None
 
     def getStopLossPercent(self):
         """
@@ -99,15 +100,28 @@ class Session:
 
         return sum(self.profitlosses)
 
-    def checkForSell(self, data):
+    def checkForBackTestSell(self, data):
         """
         Uses sell logic instance to see if it's time to sell
         @:returns boolean
         """
+
         if self.sellStrat.run(float(data['candle']['close'])) or self.takeProfit <= float(data['candle']['close']):
             self.sellPrice = float(data['candle']['close'])
             self.sellTime = data['candle']['timestamp']
             return True
+
+        return False
+
+    def checkForPaperTradeSell(self):
+        currentPrice = getCurrentPrice(self.pair)
+
+        if currentPrice == self.prev1mCandle and self.prev1mCandle is not None:
+
+            if self.sellStrat.run(currentPrice) or self.takeProfit <= currentPrice:
+                self.sellPrice = currentPrice
+                self.sellTime = currentPrice
+                return True
 
         return False
 
@@ -119,13 +133,18 @@ class Session:
         @:returns None
         """
         if not self.buy:
-            self.buy, self.buyTime, self.buyPrice = self.buyStrat(data)
+
+            if self.prevData is None or self.prevData != data:
+                self.buy, self.buyTime, self.buyPrice = self.buyStrat(data)
 
 
         else:
             self.takeProfit = float(self.buyPrice) * self.takeProfitPercent
-            self.sell = self.checkForSell(data)
+            if self.type == SessionType.BACKTEST:
+                self.sell = self.checkForBackTestSell(data)
 
+            elif self.type == SessionType.PAPERTRADE:
+                self.sell = self.checkForPaperTradeSell()
             if self.sell:
                 self.calcPL()
                 print(colored("--------------------------\n" + self.toString() + "--------------------------",
@@ -133,6 +152,8 @@ class Session:
                     "--------------------------\n" + self.toString() + "--------------------------", 'red'))
                 self.profitlosses.append(self.profitLoss)
                 self.reset()
+
+        self.prevData = data
 
     def getTotalTrades(self) -> int:
         """
