@@ -4,7 +4,7 @@ from DB import QueryHelpers
 from Helpers.Enums import Candle, Pair
 from DB.config import config
 from Helpers.Logger import logToSlack, logDebugToFile
-from multiprocessing import Lock
+from threading import Lock
 
 
 class DBoperations:

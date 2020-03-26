@@ -10,7 +10,6 @@ from DB import QueryHelpers
 from API import IndicatorAPI
 import ccxt
 from Helpers.Logger import logToSlack, MessageType, logDebugToFile, logErrorToFile
-from multiprocessing import Lock
 
 
 class DBwriter(DBoperations):
