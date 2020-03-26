@@ -1,0 +1,6 @@
+.vscode/
+__pycache__/
+.idea/
+src/database.ini
+ccxt-trader.tar.gz
+.DS_Store
