@@ -13,4 +13,4 @@ port=25060
 database=defaultdb
 sslmode=require" > src/database.ini'
 
-ssh -o StrictHostKeyChecking=no root@e159.65.75.241 "cd src/ ; nohup python3.8 DataBaseDriver.py >/dev/null 2>&1 &"
+ssh -o StrictHostKeyChecking=no root@159.65.75.241 "cd src/ ; nohup python3.8 DataBaseDriver.py >/dev/null 2>&1 &"
