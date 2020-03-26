@@ -97,9 +97,9 @@ def main():
     Main function for Driver script...
     :returns: Nothing
     """
-    p1 = Process(target=writeSchedule, args=(Pair.ETHUSDT, 5, Candle.FIVE_MINUTE,))
-    p2 = Process(target=writeSchedule, args=(Pair.ETHUSDT, 15, Candle.FIFTEEEN_MINUTE,))
-    p3 = Process(target=writeSchedule, args=(Pair.ETHUSDT, 30, Candle.THIRTY_MINUTE,))
+    p1 = Thread(target=writeSchedule, args=(Pair.ETHUSDT, 5, Candle.FIVE_MINUTE,))
+    p2 = Thread(target=writeSchedule, args=(Pair.ETHUSDT, 15, Candle.FIFTEEEN_MINUTE,))
+    p3 = Thread(target=writeSchedule, args=(Pair.ETHUSDT, 30, Candle.THIRTY_MINUTE,))
 
     p1.start()
     p2.start()
