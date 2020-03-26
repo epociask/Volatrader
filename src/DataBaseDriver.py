@@ -2,7 +2,7 @@ from Helpers.Enums import *
 from DB.DBwriter import DBwriter
 from Helpers.Logger import logToSlack
 from datetime import datetime
-from multiprocessing import Process
+from threading import Thread
 import time
 
 writer = DBwriter()
@@ -96,9 +96,9 @@ def main():
     Main function for Driver script...
     :returns: Nothing
     """
-    p1 = Process(target=writeSchedule, args=(Pair.ETHUSDT, 5, Candle.FIVE_MINUTE,))
-    p2 = Process(target=writeSchedule, args=(Pair.ETHUSDT, 15, Candle.FIFTEEEN_MINUTE,))
-    p3 = Process(target=writeSchedule, args=(Pair.ETHUSDT, 30, Candle.THIRTY_MINUTE,))
+    p1 = Thread(target=writeSchedule, args=(Pair.ETHUSDT, 5, Candle.FIVE_MINUTE,))
+    p2 = Thread(target=writeSchedule, args=(Pair.ETHUSDT, 15, Candle.FIFTEEEN_MINUTE,))
+    p3 = Thread(target=writeSchedule, args=(Pair.ETHUSDT, 30, Candle.THIRTY_MINUTE,))
 
     p1.start()
     p2.start()
