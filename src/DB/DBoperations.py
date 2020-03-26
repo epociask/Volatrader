@@ -81,7 +81,6 @@ class DBoperations:
             self.lock.release()
             return HelpfulOperators.convertCandlesToDict(temp)
 
-
         except Exception as e:
             logToSlack(e)
             self.lock.release()
