@@ -270,9 +270,7 @@ class DBwriter(DBoperations):
             logDebugToFile(q)
             self.lock.acquire()
             self.cur.execute(q)
-            self.lock.release()
             print("NOW HERE")
-            self.lock.acquire()
             self.commit()
             self.lock.release()
         except Exception as e:
