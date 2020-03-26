@@ -82,7 +82,7 @@ def writeSchedule(pair: Pair, timeStep, candleSize: Candle) -> None:
         try:
             t = int(str(datetime.now())[14:16])
             if t % timeStep == 0 or t == 0:
-                time.sleep(10)
+                time.sleep(5)
                 writer.writeCandlesFromCCXT(candleSize, pair, True, 1)
                 writeIndicators(pair, candleSize, limit=0)
 
