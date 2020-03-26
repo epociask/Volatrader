@@ -246,8 +246,11 @@ class DBwriter(DBoperations):
                     logToSlack(e, tagChannel=True, messageType=MessageType.ERROR)
                     self.lock.release()
                     raise e
-            count+=1
+            count += 1
+
+            self.lock.acquire()
             self.commit()
+            self.lock.release()
 
 
         if len(args) != 0 and type(args[0]) == str:
@@ -269,7 +272,9 @@ class DBwriter(DBoperations):
             self.cur.execute(q)
             self.lock.release()
             print("NOW HERE")
-            self.conn.commit()
+            self.lock.acquire()
+            self.commit()
+            self.lock.release()
         except Exception as e:
             logToSlack(e)
             raise e
