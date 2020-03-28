@@ -4,7 +4,10 @@ from Helpers.Logger import logToSlack
 from datetime import datetime
 from threading import Thread
 import time
+import asyncio
+import nest_asyncio
 
+nest_asyncio.apply()
 writer = DBwriter()
 
 """
@@ -91,20 +94,20 @@ def writeSchedule(pair: Pair, timeStep, candleSize: Candle) -> None:
             writeSchedule(pair, timeStep, candleSize)
 
 
-def main():
+async def main():
     """
     Main function for Driver script...
     :returns: Nothing
     """
-    p1 = Thread(target=writeSchedule, args=(Pair.ETHUSDT, 2, Candle.FIVE_MINUTE,))
-    p2 = Thread(target=writeSchedule, args=(Pair.ETHUSDT, 2, Candle.FIFTEEEN_MINUTE,))
-    p3 = Thread(target=writeSchedule, args=(Pair.ETHUSDT, 2, Candle.THIRTY_MINUTE,))
+    p1 = Thread(target=writeSchedule, args=(Pair.ETHUSDT, 5, Candle.FIVE_MINUTE,))
+    p2 = Thread(target=writeSchedule, args=(Pair.ETHUSDT, 15, Candle.FIFTEEEN_MINUTE,))
 
     p1.start()
     p2.start()
-    p3.start()
 
+    writeSchedule(Pair.ETHUSDT, 30, Candle.THIRTY_MINUTE,)
 
 
 if __name__ == '__main__':
-    main()
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())

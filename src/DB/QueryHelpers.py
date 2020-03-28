@@ -137,6 +137,9 @@ def getIndicatorDataWithCandlesQuery(pair: Pair, candleSize: Candle, indicatorLi
 #
 
 def getCreateBackTestTableQuery() -> str:
+    """
+    :return:
+    """
     return f"CREATE TABLE BACKTEST_TABLE (pkey UUID NOT NULL DEFAULT uuid_generate_v1(), " \
            f"PAIR VARCHAR, CANDLESIZE VARCHAR, STRATEGY VARCHAR, POSTIVE_TRADES VARCHAR, NEGATIVE_TRADES VARCHAR, START_TIME VARCHAR, FINISH_TIME VARCHAR, " \
            f"STOP_LOSS_PERCENT VARCHAR, TAKE_PROFIT_PERCENT VARCHAR, PROFIT_LOSS VARCHAR " \
@@ -151,13 +154,12 @@ def getFetchFromSharedTableQuery(pair: Pair, candleSize: Candle):
     return f"SELECT AVAILABLE FROM SHARED WHERE \'{pair.value}_{candleSize.value}\' = PAIR_CANDLE;"
 
 
-def getUpdateRowInSharedTableQuery(pair: Pair, candleSize: Candle, b: bool):
+def getUpdateRowInSharedTableQuery(pair: Pair, candleSize: Candle, available: bool):
     """
-
-    :param pair:
-    :param candleSize:
-    :param b:
+    :param pair: Pair enum
+    :param candleSize: Candle enum
+    :param available: boolean
     :return:
     """
-    return f"INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES (\'{pair.value}_{candleSize.value}\', {b}) ON CONFLICT(PAIR_CANDLE)" \
+    return f"INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES (\'{pair.value}_{candleSize.value}\', {available}) ON CONFLICT(PAIR_CANDLE)" \
            f" DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = \'{pair.value}_{candleSize.value}\';"
