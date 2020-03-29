@@ -1,4 +1,4 @@
-from BackTest.backtester import backTest
+from backtester import backTest
 from DB.DBwriter import DBwriter
 writer = DBwriter()
 

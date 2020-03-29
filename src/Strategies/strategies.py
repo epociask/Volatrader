@@ -1,7 +1,7 @@
 from Helpers.Enums import Indicator
 
 SIMPLE_BUY_STRAT_INDICATORS = [Indicator.THREEOUTSIDE, Indicator.INVERTEDHAMMER]
-TEST_BUY_STRAT_INDICATORS = []
+TEST_BUY_STRAT_INDICATORS = [Indicator.THREEOUTSIDE]
 '''
 returns strategy function with a list of indicators to use with it
 '''
@@ -22,4 +22,4 @@ def SIMPLE_BUY_STRAT(data):
 
 
 def TEST_BUY_STRAT(data):
-    return True, float(data['candle']['close']), data['candle']['timestamp']
+    return True,  data['candle']['timestamp'], float(data['candle']['close'])

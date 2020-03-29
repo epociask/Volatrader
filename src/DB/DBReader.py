@@ -81,13 +81,10 @@ class DBReader(DBoperations):
                 query = QueryHelpers.getIndicatorDataWithCandlesQuery(pair, candleSize, indicatorList, args[0])
             print(query)
             logDebugToFile(query)
-            self.lock.acquire()
             self.cur.execute(query)
-            self.lock.release()
             return HelpfulOperators.cleanCandlesWithIndicators(self.cur.fetchall(), indicatorList)
 
         except Exception as e:
-            self.lock.release()
             logToSlack(e, tagChannel=True, messageType=MessageType.ERROR)
             raise e
 
