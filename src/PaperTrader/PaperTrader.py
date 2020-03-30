@@ -6,7 +6,7 @@ from Helpers.Logger import Channel
 from Helpers.Enums import Pair, Candle, SessionType
 from DB.DBReader import DBReader
 from Strategies import strategies
-from Strategies.strategies import STRAT
+# from Strategies.strategies import STRAT
 
 convertToVal = lambda candleEnum: candleEnum.value[0: len(candleEnum.value) - 2]
 
@@ -20,7 +20,7 @@ class PaperTrader:
         self.reader = DBReader()
         self.timeStep = timeStep
 
-    def trade(self, pair: Pair, candleSize: Candle, strategy: STRAT, stopLossPercent: int, takeProfitPercent: int,
+    def trade(self, pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int, takeProfitPercent: int,
               principle: int):
         """
 
@@ -35,7 +35,7 @@ class PaperTrader:
         self.pair = pair
         self.candleSize = candleSize
         self.takeProfitPercent = f"0{takeProfitPercent}" if takeProfitPercent - 10 <= 0 else f"{takeProfitPercent}"
-        self.stratName = strategy.value
+        self.stratName = strategy
         self.strategy, self.indicators = strategies.getStrat(self.stratName)
         print(strategy)
         self.stopLossPercent = stopLossPercent

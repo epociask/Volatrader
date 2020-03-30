@@ -7,7 +7,7 @@ import time
 import asyncio
 import nest_asyncio
 
-nest_asyncio.apply()
+# nest_asyncio.apply()
 writer = DBwriter()
 
 """
@@ -104,8 +104,6 @@ async def main():
 
     p1.start()
     p2.start()
-
-    writeSchedule(Pair.ETHUSDT, 30, Candle.THIRTY_MINUTE,)
 
 
 if __name__ == '__main__':

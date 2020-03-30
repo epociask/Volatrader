@@ -5,7 +5,7 @@ from Helpers.Session import Session
 from Strategies import strategies
 from termcolor import colored
 from Helpers.Enums import *
-from Strategies.strategies import STRAT
+# from Strategies.strategies import STRAT
 
 
 def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProfitPercent, principle, *args) -> Session:
@@ -26,9 +26,9 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     assert (type(candleSize)) is Candle
 
     takeProfitPercent = f"0{takeProfitPercent}" if takeProfitPercent - 10 <= 0 else f"{takeProfitPercent}"
-    stratString = strategy.value
+    stratString = strategy
     strategy, indicators = strategies.getStrat(stratString)
-    backTestingSession = Session(pair, strategy.value, takeProfitPercent, stopLossPercent, stratString, SessionType.BACKTEST)
+    backTestingSession = Session(pair, strategy, takeProfitPercent, stopLossPercent, stratString, SessionType.BACKTEST)
     reader = DBReader()
 
     if len(args) is 0:
@@ -37,7 +37,7 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     else:
         timeNow = str(datetime.now())[0: -7]
         print(rewind(timeNow, args[0].value, 5))
-        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators, 576)
+        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators, 96)
 
     DataSet = sorted(DataSet, key=lambda i: i['candle']['timestamp'], reverse=False)
     start = DataSet[0]['candle']['timestamp']
@@ -82,4 +82,4 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     return backTestingSession, start, finish
 
 
-backTest(Pair.ETHUSDT, Candle.FIVE_MINUTE, STRAT.CANDLESTRAT, 1, 2, 10000, Time.DAY)
+backTest(Pair.ETHUSDT, Candle.FIFTEEEN_MINUTE, "CANDLESTICK_STRAT", 1, 2, 10000, Time.DAY)

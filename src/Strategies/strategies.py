@@ -1,20 +1,32 @@
 from Helpers.Enums import Indicator
 import enum
 
-class STRAT(enum):
-    CANDLESTRAT = "CANDLESTICK_STRAT"
-    SIMPLE_BUY_STRAT = "SIMPLE_BUY_STRAT"
-    TEST_BUY_STRAT = "TEST_BUY_STRAT"
+
+
 
 SIMPLE_BUY_STRAT_INDICATORS = [Indicator.THREEOUTSIDE, Indicator.INVERTEDHAMMER]
 TEST_BUY_STRAT_INDICATORS = [Indicator.THREEOUTSIDE]
-CANDLESTICK_STRAT_INDICATORS = [Indicator.LONGLEGGEDDOJI, Indicator.LONGLINE, Indicator.KICKING, Indicator.INNECK, Indicator.HIGHWAVE, Indicator.GAPSIDEWHITE, Indicator.FIBONACCIRETRACEMENT, Indicator.HARAMICROSS, Indicator.HIKKAKE, Indicator.HOMINGPIGEON, Indicator.EVENINGSTAR, Indicator.EVENINGDOJISTAR, Indicator.DARKCLOUDCOVER, Indicator.BREAKAWAY, Indicator.CONCEALBABYSWALL, Indicator.THREESTARSINSOUTH, Indicator.THREELINESTRIKE, Indicator.THREEINSIDE, Indicator.ADXR, Indicator.THREEOUTSIDE, Indicator.INVERTEDHAMMER, Indicator.MORNINGSTAR, Indicator.HANGINGMAN, Indicator.SHOOTINGSTAR, Indicator.THREEWHITESOLDIERS]
-'''
-returns strategy function with a list of indicators to use with it
-'''
+CANDLESTICK_STRAT_INDICATORS = [Indicator.LONGLEGGEDDOJI, Indicator.LONGLINE, Indicator.KICKING, Indicator.INNECK,
+                                Indicator.HIGHWAVE, Indicator.GAPSIDEWHITE, Indicator.FIBONACCIRETRACEMENT,
+                                Indicator.HARAMICROSS, Indicator.HIKKAKE, Indicator.HOMINGPIGEON, Indicator.EVENINGSTAR,
+                                Indicator.EVENINGDOJISTAR, Indicator.DARKCLOUDCOVER, Indicator.BREAKAWAY,
+                                Indicator.CONCEALBABYSWALL, Indicator.THREESTARSINSOUTH, Indicator.THREELINESTRIKE,
+                                Indicator.THREEINSIDE, Indicator.ADXR, Indicator.THREEOUTSIDE, Indicator.INVERTEDHAMMER,
+                                Indicator.MORNINGSTAR, Indicator.HANGINGMAN, Indicator.SHOOTINGSTAR,
+                                Indicator.THREEWHITESOLDIERS]
+
+# class STRAT(enum):
+#     CANDLESTRAT = "CANDLESTICK_STRAT"
+#     SIMPLE_BUY_STRAT = "SIMPLE_BUY_STRAT"
+#     TEST_BUY_STRAT = "TEST_BUY_STRAT"
 
 
-def getStrat(name):
+def getStrat(name: str):
+    """
+    returns strategy function with a list of indicators to use with it
+    :param name: Name of strategy
+    :returns: strategy function and list of indicators used w/ strategy
+    """
     return globals()[name], globals()[f"{name}_INDICATORS"]
 
 
@@ -29,26 +41,27 @@ def SIMPLE_BUY_STRAT(data):
 
 
 def TEST_BUY_STRAT(data):
-    return True,  data['candle']['timestamp'], float(data['candle']['close'])
+    return True, data['candle']['timestamp'], float(data['candle']['close'])
 
 
 def CANDLESTICK_STRAT(data):
-   bullSigns = 0
-   bearSigns = 0
-   print(f"fib val; {data['fibonacciretracement']['value']}")
-   for value in data:
-       if value != 'candle':
-           print(f"{value}: {data[value]['value']}")
-           if data[value]['value'] == '100':
-                bullSigns+=1
+    bullSigns = 0
+    bearSigns = 0
+    print(f"fib val; {data['fibonacciretracement']['value']}")
+    for value in data:
+        if value != 'candle':
+            print(f"{value}: {data[value]['value']}")
+            if data[value]['value'] == '100':
+                bullSigns += 1
 
-           elif data[value]['value'] == '-100':
-               bearSigns+=1
+            elif data[value]['value'] == '-100':
+                bearSigns += 1
 
-   total = bullSigns - bearSigns
-   if total >= 2 and (float(data['fibonacciretracement']['value']) < float(data['candle']['close'])) and data['longleggeddoji']['value'] == '100':
-       print(total)
-       return True, data['candle']['timestamp'], float(data['candle']['close'])
+    total = bullSigns - bearSigns
+    if total >= 2 and (float(data['fibonacciretracement']['value']) < float(data['candle']['close'])) and \
+            data['longleggeddoji']['value'] == '100':
+        print(total)
+        return True, data['candle']['timestamp'], float(data['candle']['close'])
 
-   return False, None, None
+    return False, None, None
 
