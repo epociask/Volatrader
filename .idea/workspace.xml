@@ -2,16 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8e2abe85-81f2-43ee-9c12-1e472d873d8a" name="Default Changelist" comment="REFACTOR!!">
-      <change afterPath="$PROJECT_DIR$/src/PaperTraderDriver.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BackTest/AutomateBacktest.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/BackTest/AutomateBacktest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BackTest/backtester.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/backtester.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DB/DBReader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/DB/DBReader.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Helpers/Session.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Helpers/Session.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/PaperTrader/PaperTrader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/PaperTrader/PaperTrader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PaperTrader/PaperTraderDriver.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/PaperTraderDriver.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/PaperTraderDriver.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Strategies/strategies.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Strategies/strategies.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/database.ini" beforeDir="false" afterPath="$PROJECT_DIR$/src/database.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backtester.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/backtester.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +71,7 @@
       <recent name="C:\Users\ethen\ccxt\ccxt-trader\src\LiveTrader" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.PaperTraderDriver">
+  <component name="RunManager" selected="Python.backtester (1)">
     <configuration name="DBReader" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ccxt-trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -238,8 +234,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.PaperTraderDriver" />
         <item itemvalue="Python.backtester (1)" />
+        <item itemvalue="Python.PaperTraderDriver" />
         <item itemvalue="Python.DataBaseDriver" />
         <item itemvalue="Python.DBReader" />
         <item itemvalue="Python tests.Unittests for TestBacktester.TestBacktester" />
@@ -296,7 +292,7 @@
       <workItem from="1585067315772" duration="11847000" />
       <workItem from="1585112151990" duration="3266000" />
       <workItem from="1585158802370" duration="20813000" />
-      <workItem from="1585243220980" duration="10746000" />
+      <workItem from="1585243220980" duration="25022000" />
     </task>
     <task id="LOCAL-00001" summary="REFACTOR!!">
       <created>1583658008263</created>
@@ -551,14 +547,6 @@
     <state x="430" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1583894291295" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/Strategies/strategies.py</url>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
         <watch expression="e" />

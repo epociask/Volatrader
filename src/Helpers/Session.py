@@ -9,9 +9,8 @@ class Session:
     Class to hold buying and selling logic and execute each accordingly to price updates
     """
 
-    def __init__(self, pair, candleSize, buyStrategy, takeProfitPercent, percentSL, stratString: str, sessionType: Enum):
+    def __init__(self, pair, buyStrategy, takeProfitPercent, percentSL, stratString: str, sessionType: Enum):
         self.pair = pair
-        self.candleSize = candleSize
         self.sellStrat = Instance(pair)
         self.sellStrat.setStopLossPercent(percentSL)
         self.profitlosses = []
@@ -140,8 +139,11 @@ class Session:
                 logDebugToFile("Checking buy condition")
                 self.buy, self.buyTime, self.buyPrice = self.buyStrat(data)
 
-                if self.buy:
+                if self.buy and (self.type != SessionType.BACKTEST):
                     logToSlack(f"Buying for [{self.stratString}]{self.pair.value}")
+
+                elif self.buy:
+                    print(f"BUYING @ {data['candle']['timestamp']}")
 
 
         else:
@@ -150,10 +152,12 @@ class Session:
                 self.sell = self.checkForBackTestSell(data)
 
             elif self.type == SessionType.PAPERTRADE:
-                self.sell = self.checkForBackTestSell()
+                self.sell = self.checkForBackTestSell(data)
             if self.sell:
                 self.calcPL()
                 logToSlack(colored("--------------------------\n" + self.toString() + "--------------------------",
+                              'green') if self.profitLoss > 0 else colored(
+                    "--------------------------\n" + self.toString() + "--------------------------", 'red')) if self.type != SessionType.BACKTEST else print(colored("--------------------------\n" + self.toString() + "--------------------------",
                               'green') if self.profitLoss > 0 else colored(
                     "--------------------------\n" + self.toString() + "--------------------------", 'red'))
                 self.profitlosses.append(self.profitLoss)

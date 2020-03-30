@@ -6,7 +6,7 @@ from Helpers.Logger import Channel
 from Helpers.Enums import Pair, Candle, SessionType
 from DB.DBReader import DBReader
 from Strategies import strategies
-
+from Strategies.strategies import STRAT
 
 convertToVal = lambda candleEnum: candleEnum.value[0: len(candleEnum.value) - 2]
 
@@ -20,22 +20,36 @@ class PaperTrader:
         self.reader = DBReader()
         self.timeStep = timeStep
 
-    def trade(self, pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int, takeProfitPercent: int,
+    def trade(self, pair: Pair, candleSize: Candle, strategy: STRAT, stopLossPercent: int, takeProfitPercent: int,
               principle: int):
+        """
+
+        :param pair:
+        :param candleSize:
+        :param strategy:
+        :param stopLossPercent:
+        :param takeProfitPercent:
+        :param principle:
+        :return:
+        """
         self.pair = pair
         self.candleSize = candleSize
         self.takeProfitPercent = f"0{takeProfitPercent}" if takeProfitPercent - 10 <= 0 else f"{takeProfitPercent}"
-        self.stratName = strategy
+        self.stratName = strategy.value
         self.strategy, self.indicators = strategies.getStrat(self.stratName)
         print(strategy)
         self.stopLossPercent = stopLossPercent
-        self.tradingSession = Session(pair, self.strategy, self.candleSize, takeProfitPercent, self.stopLossPercent, self.stratName,
+        self.tradingSession = Session(pair, self.strategy, takeProfitPercent, self.stopLossPercent, self.stratName,
                                       SessionType.PAPERTRADE)
         self.principle = principle
         self.start()
 
     def start(self):
-        logToSlack(f"Starting Paper Trader for {self.pair.value}/{self.candleSize.value} \nstrat: {self.stratName} takeprofit: %{int(self.takeProfitPercent)} stoploss: %{self.stopLossPercent}")
+        """
+
+        :return:
+        """
+        logToSlack(f"Starting Paper Trader for {self.pair.value}/{self.candleSize.value} \nstrat: {self.stratName}\n takeprofit: %{int(self.takeProfitPercent)}\n stoploss: %{self.stopLossPercent}")
         while True:
             t = int(str(datetime.now())[14:16])
             if t % self.timeStep == 0 or t == 0:
@@ -45,7 +59,7 @@ class PaperTrader:
                     availableYet = self.reader.fetchRowFromSharedTable(self.pair, self.candleSize)
                     print(availableYet)
                     if availableYet == "True":
-                        logToSlack(f"data now available in DB to {self.pair.value}/{self.candleSize.value}[{self.stratName}] to make calculation")
+                        # logToSlack(f"data now available in DB to {self.pair.value}/{self.candleSize.value}[{self.stratName}] to make calculation")
                         data = self.reader.fetchCandlesWithIndicators(self.pair, self.candleSize, self.indicators, 1)
                         self.tradingSession.update(data[0])
                         temp = False
