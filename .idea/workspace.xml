@@ -2,9 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8e2abe85-81f2-43ee-9c12-1e472d873d8a" name="Default Changelist" comment="REFACTOR!!">
-      <change beforePath="$PROJECT_DIR$/.floo" beforeDir="false" afterPath="$PROJECT_DIR$/.floo" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Helpers/priceFetcher.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DB/DBReader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/DB/DBReader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Helpers/HelpfulOperators.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Helpers/HelpfulOperators.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Helpers/IndicatorConstants.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Helpers/IndicatorConstants.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Helpers/Session.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Helpers/Session.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/PaperTrader/PaperTrader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/PaperTrader/PaperTrader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/PaperTraderDriver.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/PaperTraderDriver.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Strategies/strategies.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Strategies/strategies.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/backtester.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/backtester.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -70,28 +76,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.backtester (1)">
-    <configuration name="DBReader" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="ccxt-trader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/DB" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/DB/DBReader.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="DataBaseDriver" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ccxt-trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -106,6 +90,25 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/DataBaseDriver.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="IndicatorConstants" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ccxt-trader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/Helpers" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/Helpers/IndicatorConstants.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -140,9 +143,6 @@
       <module name="ccxt-trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -184,9 +184,6 @@
       <module name="ccxt-trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -224,28 +221,32 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for TestBacktester.TestBacktester" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="priceFetcher" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ccxt-trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/test" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/Helpers" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;TestBacktester.TestBacktester&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/Helpers/priceFetcher.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Python.backtester (1)" />
+        <item itemvalue="Python.IndicatorConstants" />
         <item itemvalue="Python.PaperTraderDriver" />
+        <item itemvalue="Python.priceFetcher" />
         <item itemvalue="Python.DataBaseDriver" />
-        <item itemvalue="Python.DBReader" />
-        <item itemvalue="Python tests.Unittests for TestBacktester.TestBacktester" />
       </list>
     </recent_temporary>
   </component>
@@ -303,6 +304,8 @@
       <workItem from="1585611263529" duration="820000" />
       <workItem from="1585612088973" duration="287000" />
       <workItem from="1585612421174" duration="236000" />
+      <workItem from="1585612659681" duration="500000" />
+      <workItem from="1585613162499" duration="5869000" />
     </task>
     <task id="LOCAL-00001" summary="REFACTOR!!">
       <created>1583658008263</created>
@@ -370,9 +373,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="507" y="9" key="#backtester/0.0.1536.824/258.-768.1366.728@0.0.1536.824" timestamp="1583398895260" />
-    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583836109025">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state x="2106" y="0" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1585615161413">
+      <screen x="1920" y="0" width="1280" height="639" />
     </state>
+    <state x="2106" y="0" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824/1920.0.1280.639@1920.0.1280.639" timestamp="1585615161413" />
     <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1583836109025" />
     <state x="100" y="100" width="1336" height="664" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog" timestamp="1583886511730">
       <screen x="0" y="0" width="1536" height="824" />
@@ -529,6 +533,10 @@
     <state x="465" y="236" key="com.intellij.ide.util.TipDialog/0.0.1536.824/1920.0.1280.680@0.0.1536.824" timestamp="1585067417420" />
     <state x="2308" y="195" key="com.intellij.ide.util.TipDialog/0.0.1536.824/1920.0.1280.680@1920.0.1280.680" timestamp="1585112156508" />
     <state x="466" y="234" width="606" height="350" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1585158886369" />
+    <state x="2360" y="0" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1585614325791">
+      <screen x="1920" y="0" width="1280" height="639" />
+    </state>
+    <state x="2360" y="0" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1536.824/1920.0.1280.639@1920.0.1280.639" timestamp="1585614325791" />
     <state x="330" y="148" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1583733759228">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -548,10 +556,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="510" y="56" key="refactoring.ChangeSignatureDialog/0.0.1536.824@0.0.1536.824" timestamp="1583728767719" />
-    <state x="2278" y="113" width="672" height="527" key="search.everywhere.popup" timestamp="1585609683416">
+    <state x="2278" y="113" width="672" height="527" key="search.everywhere.popup" timestamp="1585615932014">
       <screen x="1920" y="0" width="1280" height="639" />
     </state>
-    <state x="2278" y="113" width="672" height="527" key="search.everywhere.popup/0.0.1536.824/1920.0.1280.639@1920.0.1280.639" timestamp="1585609683416" />
+    <state x="2278" y="113" width="672" height="527" key="search.everywhere.popup/0.0.1536.824/1920.0.1280.639@1920.0.1280.639" timestamp="1585615932014" />
     <state x="2278" y="120" width="672" height="560" key="search.everywhere.popup/0.0.1536.824/1920.0.1280.680@1920.0.1280.680" timestamp="1584901733211" />
     <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824/258.-768.1366.728@0.0.1536.824" timestamp="1583398691162" />
     <state x="641" y="-640" width="672" height="160" key="search.everywhere.popup/0.0.1536.824/258.-768.1366.728@258.-768.1366.728" timestamp="1583711246463" />

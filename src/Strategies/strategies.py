@@ -15,6 +15,9 @@ CANDLESTICK_STRAT_INDICATORS = [Indicator.LONGLEGGEDDOJI, Indicator.LONGLINE, In
                                 Indicator.MORNINGSTAR, Indicator.HANGINGMAN, Indicator.SHOOTINGSTAR,
                                 Indicator.THREEWHITESOLDIERS]
 
+NATHAN_STRAT_INDICATORS = [Indicator.MACDFIX]
+
+
 # class STRAT(enum):
 #     CANDLESTRAT = "CANDLESTICK_STRAT"
 #     SIMPLE_BUY_STRAT = "SIMPLE_BUY_STRAT"
@@ -43,6 +46,15 @@ def SIMPLE_BUY_STRAT(data):
 def TEST_BUY_STRAT(data):
     return True, data['candle']['timestamp'], float(data['candle']['close'])
 
+
+def NATHAN_STRAT(data):
+    """
+    Nathan Haile's genius strategy
+    """
+    if data['macdfix']['valueMACDSignal'] > data['macdfix']['valueMACD']:
+        return True, data['candle']['timestamp'], float(data['candle']['close'])
+
+    return False, None, None
 
 def CANDLESTICK_STRAT(data):
     bullSigns = 0

@@ -9,7 +9,7 @@ import re
 # from Strategies.strategies import STRAT
 
 
-def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProfitPercent, principle, *args) -> Session:
+def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProfitPercent, principle, timeEnum = None) -> Session:
     """
     main backtest function, prints backtest results
     @:param pair -> pair you wish to run backtest on
@@ -20,7 +20,6 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     @:param args optional TIME ENUM to specify timeline to test strategy upon
     """
 
-    assert len(args) == 0 or len(args) == 1
     assert stopLossPercent in range(1, 100)
     assert takeProfitPercent in range(1, 100)
     assert type(pair) is Pair
@@ -31,14 +30,15 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     strategy, indicators = strategies.getStrat(stratString)
     backTestingSession = Session(pair, strategy, takeProfitPercent, stopLossPercent, stratString, SessionType.BACKTEST)
     reader = DBReader()
+    print(indicators)
 
-    if len(args) is 0:
+    if timeEnum is None:
         DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators)
 
     else:
-        timeNow = str(datetime.now())[0: -7]
-        print(rewind(timeNow, args[0].value, 5))
-        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators, 96)
+        print(int(re.findall(r'\d+', candleSize.value)[0]))
+        print((timeEnum.value* int(re.findall(r'\d+', candleSize.value)[0])))
+        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators, (timeEnum.value* int(re.findall(r'\d+', candleSize.value)[0])))
 
     DataSet = sorted(DataSet, key=lambda i: i['candle']['timestamp'], reverse=False)
     start = DataSet[0]['candle']['timestamp']
@@ -83,4 +83,4 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     return backTestingSession, start, finish
 
 
-backTest(Pair.ETHUSDT, Candle.FIFTEEEN_MINUTE, "CANDLESTICK_STRAT", 1, 2, 10000, Time.DAY)
+backTest(Pair.ETHUSDT, Candle.FIFTEEEN_MINUTE, "NATHAN_STRAT", 2, 4, 10000, Time.DAY)

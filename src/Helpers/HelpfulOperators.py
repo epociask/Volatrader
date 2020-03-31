@@ -1,6 +1,8 @@
 import copy
 import decimal
 import datetime
+import time
+
 import ccxt
 from Helpers.IndicatorConstants import candle
 from Helpers.Enums import Indicator, Pair, Candle
@@ -187,3 +189,16 @@ def cleanCandlesWithIndicators(data: list, indicators: list) -> list:
 
 
 
+import requests
+from Helpers.Enums import  Pair
+
+
+def getCurrentBinancePrice(pair: Pair):
+    """
+    gets and returns current price of binance asset 
+    :param pair: Pair enum
+    :return: float
+    """
+    time.sleep(5)
+    req = requests.get(f"https://api.binance.com/api/v1/ticker/price?symbol={pair.value}")
+    return float(req.json()['price'])

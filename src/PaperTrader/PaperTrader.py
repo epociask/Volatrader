@@ -6,7 +6,10 @@ from Helpers.Logger import Channel
 from Helpers.Enums import Pair, Candle, SessionType
 from DB.DBReader import DBReader
 from Strategies import strategies
+from Helpers.HelpfulOperators import getCurrentBinancePrice
 #from Strategies.strategies import STRAT
+from Helpers.HelpfulOperators import getCurrentBinancePrice
+
 
 convertToVal = lambda candleEnum: candleEnum.value[0: len(candleEnum.value) - 2]
 
@@ -19,6 +22,7 @@ class PaperTrader:
         self.tradingSession = None
         self.reader = DBReader()
         self.timeStep = timeStep
+
 
     def trade(self, pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int, takeProfitPercent: int,
               principle: int):
@@ -49,12 +53,12 @@ class PaperTrader:
 
         :return:
         """
-        logToSlack(f"Starting Paper Trader for {self.pair.value}/{self.candleSize.value} \nstrat: {self.stratName}\n takeprofit: %{int(self.takeProfitPercent)}\n stoploss: %{self.stopLossPercent}")
+        logToSlack(f"Starting Paper Trader for {self.pair.value}/{self.candleSize.value} \nstrat: {self.stratName}\n takeprofit: %{int(self.takeProfitPercent)}\n stoploss: %{self.stopLossPercent}", channel=Channel.VOLATRADER)
+        notBought = True
         while True:
             t = int(str(datetime.now())[14:16])
-            if t % self.timeStep == 0 or t == 0:
+            if (t % self.timeStep == 0 or t == 0) and notBought:
                 time.sleep(60)
-                notBought = True
                 while notBought:
                     availableYet = self.reader.fetchRowFromSharedTable(self.pair, self.candleSize)
                     print(availableYet)
@@ -65,3 +69,8 @@ class PaperTrader:
 
                     else:
                         time.sleep(5)
+
+            elif not notBought:
+                price = getCurrentBinancePrice(self.pair)
+                self.tradingSession.update(price)
+                print("CURRENT PRICE: ", price)

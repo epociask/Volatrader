@@ -7,8 +7,9 @@ from Helpers.Enums import Indicator
 
 def getIndicator(name:  Indicator):
     try:
-        return globals()[name].copy()
+        return globals()[name.value].copy()
     except KeyError:
+        print("key error ")
         return {"value": None}.copy()
 
 
@@ -157,4 +158,5 @@ tdsequential = {
     "countdownResetForTDST": None,
 
 }
+
 

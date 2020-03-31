@@ -72,7 +72,9 @@ class DBReader(DBoperations):
         assert len(args) == 0 or len(args) == 1
 
         indicatorList = [{e.value: getIndicator(e)} for e in indicators]
-
+        print(indicatorList)
+        for e in indicatorList:
+            print(e)
         try:
             if len(args) == 0:
                 query = QueryHelpers.getIndicatorDataWithCandlesQuery(pair, candleSize, indicatorList)

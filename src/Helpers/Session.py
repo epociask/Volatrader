@@ -114,17 +114,13 @@ class Session:
 
         return False
 
-    # def checkForPaperTradeSell(self):
-    #     currentPrice = getCurrentPrice(self.pair, self.candleSize)
-    #
-    #     if currentPrice == self.prev1mCandle and self.prev1mCandle is not None:
-    #
-    #         if self.sellStrat.run(currentPrice) or self.takeProfit <= currentPrice:
-    #             self.sellPrice = currentPrice
-    #             self.sellTime = currentPrice
-    #             return True
-    #
-    #     return False
+    def checkForPaperTradeSell(self, price):
+        if self.sellStrat.run(price) or self.takeProfit <= price:
+            return True
+        
+        else:
+            return False
+
 
     def update(self, data) -> None:
         """
@@ -152,7 +148,7 @@ class Session:
                 self.sell = self.checkForBackTestSell(data)
 
             elif self.type == SessionType.PAPERTRADE:
-                self.sell = self.checkForBackTestSell(data)
+                self.sell = self.checkForPaperTradeSell(data)
             if self.sell:
                 self.calcPL()
                 logToSlack(colored("--------------------------\n" + self.toString() + "--------------------------",
@@ -162,9 +158,10 @@ class Session:
                     "--------------------------\n" + self.toString() + "--------------------------", 'red'))
                 self.profitlosses.append(self.profitLoss)
                 self.reset()
+                return True
 
         self.prevData = data
-
+        return None
     def getTotalTrades(self) -> int:
         """
         @:returns count of total trades
