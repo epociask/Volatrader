@@ -6,7 +6,7 @@ from Helpers.Logger import Channel
 from Helpers.Enums import Pair, Candle, SessionType
 from DB.DBReader import DBReader
 from Strategies import strategies
-# from Strategies.strategies import STRAT
+#from Strategies.strategies import STRAT
 
 convertToVal = lambda candleEnum: candleEnum.value[0: len(candleEnum.value) - 2]
 
@@ -54,15 +54,14 @@ class PaperTrader:
             t = int(str(datetime.now())[14:16])
             if t % self.timeStep == 0 or t == 0:
                 time.sleep(60)
-                temp = True
-                while temp:
+                notBought = True
+                while notBought:
                     availableYet = self.reader.fetchRowFromSharedTable(self.pair, self.candleSize)
                     print(availableYet)
                     if availableYet == "True":
-                        # logToSlack(f"data now available in DB to {self.pair.value}/{self.candleSize.value}[{self.stratName}] to make calculation")
                         data = self.reader.fetchCandlesWithIndicators(self.pair, self.candleSize, self.indicators, 1)
                         self.tradingSession.update(data[0])
-                        temp = False
+                        notBought = False
 
                     else:
                         time.sleep(5)

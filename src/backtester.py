@@ -5,6 +5,7 @@ from Helpers.Session import Session
 from Strategies import strategies
 from termcolor import colored
 from Helpers.Enums import *
+import re
 # from Strategies.strategies import STRAT
 
 
