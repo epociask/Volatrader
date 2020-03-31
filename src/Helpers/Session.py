@@ -137,6 +137,7 @@ class Session:
 
                 if self.buy and (self.type != SessionType.BACKTEST):
                     logToSlack(f"Buying for [{self.stratString}]{self.pair.value}")
+                    return False
 
                 elif self.buy:
                     print(f"BUYING @ {data['candle']['timestamp']}")

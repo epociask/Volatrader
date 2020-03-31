@@ -40,8 +40,10 @@ class PaperTrader:
         self.candleSize = candleSize
         self.takeProfitPercent = f"0{takeProfitPercent}" if takeProfitPercent - 10 <= 0 else f"{takeProfitPercent}"
         self.stratName = strategy
-        self.strategy, self.indicators = strategies.getStrat(self.stratName)
-        print(strategy)
+        strategy = strategies.getStrat(self.stratName)
+        self.strategy = strategy(pair, candleSize)
+        self.indicators = self.strategy.indicatorList
+        print(self.indicators)
         self.stopLossPercent = stopLossPercent
         self.tradingSession = Session(pair, self.strategy, takeProfitPercent, self.stopLossPercent, self.stratName,
                                       SessionType.PAPERTRADE)
@@ -64,8 +66,7 @@ class PaperTrader:
                     print(availableYet)
                     if availableYet == "True":
                         data = self.reader.fetchCandlesWithIndicators(self.pair, self.candleSize, self.indicators, 1)
-                        self.tradingSession.update(data[0])
-                        notBought = False
+                        notBought = self.tradingSession.update(data[0])
 
                     else:
                         time.sleep(5)
