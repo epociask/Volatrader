@@ -41,7 +41,7 @@ def configureFile() -> None:
     Configures basic configuration settings for txt log file
     """
 
-    logDir = "logs/" + cleanDate(str(datetime.now())) + ".txt"
+    logDir = "../logs/" + cleanDate(str(datetime.now())) + ".txt"
     logging.basicConfig(filename= logDir,
                         filemode='a',
                         format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(lineno)d %(message)s',

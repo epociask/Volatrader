@@ -6,6 +6,7 @@ from threading import Thread
 import time
 import asyncio
 import nest_asyncio
+from Helpers.PriceNotifications import sendAbnormalVolumeNotification
 
 # nest_asyncio.apply()
 writer = DBwriter()
@@ -87,6 +88,7 @@ def writeSchedule(pair: Pair, timeStep, candleSize: Candle) -> None:
             if t % timeStep == 0 or t == 0:
                 time.sleep(5)
                 writer.writeCandlesFromCCXT(candleSize, pair, True, 1)
+                sendAbnormalVolumeNotification()
                 writeIndicators(pair, candleSize, limit=0)
 
         except Exception as e:

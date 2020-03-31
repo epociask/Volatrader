@@ -1,0 +1,336 @@
+01:40:05,27 [DATABASE_LOGGER] DEBUG 94 [DEBUG] Starting write candles fucntion
+
+01:40:05,32 [DATABASE_LOGGER] DEBUG 94 [DEBUG] Starting write candles fucntion
+
+01:40:05,863 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1585644000.0), '133.02', '133.06', '133.02', '133.03', '21.00471');
+
+01:40:05,885 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1585644000.0), '133.02', '133.06', '133.02', '133.03', '21.00471');
+
+01:40:05,885 [DATABASE_LOGGER] WARNING 105 [WARNING] 'NoneType' object has no attribute 'execute'
+
+01:40:05,891 asyncio DEBUG 58 Using selector: KqueueSelector
+01:40:05,908 [DATABASE_LOGGER] DEBUG 94 [DEBUG] [SUCCESS] FINISHED WRITING CANDLE DATA
+
+01:40:06,136 [DATABASE_LOGGER] WARNING 105 [WARNING] [STARTING INDICATOR WRITE FOR ETHUSDT/5m]
+
+01:40:06,149 asyncio DEBUG 58 Using selector: KqueueSelector
+01:40:06,638 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644006.391700', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[ERROR]* ```[ADRIANS LOCAL]'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585644006.391700', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:40:06,643 [DATABASE_LOGGER] WARNING 105 [WARNING] DATABASE BREAKING ERROR :: 
+'NoneType' object has no attribute 'execute'
+
+01:40:06,703 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644006.391800', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': ' *[WARNING]* ```[ADRIANS LOCAL][STARTING INDICATOR WRITE FOR ETHUSDT/5m]```', 'user': 'UURQ1SNF4', 'ts': '1585644006.391800', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:40:06,721 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:06,773 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:07,150 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644007.391900', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[WARNING]* ```[ADRIANS LOCAL]DATABASE BREAKING ERROR :: \n'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585644007.391900', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:40:08,102 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET twocrows_value = '0' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:08,131 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:08,168 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:08,187 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:09,436 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET threeblackcrows_value = '0' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:09,456 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:09,478 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:09,495 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:10,748 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET threeinside_value = '0' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:10,774 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:10,808 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:10,825 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:12,32 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET threelinestrike_value = '0' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:12,54 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:12,88 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:12,116 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:12,170 [DATABASE_LOGGER] DEBUG 94 [DEBUG] Starting write candles fucntion
+
+01:40:12,913 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1585644000.0), '133.02', '133.09', '133.02', '133.06', '127.41701');
+
+01:40:12,918 [DATABASE_LOGGER] WARNING 105 [WARNING] 'NoneType' object has no attribute 'execute'
+
+01:40:13,340 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET threeoutside_value = '0' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:13,363 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:13,377 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644013.392000', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[ERROR]* ```[ADRIANS LOCAL]'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585644013.392000', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:40:13,383 [DATABASE_LOGGER] WARNING 105 [WARNING] DATABASE BREAKING ERROR :: 
+'NoneType' object has no attribute 'execute'
+
+01:40:13,422 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:13,445 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:13,856 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644013.392100', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[WARNING]* ```[ADRIANS LOCAL]DATABASE BREAKING ERROR :: \n'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585644013.392100', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:40:14,752 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET threestarsinsouth_value = '0' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:14,780 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:14,799 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:14,822 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:16,39 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET threewhitesoldiers_value = '0' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:16,69 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:16,99 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:16,128 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:17,443 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET abs_value = '133.03' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:17,466 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:17,495 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:17,536 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:18,866 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET acos_value = 'None' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:18,871 [DATABASE_LOGGER] DEBUG 94 [DEBUG] Starting write candles fucntion
+
+01:40:18,894 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:18,921 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:18,944 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:19,772 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1585644000.0), '133.02', '133.22', '133.02', '133.18', '816.34684');
+
+01:40:19,778 [DATABASE_LOGGER] WARNING 105 [WARNING] 'NoneType' object has no attribute 'execute'
+
+01:40:20,216 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET ad_value = '-417.724866904933' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:20,225 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644020.392200', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[ERROR]* ```[ADRIANS LOCAL]'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585644020.392200', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:40:20,230 [DATABASE_LOGGER] WARNING 105 [WARNING] DATABASE BREAKING ERROR :: 
+'NoneType' object has no attribute 'execute'
+
+01:40:20,244 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:20,288 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:20,312 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:20,707 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644020.392300', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[WARNING]* ```[ADRIANS LOCAL]DATABASE BREAKING ERROR :: \n'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585644020.392300', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:40:20,889 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET adosc_value = '501.32330856650253' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:20,905 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:20,941 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:20,953 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:22,171 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET advanceblock_value = '0' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:22,198 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:22,240 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:22,267 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:22,866 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET adx_value = '40.139399424270394' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:22,895 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:22,949 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:22,972 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:23,547 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET adxr_value = '30.45375219986629' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:23,576 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:23,628 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:23,663 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:24,908 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET ao_value = '9.088441176470695' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:24,926 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:24,956 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:24,978 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:25,718 [DATABASE_LOGGER] DEBUG 94 [DEBUG] Starting write candles fucntion
+
+01:40:26,148 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET apo_value = '4.537884615384712' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:26,165 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:26,204 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:26,227 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:26,610 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1585644000.0), '133.02', '133.27', '133.02', '133.27', '944.31855');
+
+01:40:26,615 [DATABASE_LOGGER] WARNING 105 [WARNING] 'NoneType' object has no attribute 'execute'
+
+01:40:27,99 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644026.392400', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[ERROR]* ```[ADRIANS LOCAL]'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585644026.392400', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:40:27,105 [DATABASE_LOGGER] WARNING 105 [WARNING] DATABASE BREAKING ERROR :: 
+'NoneType' object has no attribute 'execute'
+
+01:40:27,547 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644027.392500', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[WARNING]* ```[ADRIANS LOCAL]DATABASE BREAKING ERROR :: \n'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585644027.392500', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:40:27,551 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET aroon_valueAroonDown = '0', aroon_valueAroonUp = '85.71428571428572' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:27,579 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:27,630 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:27,662 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:28,948 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET aroonosc_value = '85.71428571428572' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:28,978 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:29,21 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:29,53 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:30,315 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET asin_value = 'None' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:30,339 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:30,367 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:30,391 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:31,8 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET atan_value = '1.5632793669735476' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:31,42 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:31,65 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:31,100 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:32,399 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET atr_value = '1.1796224219037317' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:32,428 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:32,464 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:32,499 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:32,560 [DATABASE_LOGGER] DEBUG 94 [DEBUG] Starting write candles fucntion
+
+01:40:33,365 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1585644000.0), '133.02', '133.28', '133.02', '133.28', '1032.17836');
+
+01:40:33,370 [DATABASE_LOGGER] WARNING 105 [WARNING] 'NoneType' object has no attribute 'execute'
+
+01:40:33,778 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET avgprice_value = '133.0325' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:33,813 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:33,837 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:33,849 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644033.392600', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[ERROR]* ```[ADRIANS LOCAL]'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585644033.392600', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:40:33,857 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:33,869 [DATABASE_LOGGER] WARNING 105 [WARNING] DATABASE BREAKING ERROR :: 
+'NoneType' object has no attribute 'execute'
+
+01:40:34,357 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644034.392700', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[WARNING]* ```[ADRIANS LOCAL]DATABASE BREAKING ERROR :: \n'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585644034.392700', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:40:35,104 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET bbands_valueUpperBand = '138.14670560520565', bbands_valueMiddleBand = '135.54999999999987', bbands_valueLowerBand = '132.95329439479409' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:35,117 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:35,128 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:35,157 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:36,368 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET belthold_value = '0' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:36,389 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:36,426 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:36,461 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:37,767 [DATABASE_LOGGER] DEBUG 94 [DEBUG] UPDATE ETHUSDT_OHLCV_5m SET beta_value = '0.9403168361372211' WHERE timestamp = '2020-03-31 01:40:00';
+
+01:40:37,790 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', True) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:37,818 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO SHARED(PAIR_CANDLE, AVAILABLE) VALUES ('ETHUSDT_5m', False) ON CONFLICT(PAIR_CANDLE) DO UPDATE SET AVAILABLE = EXCLUDED.AVAILABLE WHERE EXCLUDED.PAIR_CANDLE = 'ETHUSDT_5m';
+
+01:40:37,841 [DATABASE_LOGGER] DEBUG 94 [DEBUG] SELECT timestamp, open, high, low, close, volume FROM ETHUSDT_OHLCV_5m ORDER BY timestamp DESC LIMIT 300;
+
+01:40:39,373 [DATABASE_LOGGER] DEBUG 94 [DEBUG] Starting write candles fucntion
+
+01:40:40,133 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1585644000.0), '133.02', '133.29', '133.02', '133.26', '1044.90336');
+
+01:40:40,133 [DATABASE_LOGGER] WARNING 105 [WARNING] 'NoneType' object has no attribute 'execute'
+
+01:40:40,437 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644040.392800', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[ERROR]* ```[ADRIANS LOCAL]'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585644040.392800', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:40:40,444 [DATABASE_LOGGER] WARNING 105 [WARNING] DATABASE BREAKING ERROR :: 
+'NoneType' object has no attribute 'execute'
+
+01:40:40,893 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644040.392900', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[WARNING]* ```[ADRIANS LOCAL]DATABASE BREAKING ERROR :: \n'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585644040.392900', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:40:45,915 [DATABASE_LOGGER] DEBUG 94 [DEBUG] Starting write candles fucntion
+
+01:40:46,701 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1585644000.0), '133.02', '133.29', '133.02', '133.25', '1106.84126');
+
+01:40:46,706 [DATABASE_LOGGER] WARNING 105 [WARNING] 'NoneType' object has no attribute 'execute'
+
+01:40:47,138 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644047.393000', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[ERROR]* ```[ADRIANS LOCAL]'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585644047.393000', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:40:47,144 [DATABASE_LOGGER] WARNING 105 [WARNING] DATABASE BREAKING ERROR :: 
+'NoneType' object has no attribute 'execute'
+
+01:40:47,570 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644047.393100', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[WARNING]* ```[ADRIANS LOCAL]DATABASE BREAKING ERROR :: \n'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585644047.393100', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:40:52,583 [DATABASE_LOGGER] DEBUG 94 [DEBUG] Starting write candles fucntion
+
+01:40:53,410 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1585644000.0), '133.02', '133.29', '133.02', '133.25', '1158.05368');
+
+01:40:53,417 [DATABASE_LOGGER] WARNING 105 [WARNING] 'NoneType' object has no attribute 'execute'
+
+01:40:53,870 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644053.393200', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[ERROR]* ```[ADRIANS LOCAL]'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585644053.393200', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:40:53,876 [DATABASE_LOGGER] WARNING 105 [WARNING] DATABASE BREAKING ERROR :: 
+'NoneType' object has no attribute 'execute'
+
+01:40:54,282 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644054.393300', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[WARNING]* ```[ADRIANS LOCAL]DATABASE BREAKING ERROR :: \n'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585644054.393300', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:40:59,291 [DATABASE_LOGGER] DEBUG 94 [DEBUG] Starting write candles fucntion
+
+01:41:00,203 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1585644000.0), '133.02', '133.29', '133.02', '133.23', '1158.57691');
+
+01:41:00,203 [DATABASE_LOGGER] WARNING 105 [WARNING] 'NoneType' object has no attribute 'execute'
+
+01:41:00,491 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644060.393400', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[ERROR]* ```[ADRIANS LOCAL]'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585644060.393400', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:41:00,492 [DATABASE_LOGGER] WARNING 105 [WARNING] DATABASE BREAKING ERROR :: 
+'NoneType' object has no attribute 'execute'
+
+01:41:00,909 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644060.393500', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[WARNING]* ```[ADRIANS LOCAL]DATABASE BREAKING ERROR :: \n'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585644060.393500', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:45:05,2 [DATABASE_LOGGER] DEBUG 94 [DEBUG] Starting write candles fucntion
+
+01:45:05,2 [DATABASE_LOGGER] DEBUG 94 [DEBUG] Starting write candles fucntion
+
+01:45:05,415 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO ETHUSDT_OHLCV_5m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1585644300.0), '132.95', '132.96', '132.94', '132.96', '10.13844');
+
+01:45:05,854 [DATABASE_LOGGER] DEBUG 94 [DEBUG] INSERT INTO ETHUSDT_OHLCV_15m(timestamp, open, high, low, close, volume) VALUES (to_timestamp(1585644300.0), '132.95', '132.96', '132.94', '132.96', '10.13844');
+
+01:45:05,854 [DATABASE_LOGGER] WARNING 105 [WARNING] 'NoneType' object has no attribute 'execute'
+
+01:45:06,183 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644306.393900', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[ERROR]* ```[ADRIANS LOCAL]'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585644306.393900', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:45:06,183 [DATABASE_LOGGER] WARNING 105 [WARNING] DATABASE BREAKING ERROR :: 
+'NoneType' object has no attribute 'execute'
+
+01:45:06,183 [DATABASE_LOGGER] WARNING 105 [WARNING] 'NoneType' object has no attribute 'execute'
+
+01:45:06,184 [DATABASE_LOGGER] WARNING 105 [WARNING] DATABASE BREAKING ERROR :: 
+This event loop is already running
+
+01:45:06,394 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585644306.394000', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[WARNING]* ```[ADRIANS LOCAL]DATABASE BREAKING ERROR :: \n'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585644306.394000', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+01:45:11,398 [DATABASE_LOGGER] DEBUG 94 [DEBUG] Starting write candles fucntion
+

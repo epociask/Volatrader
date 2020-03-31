@@ -45,6 +45,16 @@ sslmode = require
 
 ```
 
+Local Database
+
+```text
+[postgresql]
+host=localhost
+database=coin-database
+user=postgres
+port=5432
+
+```
 
 
 ### To deploy:

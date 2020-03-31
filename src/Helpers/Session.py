@@ -133,7 +133,7 @@ class Session:
 
             if self.prevData is None or self.prevData != data:
                 logDebugToFile("Checking buy condition")
-                self.buy, self.buyTime, self.buyPrice = self.buyStrat.update(data)
+                self.buy, self.buyTime, self.buyPrice = self.buyStrat(data)
 
                 if self.buy and (self.type != SessionType.BACKTEST):
                     logToSlack(f"Buying for [{self.stratString}]{self.pair.value}")
