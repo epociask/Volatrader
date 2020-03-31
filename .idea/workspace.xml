@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8e2abe85-81f2-43ee-9c12-1e472d873d8a" name="Default Changelist" comment="REFACTOR!!">
-      <change afterPath="$PROJECT_DIR$/src/Helpers/priceFetcher.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DB/DBReader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/DB/DBReader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Helpers/HelpfulOperators.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Helpers/HelpfulOperators.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Helpers/IndicatorConstants.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Helpers/IndicatorConstants.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DB/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/DB/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Helpers/Session.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Helpers/Session.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PaperTrader/PaperTrader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/PaperTrader/PaperTrader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PaperTraderDriver.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/PaperTraderDriver.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Strategies/strategies.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Strategies/strategies.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/backtester.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/backtester.py" afterDir="false" />
     </list>
@@ -102,6 +97,9 @@
       <module name="ccxt-trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/Helpers" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -143,6 +141,9 @@
       <module name="ccxt-trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -225,6 +226,9 @@
       <module name="ccxt-trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/Helpers" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -306,6 +310,7 @@
       <workItem from="1585612421174" duration="236000" />
       <workItem from="1585612659681" duration="500000" />
       <workItem from="1585613162499" duration="5869000" />
+      <workItem from="1585639923125" duration="3520000" />
     </task>
     <task id="LOCAL-00001" summary="REFACTOR!!">
       <created>1583658008263</created>
@@ -526,13 +531,13 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="775" height="419" key="XDebugger.FullValuePopup/0.0.1536.824@0.0.1536.824" timestamp="1583727509569" />
-    <state x="2308" y="181" width="606" height="350" key="com.intellij.ide.util.TipDialog" timestamp="1585612435650">
-      <screen x="1920" y="0" width="1280" height="639" />
+    <state x="466" y="234" width="606" height="350" key="com.intellij.ide.util.TipDialog" timestamp="1585639929404">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="2308" y="181" key="com.intellij.ide.util.TipDialog/0.0.1536.824/1920.0.1280.639@1920.0.1280.639" timestamp="1585612435650" />
     <state x="465" y="236" key="com.intellij.ide.util.TipDialog/0.0.1536.824/1920.0.1280.680@0.0.1536.824" timestamp="1585067417420" />
     <state x="2308" y="195" key="com.intellij.ide.util.TipDialog/0.0.1536.824/1920.0.1280.680@1920.0.1280.680" timestamp="1585112156508" />
-    <state x="466" y="234" width="606" height="350" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1585158886369" />
+    <state x="466" y="234" width="606" height="350" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1585639929404" />
     <state x="2360" y="0" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1585614325791">
       <screen x="1920" y="0" width="1280" height="639" />
     </state>
