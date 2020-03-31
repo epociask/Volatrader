@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8e2abe85-81f2-43ee-9c12-1e472d873d8a" name="Default Changelist" comment="REFACTOR!!">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Helpers/Session.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Helpers/Session.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PaperTrader/PaperTrader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/PaperTrader/PaperTrader.py" afterDir="false" />
-    </list>
+    <list default="true" id="8e2abe85-81f2-43ee-9c12-1e472d873d8a" name="Default Changelist" comment="REFACTOR!!" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -305,7 +301,7 @@
       <workItem from="1585612421174" duration="236000" />
       <workItem from="1585612659681" duration="500000" />
       <workItem from="1585613162499" duration="5869000" />
-      <workItem from="1585639923125" duration="5824000" />
+      <workItem from="1585639923125" duration="6526000" />
     </task>
     <task id="LOCAL-00001" summary="REFACTOR!!">
       <created>1583658008263</created>
