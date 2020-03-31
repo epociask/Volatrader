@@ -122,7 +122,7 @@ class Session:
             return False
 
 
-    def update(self, data) -> None:
+    def update(self, data) -> bool:
         """
         main function
         @:param data
@@ -159,10 +159,9 @@ class Session:
                     "--------------------------\n" + self.toString() + "--------------------------", 'red'))
                 self.profitlosses.append(self.profitLoss)
                 self.reset()
-                return True
 
         self.prevData = data
-        return None
+        return True
     def getTotalTrades(self) -> int:
         """
         @:returns count of total trades

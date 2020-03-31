@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8e2abe85-81f2-43ee-9c12-1e472d873d8a" name="Default Changelist" comment="REFACTOR!!" />
+    <list default="true" id="8e2abe85-81f2-43ee-9c12-1e472d873d8a" name="Default Changelist" comment="REFACTOR!!">
+      <change afterPath="$PROJECT_DIR$/src/AutomateBacktest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BackTest/AutomateBacktest.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backtester.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/BackTest/backtester.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -49,6 +54,13 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\ethen\ccxt\ccxt-trader\src" />
+      <recent name="C:\Users\ethen\ccxt\ccxt-trader\src\BackTest" />
+      <recent name="C:\Users\ethen\ccxt\ccxt-trader\src\Helpers" />
+      <recent name="C:\Users\ethen\ccxt\ccxt-trader\src\" />
+      <recent name="C:\Users\ethen\ccxt\ccxt-trader\src\DB" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\ethen\ccxt\ccxt-trader\src\DB" />
       <recent name="C:\Users\ethen\ccxt\ccxt-trader\src\PaperTrader" />
@@ -56,29 +68,38 @@
       <recent name="C:\Users\ethen\ccxt\ccxt-trader\src" />
       <recent name="C:\Users\ethen\ccxt\ccxt-trader\src\BackTest" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\ethen\ccxt\ccxt-trader\src" />
-      <recent name="C:\Users\ethen\ccxt\ccxt-trader\src\Helpers" />
-      <recent name="C:\Users\ethen\ccxt\ccxt-trader\src\" />
-      <recent name="C:\Users\ethen\ccxt\ccxt-trader\src\DB" />
-      <recent name="C:\Users\ethen\ccxt\ccxt-trader\src\LiveTrader" />
-    </key>
   </component>
-  <component name="RunManager" selected="Python.PaperTraderDriver">
-    <configuration name="DataBaseDriver" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.AutomateBacktest (1)">
+    <configuration name="AutomateBacktest (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ccxt-trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/DataBaseDriver.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/AutomateBacktest.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="AutomateBacktest" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ccxt-trader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/BackTest" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\ethen\ccxt\ccxt-trader\src\AutomateBacktest.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -172,25 +193,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="backtester (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="ccxt-trader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/backtester.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="backtester" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="ccxt-trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -204,7 +206,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="C:\Users\ethen\ccxt\ccxt-trader\src\backtester.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\ethen\ccxt\ccxt-trader\src\BackTest\backtester.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -213,20 +215,17 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="priceFetcher" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="backtester" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ccxt-trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/Helpers" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/Helpers/priceFetcher.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\ethen\ccxt\ccxt-trader\src\BackTest\backtester.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -237,11 +236,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.PaperTraderDriver" />
+        <item itemvalue="Python.AutomateBacktest (1)" />
+        <item itemvalue="Python.AutomateBacktest" />
         <item itemvalue="Python.backtester (1)" />
+        <item itemvalue="Python.PaperTraderDriver" />
         <item itemvalue="Python.IndicatorConstants" />
-        <item itemvalue="Python.priceFetcher" />
-        <item itemvalue="Python.DataBaseDriver" />
       </list>
     </recent_temporary>
   </component>
@@ -301,7 +300,7 @@
       <workItem from="1585612421174" duration="236000" />
       <workItem from="1585612659681" duration="500000" />
       <workItem from="1585613162499" duration="5869000" />
-      <workItem from="1585639923125" duration="6526000" />
+      <workItem from="1585639923125" duration="10666000" />
     </task>
     <task id="LOCAL-00001" summary="REFACTOR!!">
       <created>1583658008263</created>

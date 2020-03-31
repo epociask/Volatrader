@@ -9,7 +9,7 @@ import re
 # from Strategies.strategies import STRAT
 
 
-def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProfitPercent, principle, timeEnum = None) -> Session:
+def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProfitPercent, principle, timeEnum = None, shouldOutputToConsole = True) -> Session:
     """
     main backtest function, prints backtest results
     @:param pair -> pair you wish to run backtest on
@@ -32,27 +32,27 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     indicators = strategy.indicatorList
     backTestingSession = Session(pair, strategy, takeProfitPercent, stopLossPercent, stratString, SessionType.BACKTEST)
     reader = DBReader()
-    print(indicators)
 
     if timeEnum is None:
         DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators)
 
     else:
-        print(int(re.findall(r'\d+', candleSize.value)[0]))
-        print((timeEnum.value* int(re.findall(r'\d+', candleSize.value)[0])))
-        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators, (timeEnum.value * int(re.findall(r'\d+', candleSize.value)[0])))
+        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators, (timeEnum.value * (60 / int(re.findall(r'\d+', candleSize.value)[0]))))
 
     DataSet = sorted(DataSet, key=lambda i: i['candle']['timestamp'], reverse=False)
     start = DataSet[0]['candle']['timestamp']
     finish = DataSet[-1]['candle']['timestamp']
     print("Dataset :::: ", DataSet)
     for data in DataSet:
-        print(colored(data, "blue", attrs=['blink']))
+        if shouldOutputToConsole:
+            print(colored(data, "blue", attrs=['blink']))
         backTestingSession.update(data)
-    print(colored(
-        "\n\n"
-        "------------------------------------------------------------------------------------------------------------\n",
-        attrs=['bold']))
+
+    if shouldOutputToConsole:
+        print(colored(
+            "\n\n"
+            "------------------------------------------------------------------------------------------------------------\n",
+            attrs=['bold']))
 
     endingPrice = float(principle + float(principle * (backTestingSession.getTotalPL() * .01)))
     endVal = colored("\t\tEnding Price: ", attrs=['bold']) + "$" + (
@@ -85,4 +85,3 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     return backTestingSession, start, finish
 
 
-backTest(Pair.ETHUSDT, Candle.FIFTEEEN_MINUTE, "TEST_BUY_STRAT", 1, 2, 10000, Time.DAY)
