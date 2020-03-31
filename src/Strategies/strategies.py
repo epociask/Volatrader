@@ -1,5 +1,6 @@
 from Helpers.Enums import Indicator
 import enum
+from Helpers.PriceNotifications import *
 
 
 
@@ -18,6 +19,15 @@ CANDLESTICK_STRAT_INDICATORS = [Indicator.LONGLEGGEDDOJI, Indicator.LONGLINE, In
 NATHAN_STRAT_INDICATORS = [Indicator.MACDFIX]
 
 
+class Strategy:
+
+    def __init__(self):
+        self.indicatorList = None
+
+        #put data members here
+    def update(self, data):
+        pass
+
 # class STRAT(enum):
 #     CANDLESTRAT = "CANDLESTICK_STRAT"
 #     SIMPLE_BUY_STRAT = "SIMPLE_BUY_STRAT"
@@ -30,21 +40,31 @@ def getStrat(name: str):
     :param name: Name of strategy
     :returns: strategy function and list of indicators used w/ strategy
     """
-    return globals()[name], globals()[f"{name}_INDICATORS"]
+    return globals()[name]
 
 
 def SIMPLE_BUY_STRAT(data):
     if data['3outside']['value'] != '0' or float(data['invertedhammer']['value']) != "0":
         buyPrice = float(data['candle']['close'])
         buyTime = data['candle']['timestamp']
-
         return True, buyTime, buyPrice
 
     return False, None, None
 
 
-def TEST_BUY_STRAT(data):
-    return True, data['candle']['timestamp'], float(data['candle']['close'])
+class TEST_BUY_STRAT():
+
+
+    def init(self):
+        self.indicatorList = ['3outside']
+        self.SD = getUpperNormalDistrubtion(Pair.ETHUSDT, Candle.FIVE_MINUTE, 1000)['2SD']
+
+    def update(self, data):
+        if float(data['candle']['volume']) > self.SD:
+            return True, data['candle']['timestamp'], float(data['candle']['close'])
+
+        return False, None, None
+
 
 
 def NATHAN_STRAT(data):

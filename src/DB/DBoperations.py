@@ -46,6 +46,9 @@ class DBoperations:
 
         return None
 
+    def execute(self, data):
+        self.cur.execute(data)
+
     def connStatus(self):
         """
         @:returns connection status
