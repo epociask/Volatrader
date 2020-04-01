@@ -136,7 +136,8 @@ class Session:
                 self.buy, self.buyTime, self.buyPrice = self.buyStrat.update(data)
 
                 if self.buy and (self.type != SessionType.BACKTEST):
-                    logToSlack(f"Buying for [{self.stratString}]{self.pair.value}")
+                    self.buyPrice = 
+                    logToSlack(f"Buying for [{self.stratString}]{self.pair.value} at price {}")
                     return False
 
                 elif self.buy:
