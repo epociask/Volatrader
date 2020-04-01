@@ -12,12 +12,28 @@ def getStrat(name: str):
     return c
 
 
-# class STRAT(enum):
-#     CANDLESTRAT = "CANDLESTICK_STRAT"
-#     SIMPLE_BUY_STRAT = "SIMPLE_BUY_STRAT"
-#     TEST_BUY_STRAT = "TEST_BUY_STRAT"
+class strategy():
 
-class SIMPLE_BUY_STRAT():
+    def __init__(self, pair: Pair, candleSize: Candle):
+        self.pair = pair
+        self.candleSize = candleSize
+        self.indicatorList = None
+
+
+class BBANDS_STRAT(strategy):
+
+    def __init__(self, pair: Pair, candle: Candle):
+        super().__init__(pair, candle)
+        self.indicatorList = [Indicator.BBANDS]
+
+    def update(self, data):
+        if data['bbands']['valueUpperBand'] < data['candle']['close']:
+            return True, data['candle']['timestamp'], float(data['candle']['close'])
+
+        return False, None, None
+
+
+class SIMPLE_BUY_STRAT(strategy):
 
     def __init__(self):
         self.indicatorList = [Indicator.THREEOUTSIDE, Indicator.INVERTEDHAMMER]
@@ -30,13 +46,6 @@ class SIMPLE_BUY_STRAT():
             return True, buyTime, buyPrice
 
         return False, None, None
-
-
-class strategy():
-
-    def __init__(self, pair: Pair, candleSize: Candle):
-        self.pair = pair
-        self.candleSize = candleSize
 
 
 class TEST_BUY_STRAT(strategy):
@@ -64,7 +73,8 @@ class TEST_BUY_STRAT(strategy):
 
         ind, _, _, = self.dumbass.update(data)
         if float(data['candle']['volume']) > self.sdv['2SD'] and float(data['candle']['close']) < float(
-                data['candle']['open']) and bear is None and float(data['fibonacciretracement']['value']) > float(data['candle']['close']) and ind:
+                data['candle']['open']) and bear is None and float(data['fibonacciretracement']['value']) > float(
+            data['candle']['close']) and ind:
             return True, data['candle']['timestamp'], float(data['candle']['close'])
 
         else:
@@ -87,7 +97,7 @@ class NATHAN_STRAT(strategy):
         return False, None, None
 
 
-class CANDLESTICK_STRAT():
+class CANDLESTICK_STRAT(strategy):
 
     def __init__(self):
         self.indicatorList = [Indicator.LONGLEGGEDDOJI, Indicator.LONGLINE, Indicator.KICKING, Indicator.INNECK,

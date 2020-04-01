@@ -23,4 +23,4 @@ def automateAndVariate(pair: Pair, candleSizes: list, stopLossRange: int, takePr
 
 
 automateAndVariate(Pair.ETHUSDT, [Candle.FIFTEEEN_MINUTE, Candle.FIVE_MINUTE, Candle.THIRTY_MINUTE], 4, 4,
-                   "TEST_BUY_STRAT", Time.DAY)
+                   "BBANDS_STRAT", Time.DAY)

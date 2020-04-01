@@ -42,7 +42,7 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     DataSet = sorted(DataSet, key=lambda i: i['candle']['timestamp'], reverse=False)
     start = DataSet[0]['candle']['timestamp']
     finish = DataSet[-1]['candle']['timestamp']
-    print("Dataset :::: ", DataSet)
+    # print("Dataset :::: ", DataSet)
     for data in DataSet:
         if shouldOutputToConsole:
             print(colored(data, "blue", attrs=['blink']))
@@ -62,7 +62,8 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     gainCount, lossCount = backTestingSession.getTradeData()
 
     print(
-        colored("\t\t Starting Principle Amount: $", attrs=['bold']) + str(principle) + "\n" +
+        f"\t\tPair: {pair.value}" + f"\n\t\tCandleSize: {candleSize.value}" +
+        colored("\n\t\t Starting Principle Amount: $", attrs=['bold']) + str(principle) + "\n" +
         endVal +
         "\n\t\t" + colored("Total Profit Loss: ", attrs=['bold']) + (
             colored(f"+%{str(backTestingSession.getTotalPL())}", "green",
@@ -75,7 +76,8 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
         "\n\t\t" + colored("Finish: ", attrs=['bold']) + colored(finish, attrs=["underline"]) +
         colored("\n\t\t Number of profitable trades: ", attrs=['bold']) + f'{colored(str(gainCount), "blue")}' +
         "\n\t\t" + colored("Number of unprofitable trades: ", attrs=['bold']) + colored((lossCount), "red") +
-        '\n\t\t'
+        '\n\t\t' + f"Take Profit: {takeProfitPercent}" +
+        '\n\t\t' + f"Stop Loss: {stopLossPercent}"
     )
     print(colored(
         "\n"
