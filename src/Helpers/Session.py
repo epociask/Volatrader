@@ -1,8 +1,11 @@
+import time
+
 from termcolor import colored
 from BackTest.BackTesterSellLogic import Instance
 from Helpers.Enums import *
 from Helpers.authent import getCurrentPrice
 from Helpers.Logger import logDebugToFile, logToSlack
+from Helpers.HelpfulOperators import getCurrentBinancePrice
 
 class Session:
     """
@@ -136,8 +139,9 @@ class Session:
                 self.buy, self.buyTime, self.buyPrice = self.buyStrat.update(data)
 
                 if self.buy and (self.type != SessionType.BACKTEST):
-                    self.buyPrice = 
-                    logToSlack(f"Buying for [{self.stratString}]{self.pair.value} at price {}")
+                    self.buyPrice = getCurrentBinancePrice(self.pair)
+                    self.buyTime = time.now()
+                    logToSlack(f"Buying for [{self.stratString}]{self.pair.value} at price: {self.buyPrice}")
                     return False
 
                 elif self.buy:
