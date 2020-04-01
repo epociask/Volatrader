@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="8e2abe85-81f2-43ee-9c12-1e472d873d8a" name="Default Changelist" comment="REFACTOR!!">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/PaperTrader/PaperTrader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/PaperTrader/PaperTrader.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +67,7 @@
       <recent name="C:\Users\ethen\ccxt\ccxt-trader\src\BackTest" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.AutomateBacktest (1)">
+  <component name="RunManager" selected="Python.PaperTraderDriver">
     <configuration name="AutomateBacktest (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ccxt-trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -233,10 +234,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.PaperTraderDriver" />
         <item itemvalue="Python.AutomateBacktest (1)" />
         <item itemvalue="Python.AutomateBacktest" />
         <item itemvalue="Python.backtester (1)" />
-        <item itemvalue="Python.PaperTraderDriver" />
         <item itemvalue="Python.IndicatorConstants" />
       </list>
     </recent_temporary>
@@ -297,7 +298,7 @@
       <workItem from="1585612421174" duration="236000" />
       <workItem from="1585612659681" duration="500000" />
       <workItem from="1585613162499" duration="5869000" />
-      <workItem from="1585639923125" duration="12270000" />
+      <workItem from="1585639923125" duration="13575000" />
     </task>
     <task id="LOCAL-00001" summary="REFACTOR!!">
       <created>1583658008263</created>

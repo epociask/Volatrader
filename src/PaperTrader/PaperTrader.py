@@ -61,12 +61,14 @@ class PaperTrader:
             t = int(str(datetime.now())[14:16])
             if (t % self.timeStep == 0 or t == 0) and notBought:
                 time.sleep(60)
-                while notBought:
+                over = False
+                while notBought and not over:
                     availableYet = self.reader.fetchRowFromSharedTable(self.pair, self.candleSize)
                     print(availableYet)
                     if availableYet == "True":
                         data = self.reader.fetchCandlesWithIndicators(self.pair, self.candleSize, self.indicators, 1)
                         notBought = self.tradingSession.update(data[0])
+                        over = True
 
                     else:
                         time.sleep(5)
