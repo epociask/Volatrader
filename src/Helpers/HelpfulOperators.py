@@ -2,6 +2,7 @@ import copy
 import decimal
 import datetime
 import time
+from unicodedata import numeric
 
 import ccxt
 from Helpers.IndicatorConstants import candle
@@ -79,7 +80,7 @@ def getLowHighBounds(candles: list) -> (int, int):
     return low, high
 
 
-def convertCandlesToDict(candles: list) -> list:
+def convertCandlesToDict(candles: list) -> str:
     """
     converts list candle data to list of dictionary
     ..... ie: list ==> list[dict{}]
@@ -106,7 +107,7 @@ def cleanCandle(candle: dict) -> dict:
     """
 
     it = iter(candle)
-    time = str(next(it))
+    time = int(next(it).strftime("%Y%m%d%H%M"))
     open = cleaner(next(it))
     high = cleaner(next(it))
     low = cleaner(next(it))

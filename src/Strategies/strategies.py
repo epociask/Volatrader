@@ -14,16 +14,26 @@ def getStrat(name: str):
 
 class strategy():
 
-    def __init__(self, pair: Pair, candleSize: Candle):
+    def __init__(self, pair: Pair, candleSize: Candle, principle: int):
         self.pair = pair
         self.candleSize = candleSize
         self.indicatorList = None
+        self.principle = principle
 
+#TODO 4/2
+#
+# class riskManager():
+#
+#     def __init__(self, principle: int):
+#         self.principle = principle
+#
+#     def sellPercent(self, percent: float):
+#         self.principle = self.principle - (percent )
 
 class BBANDS_STRAT(strategy):
 
-    def __init__(self, pair: Pair, candle: Candle):
-        super().__init__(pair, candle)
+    def __init__(self, pair: Pair, candle: Candle, principle : int):
+        super().__init__(pair, candle, principle)
         self.indicatorList = [Indicator.BBANDS]
 
     def update(self, data):
@@ -49,8 +59,8 @@ class SIMPLE_BUY_STRAT(strategy):
 
 
 class TEST_BUY_STRAT(strategy):
-    def __init__(self, pair: Pair, candle: Candle):
-        super().__init__(pair, candle)
+    def __init__(self, pair: Pair, candle: Candle, principle:int ):
+        super().__init__(pair, candle, principle)
         self.indicatorList = [Indicator.THREEOUTSIDE, Indicator.LONGLEGGEDDOJI, Indicator.LONGLINE, Indicator.KICKING,
                               Indicator.INNECK, Indicator.MACDFIX,
                               Indicator.HIGHWAVE, Indicator.GAPSIDEWHITE, Indicator.FIBONACCIRETRACEMENT,
@@ -83,8 +93,8 @@ class TEST_BUY_STRAT(strategy):
 
 class NATHAN_STRAT(strategy):
 
-    def __init__(self, pair: Pair, candle: Candle):
-        super().__init__(pair, candle)
+    def __init__(self, pair: Pair, candle: Candle, principle:int ):
+        super().__init__(pair, candle, principle)
         self.indicatorList = [Indicator.MACDFIX]
 
     def update(self, data):

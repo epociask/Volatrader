@@ -1,5 +1,6 @@
 import datetime
 import time
+
 from Helpers.Enums import *
 from Helpers.Session import Session
 from API.CMC_api import getMarketData, getMacroEconomicData
@@ -10,7 +11,7 @@ from DB import QueryHelpers
 from API import IndicatorAPI
 import ccxt
 from Helpers.Logger import logToSlack, MessageType, logDebugToFile, logErrorToFile
-
+indicatorENUMS = [e for e in Indicator]
 
 class DBwriter(DBoperations):
     """
@@ -60,7 +61,7 @@ class DBwriter(DBoperations):
         else:
             print("too many arguments supplied to writeCandleData")
 
-    def writeIndicatorForTable(self, candleSize: Candle, pair: Pair, returnOnUNIQUEVIOLATION, indicator: Indicator,
+    def writeIndicatorForTable(self, candleSize: Candle, pair: Pair, returnOnUNIQUEVIOLATION,
                                *args) -> None:
 
         """
@@ -90,7 +91,7 @@ class DBwriter(DBoperations):
         while x:
             print("writing ind, CANDLE LENGTH: ", len(candles))
             try:
-                err = self.calculateAndInsertIndicatorEntry(candleSize, pair, indicator, candles[:300],
+                err = self.calculateAndInsertIndicatorEntry(candleSize, pair, candles[:300],
                                                             returnOnUNIQUEVIOLATION)
                 if err is None or len(candles) - 300 == 0:
                     x = False

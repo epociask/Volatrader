@@ -104,3 +104,9 @@ class DBReader(DBoperations):
             logToSlack(e)
             raise e
 
+
+
+reader = DBReader()
+for  val in (reader.getCandleDataDescFromDB(Candle.FIVE_MINUTE, Pair.ETHUSDT, 300)):
+    print(val)
+

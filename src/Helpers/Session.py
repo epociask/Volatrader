@@ -1,9 +1,7 @@
 import time
-
 from termcolor import colored
 from BackTest.BackTesterSellLogic import Instance
 from Helpers.Enums import *
-from Helpers.authent import getCurrentPrice
 from Helpers.Logger import logDebugToFile, logToSlack
 from Helpers.HelpfulOperators import getCurrentBinancePrice
 

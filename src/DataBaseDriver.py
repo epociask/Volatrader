@@ -12,7 +12,6 @@ writer = DBwriter()
 """
 noinspection PyTypeChecker
 """
-indicatorENUMS = [e for e in Indicator]
 
 
 def writeIndicators(pair: Pair, candleSize: Candle, limit=None) -> None:
@@ -25,11 +24,11 @@ def writeIndicators(pair: Pair, candleSize: Candle, limit=None) -> None:
     """
     logToSlack(f"[STARTING INDICATOR WRITE FOR {pair.value}/{candleSize.value}]")
     ts = datetime.now()
-    for indicator in indicatorENUMS:
-        if limit is None:
-            writer.writeIndicatorForTable(candleSize, pair, True, indicator)
-        else:
-            writer.writeIndicatorForTable(candleSize, pair, True, indicator, limit)
+
+    if limit is None:
+        writer.writeIndicatorForTable(candleSize, pair, True)
+    else:
+        writer.writeIndicatorForTable(candleSize, pair, True, limit)
 
     logToSlack(f"[INDICATOR WRITE TIME {pair.value}/{candleSize.value}] {datetime.now() - ts}")
 
