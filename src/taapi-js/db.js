@@ -3,10 +3,11 @@ const knex = require('knex')
 const db = knex({
   client: 'pg',
   connection: {
-    host : '127.0.0.1',
+    host : 'coin-do-user-7113675-0.db.ondigitalocean.com',
     user : 'postgres',
-    database : 'coin-database',
-    password: ''
+    port : 25060,
+    database : 'defaultdb',
+    password: 'imt6kws2bm7ffay8',
   },
 });
 

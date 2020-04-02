@@ -12,6 +12,7 @@
   "author": "Adrian smith, Ethen Pociask",
   "license": "ISC",
   "dependencies": {
+    "ccxt": "^1.25.62",
     "knex": "^0.20.13",
     "lodash": "^4.17.15",
     "pg": "^8.0.0",

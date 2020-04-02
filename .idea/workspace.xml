@@ -4,15 +4,7 @@
     <list default="true" id="8e2abe85-81f2-43ee-9c12-1e472d873d8a" name="Default Changelist" comment="REFACTOR!!">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/API/IndicatorAPI.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/API/IndicatorAPI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/AutomateBacktest.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/AutomateBacktest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BackTest/backtester.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/BackTest/backtester.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DB/DBReader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/DB/DBReader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DB/DBwriter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/DB/DBwriter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DataBaseDriver.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataBaseDriver.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Helpers/HelpfulOperators.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Helpers/HelpfulOperators.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Helpers/Session.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Helpers/Session.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Strategies/strategies.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Strategies/strategies.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/f.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/f.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/taapi-js/bulkQueries.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/taapi-js/bulkQueries.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -304,7 +296,7 @@
       <workItem from="1585612421174" duration="236000" />
       <workItem from="1585612659681" duration="500000" />
       <workItem from="1585613162499" duration="5869000" />
-      <workItem from="1585639923125" duration="32881000" />
+      <workItem from="1585639923125" duration="34542000" />
     </task>
     <task id="LOCAL-00001" summary="REFACTOR!!">
       <created>1583658008263</created>
