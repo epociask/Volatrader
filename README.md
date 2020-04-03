@@ -36,12 +36,12 @@ let's ensure our investments don't crumble when the market decides to move unfav
 Ensure postgresql is installed
 
 ```
-username = doadmin
-password = imt6kws2bm7ffay8
-host = coin-do-user-7113675-0.db.ondigitalocean.com
-port = 25060
-database = defaultdb
-sslmode = require
+[postgresql]
+user=doadmin
+password=imt6kws2bm7ffay8
+host=coin-do-user-7113675-0.db.ondigitalocean.com
+port=25060
+database=defaultdb
 
 ```
 
