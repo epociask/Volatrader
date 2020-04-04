@@ -1,3 +1,0 @@
-import requests
-
-req = requests()
