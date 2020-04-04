@@ -5,9 +5,11 @@ from Helpers.Session import Session
 from Strategies import strategies
 from termcolor import colored
 from Helpers.Enums import *
+import re
+# from Strategies.strategies import STRAT
 
 
-def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProfitPercent, principle, *args) -> Session:
+def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProfitPercent, principle, timeEnum = None, shouldOutputToConsole = True) -> Session:
     """
     main backtest function, prints backtest results
     @:param pair -> pair you wish to run backtest on
@@ -18,7 +20,6 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     @:param args optional TIME ENUM to specify timeline to test strategy upon
     """
 
-    assert len(args) == 0 or len(args) == 1
     assert stopLossPercent in range(1, 100)
     assert takeProfitPercent in range(1, 100)
     assert type(pair) is Pair
@@ -26,26 +27,33 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
 
     takeProfitPercent = f"0{takeProfitPercent}" if takeProfitPercent - 10 <= 0 else f"{takeProfitPercent}"
     stratString = strategy
-    strategy, indicators = strategies.getStrat(stratString)
+    strategy = strategies.getStrat(stratString)
+    strategy = strategy(pair, candleSize, principle)
+    indicators = strategy.indicatorList
     backTestingSession = Session(pair, strategy, takeProfitPercent, stopLossPercent, stratString, SessionType.BACKTEST)
     reader = DBReader()
 
-    if len(args) is 0:
-        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators)
+    if timeEnum is None:
+        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize)
 
     else:
-        timeNow = str(datetime.now())[0: -7]
-        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators, rewind(timeNow, args[0].value, 5))
+        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, (timeEnum.value * (60 / int(re.findall(r'\d+', candleSize.value)[0]))))
+
+    DataSet = sorted(DataSet, key=lambda i: int(i['candle']['timestamp']), reverse=False)
     start = DataSet[0]['candle']['timestamp']
     finish = DataSet[-1]['candle']['timestamp']
-    print("Dataset :::: ", DataSet)
+    # print("Dataset :::: ", DataSet)
     for data in DataSet:
-        print(colored(data, "blue", attrs=['blink']))
+        print(data)
+        if shouldOutputToConsole:
+            print(colored(data, "blue", attrs=['blink']))
         backTestingSession.update(data)
-    print(colored(
-        "\n\n"
-        "------------------------------------------------------------------------------------------------------------\n",
-        attrs=['bold']))
+
+    if shouldOutputToConsole:
+        print(colored(
+            "\n\n"
+            "------------------------------------------------------------------------------------------------------------\n",
+            attrs=['bold']))
 
     endingPrice = float(principle + float(principle * (backTestingSession.getTotalPL() * .01)))
     endVal = colored("\t\tEnding Price: ", attrs=['bold']) + "$" + (
@@ -55,7 +63,8 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     gainCount, lossCount = backTestingSession.getTradeData()
 
     print(
-        colored("\t\t Starting Principle Amount: $", attrs=['bold']) + str(principle) + "\n" +
+        f"\t\tPair: {pair.value}" + f"\n\t\tCandleSize: {candleSize.value}" +
+        colored("\n\t\t Starting Principle Amount: $", attrs=['bold']) + str(principle) + "\n" +
         endVal +
         "\n\t\t" + colored("Total Profit Loss: ", attrs=['bold']) + (
             colored(f"+%{str(backTestingSession.getTotalPL())}", "green",
@@ -68,7 +77,8 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
         "\n\t\t" + colored("Finish: ", attrs=['bold']) + colored(finish, attrs=["underline"]) +
         colored("\n\t\t Number of profitable trades: ", attrs=['bold']) + f'{colored(str(gainCount), "blue")}' +
         "\n\t\t" + colored("Number of unprofitable trades: ", attrs=['bold']) + colored((lossCount), "red") +
-        '\n\t\t'
+        '\n\t\t' + f"Take Profit: {takeProfitPercent}" +
+        '\n\t\t' + f"Stop Loss: {stopLossPercent}"
     )
     print(colored(
         "\n"
@@ -78,4 +88,3 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     return backTestingSession, start, finish
 
 
-backTest(Pair.ETHUSDT, Candle.FIVE_MINUTE, "SIMPLE_BUY_STRAT", 2, 4, 10000, Time.DAY)

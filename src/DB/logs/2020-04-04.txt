@@ -1,0 +1,19 @@
+02:10:02,279 [DATABASE_LOGGER] WARNING 105 [WARNING] 'NoneType' object has no attribute 'execute'
+
+02:10:02,283 asyncio DEBUG 53 Using selector: SelectSelector
+02:10:02,673 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585984201.000100', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[ERROR]* ```[ETHEN LOCAL ]'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585984201.000100', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+02:11:35,463 [DATABASE_LOGGER] WARNING 105 [WARNING] 'NoneType' object has no attribute 'execute'
+
+02:11:35,464 asyncio DEBUG 53 Using selector: SelectSelector
+02:11:35,739 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585984294.000200', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[ERROR]* ```[ETHEN LOCAL ]'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585984294.000200', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+02:11:46,651 [DATABASE_LOGGER] WARNING 105 [WARNING] 'NoneType' object has no attribute 'execute'
+
+02:11:46,653 asyncio DEBUG 53 Using selector: SelectSelector
+02:11:46,943 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585984306.000300', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': "<!channel> *[ERROR]* ```[ETHEN LOCAL ]'NoneType' object has no attribute 'execute'```", 'user': 'UURQ1SNF4', 'ts': '1585984306.000300', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}
+02:12:06,456 [DATABASE_LOGGER] WARNING 105 [WARNING] syntax error at or near "LIMIT"
+LINE 1: LIMIT 2;
+        ^
+
+
+02:12:06,456 asyncio DEBUG 53 Using selector: SelectSelector
+02:12:06,684 slack.web.slack_response DEBUG 173 Received the following response: {'ok': True, 'channel': 'CUUF8D81F', 'ts': '1585984325.000400', 'message': {'bot_id': 'BUUF92Y8H', 'type': 'message', 'text': '<!channel> *[ERROR]* ```[ETHEN LOCAL ]syntax error at or near "LIMIT"\nLINE 1: LIMIT 2;\n        ^\n```', 'user': 'UURQ1SNF4', 'ts': '1585984325.000400', 'team': 'TV6CT459V', 'bot_profile': {'id': 'BUUF92Y8H', 'deleted': False, 'name': 'Volatrader', 'updated': 1583816989, 'app_id': 'AV6DQSLET', 'icons': {'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png', 'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png', 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'}, 'team_id': 'TV6CT459V'}}}

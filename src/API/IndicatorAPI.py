@@ -1,8 +1,7 @@
 import requests
 from Helpers.Enums import Indicator
-from Helpers.Logger import logErrorToFile, logToSlack
-
-
+from Helpers.Logger import logToSlack
+IndicatorENUMS = [e for e in Indicator]
 def getIndicator(indicator: Indicator, candleJSON: list) -> (list, None):
     """
     Gets indicator values from json candle data from TAAPIO API
@@ -36,5 +35,6 @@ def getIndicator(indicator: Indicator, candleJSON: list) -> (list, None):
         # logErrorToFile(err)
         logToSlack(err)
         raise Exception(resp.status_code + " " + resp.headers)
+
 
 

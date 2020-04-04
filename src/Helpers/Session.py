@@ -1,17 +1,17 @@
+import time
 from termcolor import colored
 from BackTest.BackTesterSellLogic import Instance
 from Helpers.Enums import *
-from Helpers.authent import getCurrentPrice
 from Helpers.Logger import logDebugToFile, logToSlack
+from Helpers.HelpfulOperators import getCurrentBinancePrice
 
 class Session:
     """
     Class to hold buying and selling logic and execute each accordingly to price updates
     """
 
-    def __init__(self, pair, candleSize, buyStrategy, takeProfitPercent, percentSL, stratString: str, sessionType: Enum):
+    def __init__(self, pair, buyStrategy, takeProfitPercent, percentSL, stratString: str, sessionType: Enum):
         self.pair = pair
-        self.candleSize = candleSize
         self.sellStrat = Instance(pair)
         self.sellStrat.setStopLossPercent(percentSL)
         self.profitlosses = []
@@ -115,19 +115,15 @@ class Session:
 
         return False
 
-    # def checkForPaperTradeSell(self):
-    #     currentPrice = getCurrentPrice(self.pair, self.candleSize)
-    #
-    #     if currentPrice == self.prev1mCandle and self.prev1mCandle is not None:
-    #
-    #         if self.sellStrat.run(currentPrice) or self.takeProfit <= currentPrice:
-    #             self.sellPrice = currentPrice
-    #             self.sellTime = currentPrice
-    #             return True
-    #
-    #     return False
+    def checkForPaperTradeSell(self, price):
+        if self.sellStrat.run(price) or self.takeProfit <= price:
+            return True
+        
+        else:
+            return False
 
-    def update(self, data) -> None:
+
+    def update(self, data) -> bool:
         """
         main function
         @:param data
@@ -138,10 +134,16 @@ class Session:
 
             if self.prevData is None or self.prevData != data:
                 logDebugToFile("Checking buy condition")
-                self.buy, self.buyTime, self.buyPrice = self.buyStrat(data)
+                self.buy, self.buyTime, self.buyPrice = self.buyStrat.update(data)
 
-                if self.buy:
-                    logToSlack(f"Buying for [{self.stratString}]{self.pair.value}")
+                if self.buy and (self.type != SessionType.BACKTEST):
+                    self.buyPrice = getCurrentBinancePrice(self.pair)
+                    self.buyTime = time.now()
+                    logToSlack(f"Buying for [{self.stratString}]{self.pair.value} at price: {self.buyPrice}")
+                    return False
+
+                elif self.buy:
+                    print(f"BUYING @ {data['candle']['timestamp']}")
 
 
         else:
@@ -150,17 +152,19 @@ class Session:
                 self.sell = self.checkForBackTestSell(data)
 
             elif self.type == SessionType.PAPERTRADE:
-                self.sell = self.checkForBackTestSell()
+                self.sell = self.checkForPaperTradeSell(data)
             if self.sell:
                 self.calcPL()
                 logToSlack(colored("--------------------------\n" + self.toString() + "--------------------------",
+                              'green') if self.profitLoss > 0 else colored(
+                    "--------------------------\n" + self.toString() + "--------------------------", 'red')) if self.type != SessionType.BACKTEST else print(colored("--------------------------\n" + self.toString() + "--------------------------",
                               'green') if self.profitLoss > 0 else colored(
                     "--------------------------\n" + self.toString() + "--------------------------", 'red'))
                 self.profitlosses.append(self.profitLoss)
                 self.reset()
 
         self.prevData = data
-
+        return True
     def getTotalTrades(self) -> int:
         """
         @:returns count of total trades

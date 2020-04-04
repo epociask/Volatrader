@@ -1,6 +1,9 @@
 import copy
 import decimal
 import datetime
+import time
+from unicodedata import numeric
+
 import ccxt
 from Helpers.IndicatorConstants import candle
 from Helpers.Enums import Indicator, Pair, Candle
@@ -77,7 +80,7 @@ def getLowHighBounds(candles: list) -> (int, int):
     return low, high
 
 
-def convertCandlesToDict(candles: list) -> list:
+def convertCandlesToDict(candles: list) -> str:
     """
     converts list candle data to list of dictionary
     ..... ie: list ==> list[dict{}]
@@ -104,7 +107,7 @@ def cleanCandle(candle: dict) -> dict:
     """
 
     it = iter(candle)
-    time = str(next(it))
+    time = int(next(it).strftime("%Y%m%d%H%M"))
     open = cleaner(next(it))
     high = cleaner(next(it))
     low = cleaner(next(it))
@@ -143,47 +146,41 @@ def fetchCandleData(api: ccxt.Exchange, pair: Pair, candleSize: Candle, args: (i
     return candles
 
 
-def cleanCandlesWithIndicators(data: list, indicators: list) -> list:
+def cleanCandlesWithIndicators(data: list) -> list:
     """
 
     :param data: data that's to be reformatted
     :param indicators: indicators that are used in data
     :return: clean/reformatted data that can easily be accessible
     """
+    ret = []
+    for i in data:
+        it = iter(i)
+        candle = {}
+        candle['timestamp'] = int(next(it).strftime("%Y%m%d%H%M"))
+        candle['open'] = str(next(it))
+        candle['high'] = str(next(it))
+        candle['low'] = str(next(it))
+        candle['close'] = str(next(it))
+        candle['volume'] = str(next(it))
+        l = (next(it))
+        l['candle'] = candle
+        ret.append(l)
 
 
-    returnList = []
-    for row in data:
-        rowDict = {}
-        rowDict.update({"candle": candle.copy()})
-        # print(temp)
-        it = iter(row)
-        rowDict['candle']['open'] = str(next(it))
-        rowDict['candle']['high'] = str(next(it))
-        rowDict['candle']['low'] = str(next(it))
-        rowDict['candle']['close'] = str(next(it))
-        rowDict['candle']['volume'] = str(next(it))
-        indicators1 = indicators.copy()
-        for indicator in indicators1:
-            rowDict.update(copy.deepcopy(indicator))
-            for key in indicator:
-                for val in indicator.values():
-                    for i in val:
-                        rowDict[key][i] = str(next(it))
-
-        rowDict['candle']['timestamp'] = str(next(it))
-
-        returnList.append(rowDict.copy())
-    return returnList
-
-#
-# ts = 25
-# while True:
-#         print(str(datetime.now()))
-#         print(fetchCandleData(ccxt.binance(), Pair.ETHUSDT, Candle.FIVE_MINUTE, [1]))
-#
+    return ret
 
 
 
+from Helpers.Enums import  Pair
 
 
+def getCurrentBinancePrice(pair: Pair):
+    """
+    gets and returns current price of binance asset 
+    :param pair: Pair enum
+    :return: float
+    """
+    time.sleep(5)
+    req = requests.get(f"https://api.binance.com/api/v1/ticker/price?symbol={pair.value}")
+    return float(req.json()['price'])
