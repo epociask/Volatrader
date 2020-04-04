@@ -42,12 +42,10 @@ class BBANDS_STRAT(strategy):
 
         return False, None, None
 
-
 class SIMPLE_BUY_STRAT(strategy):
 
     def __init__(self):
-        self.indicatorList = [Indicator.THREEOUTSIDE, Indicator.INVERTEDHAMMER]
-
+        pass
     def update(self, data):
         if data['3outside']['value'] != '0' or float(data['invertedhammer']['value']) != "0":
             buyPrice = float(data['candle']['close'])
@@ -61,16 +59,7 @@ class SIMPLE_BUY_STRAT(strategy):
 class TEST_BUY_STRAT(strategy):
     def __init__(self, pair: Pair, candle: Candle, principle:int ):
         super().__init__(pair, candle, principle)
-        self.indicatorList = [Indicator.THREEOUTSIDE, Indicator.LONGLEGGEDDOJI, Indicator.LONGLINE, Indicator.KICKING,
-                              Indicator.INNECK, Indicator.MACDFIX,
-                              Indicator.HIGHWAVE, Indicator.GAPSIDEWHITE, Indicator.FIBONACCIRETRACEMENT,
-                              Indicator.HARAMICROSS, Indicator.HIKKAKE, Indicator.HOMINGPIGEON, Indicator.EVENINGSTAR,
-                              Indicator.EVENINGDOJISTAR, Indicator.DARKCLOUDCOVER, Indicator.BREAKAWAY,
-                              Indicator.CONCEALBABYSWALL, Indicator.THREESTARSINSOUTH, Indicator.THREELINESTRIKE,
-                              Indicator.THREEINSIDE, Indicator.ADXR, Indicator.THREEOUTSIDE, Indicator.INVERTEDHAMMER,
-                              Indicator.MORNINGSTAR, Indicator.HANGINGMAN, Indicator.SHOOTINGSTAR,
-                              Indicator.THREEWHITESOLDIERS]
-        self.dumbass = NATHAN_STRAT(pair, candle)
+        self.dumbass = NATHAN_STRAT(pair, candle, 100)
         self.sdv = getUpperNormalDistrubtion(pair, candle, 300)
 
     def update(self, data):
@@ -93,9 +82,8 @@ class TEST_BUY_STRAT(strategy):
 
 class NATHAN_STRAT(strategy):
 
-    def __init__(self, pair: Pair, candle: Candle, principle:int ):
+    def __init__(self, pair: Pair, candle: Candle, principle:int):
         super().__init__(pair, candle, principle)
-        self.indicatorList = [Indicator.MACDFIX]
 
     def update(self, data):
         """
@@ -110,14 +98,7 @@ class NATHAN_STRAT(strategy):
 class CANDLESTICK_STRAT(strategy):
 
     def __init__(self):
-        self.indicatorList = [Indicator.LONGLEGGEDDOJI, Indicator.LONGLINE, Indicator.KICKING, Indicator.INNECK,
-                              Indicator.HIGHWAVE, Indicator.GAPSIDEWHITE, Indicator.FIBONACCIRETRACEMENT,
-                              Indicator.HARAMICROSS, Indicator.HIKKAKE, Indicator.HOMINGPIGEON, Indicator.EVENINGSTAR,
-                              Indicator.EVENINGDOJISTAR, Indicator.DARKCLOUDCOVER, Indicator.BREAKAWAY,
-                              Indicator.CONCEALBABYSWALL, Indicator.THREESTARSINSOUTH, Indicator.THREELINESTRIKE,
-                              Indicator.THREEINSIDE, Indicator.ADXR, Indicator.THREEOUTSIDE, Indicator.INVERTEDHAMMER,
-                              Indicator.MORNINGSTAR, Indicator.HANGINGMAN, Indicator.SHOOTINGSTAR,
-                              Indicator.THREEWHITESOLDIERS]
+        pass
 
     def update(self, data):
         bullSigns = 0

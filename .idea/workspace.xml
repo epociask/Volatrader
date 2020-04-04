@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8e2abe85-81f2-43ee-9c12-1e472d873d8a" name="Default Changelist" comment="REFACTOR!!">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/API/IndicatorAPI.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/API/IndicatorAPI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/taapi-js/bulkQueries.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/taapi-js/bulkQueries.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DB/QueryHelpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/DB/QueryHelpers.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +48,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="full.screen.before.presentation.mode" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -296,7 +295,7 @@
       <workItem from="1585612421174" duration="236000" />
       <workItem from="1585612659681" duration="500000" />
       <workItem from="1585613162499" duration="5869000" />
-      <workItem from="1585639923125" duration="34542000" />
+      <workItem from="1585639923125" duration="35173000" />
     </task>
     <task id="LOCAL-00001" summary="REFACTOR!!">
       <created>1583658008263</created>

@@ -1,9 +1,10 @@
-const taapi = require("taapi");
+const taapi = require("taapi")
 const _ = require('lodash')
 const ccxt = require('ccxt')
 
 const db = require('./db')
-const indicators = require("./indicators.json");
+const indicators = require("./indicators.json")
+const logToDebug = require('./slackLogger')
 
 const secret = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtcG9jaWFza0Bkb25zLnVzZmNhLmVkdSIsImlhdCI6MTU4MzMxNzYwNSwiZXhwIjo3ODkwNTE3NjA1fQ.hfTvshR4HJuCSJ4XJNEgb_xkWIuW0ixZXm7OthcwUFk"
 const client = taapi.client(secret);
@@ -18,11 +19,15 @@ function sleep(ms) {
 }
 
 let indResults = {}
+let exceededRateLim = false
 
 // Cleans taapi.io's response into an insertable json object
 function cleanIndResult(result, indResults){
   result.forEach(ind => {
     indResults[ind.indicator] = ind.result
+    if (ind.result.error != undefined && ind.result.error.includes('429')){
+      exceededRateLim = true
+    }
   })
 }
 
@@ -35,12 +40,19 @@ async function makeQueries(pair, candleSize) {
         cleanIndResult(result, indResults)
         console.log("Getting candles from taapi.io")
       }).catch(error => {
-        console.log(error);
+        console.log("ERROR: ", error);
+        logToDebug({
+          text:'Error getting candles from CCXT: ',
+          fields: {
+            'error': e,
+          }
+        })
       });
-      await sleep(1500)
+      await sleep(1700)
       client.initBulkQueries();
     }
   }
+
   console.log(`FINISHED WRITING FOR ${pair} ${candleSize}`)
   return indResults
 }
@@ -52,7 +64,7 @@ async function getCandlesFromCCXT(pair, candleSize){
   const candles = {}
   if (exchange.has.fetchOHLCV) {
     try {
-      candleData = await exchange.fetchOHLCV (pair, candleSize, undefined, 1) // one minute
+      candleData = await exchange.fetchOHLCV (pair, candleSize, undefined, 1)
       candleData = candleData[0]
       candles['timestamp'] = candleData[0]
       candles['open'] = candleData[1]
@@ -61,9 +73,14 @@ async function getCandlesFromCCXT(pair, candleSize){
       candles['close'] = candleData[4]
       candles['volume'] = candleData[5]
     } catch (e){
+      logToDebug({
+        text:'Error getting candles from CCXT: ',
+        fields: {
+          'error': e,
+        }
+      })
       throw new Error(e)
     }
-
   }
   return candles
 }
@@ -91,10 +108,26 @@ async function insertData(pair, candleSize){
     console.log("Successful insertion!")
   } catch (e){
     console.log("Error Writing indicators: ", e)
+    logToDebug({
+      'text': 'Error writing indicators',
+      'fields': {
+        'error': e.toString()
+      }
+    })
   }
   return
 }
 
+function didExceedRateLim(){
+  if (exceededRateLim){
+    logToDebug({
+      text: 'Exceeded Rate limit:',
+      fields:{
+        error: 'expect bad data for ' + new Date().toUTCString()
+      }
+    })
+  }
+}
 
 
 (async function() {
@@ -102,6 +135,7 @@ async function insertData(pair, candleSize){
     let t_min = new Date().getMinutes()
     if (t_min == 0 || t_min == 30){
       await sleep(5000)
+      let t1 = new Date()
       console.log("INSERTING 5, 15, 30")
       await insertData('ETH/USDT', '5m')
       await insertData('ETH/USDT', '15m')
@@ -109,8 +143,15 @@ async function insertData(pair, candleSize){
       await insertData('BTC/USDT', '5m')
       await insertData('BTC/USDT', '15m')
       await insertData('BTC/USDT', '30m')
+      didExceedRateLim()
+      let t2 = new Date()
+      logToDebug({
+        'text': 'Time to write indicator',
+        'fields': {
+          'time to write': ((t2-t1)/1000).toString(),
+        }
+      })
       await sleep(1000*61)
-
     }
     else if (t_min % 15 == 0){
       await sleep(5000)
@@ -119,15 +160,15 @@ async function insertData(pair, candleSize){
       await insertData('ETH/USDT', '15m')
       await insertData('BTC/USDT', '5m')
       await insertData('BTC/USDT', '15m')
+      didExceedRateLim()
       await sleep(1000*61)
-
-
     }
     else if (t_min % 5 == 0){
       await sleep(5000)
       console.log("INSERTING 5")
       await insertData('ETH/USDT', '5m')
       await insertData('BTC/USDT', '5m')
+      didExceedRateLim()
       await sleep(1000*61)
     }
   }

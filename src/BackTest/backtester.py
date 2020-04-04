@@ -34,12 +34,12 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     reader = DBReader()
 
     if timeEnum is None:
-        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators)
+        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize)
 
     else:
-        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, indicators, (timeEnum.value * (60 / int(re.findall(r'\d+', candleSize.value)[0]))))
+        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, (timeEnum.value * (60 / int(re.findall(r'\d+', candleSize.value)[0]))))
 
-    DataSet = sorted(DataSet, key=lambda i: i['candle']['timestamp'], reverse=False)
+    DataSet = sorted(DataSet, key=lambda i: int(i['candle']['timestamp']), reverse=False)
     start = DataSet[0]['candle']['timestamp']
     finish = DataSet[-1]['candle']['timestamp']
     # print("Dataset :::: ", DataSet)

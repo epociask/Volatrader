@@ -7,8 +7,6 @@ from Helpers.Enums import Pair, Candle, SessionType
 from DB.DBReader import DBReader
 from Strategies import strategies
 from Helpers.HelpfulOperators import getCurrentBinancePrice
-#from Strategies.strategies import STRAT
-from Helpers.HelpfulOperators import getCurrentBinancePrice
 
 
 convertToVal = lambda candleEnum: candleEnum.value[0: len(candleEnum.value) - 2]
@@ -41,7 +39,7 @@ class PaperTrader:
         self.takeProfitPercent = f"0{takeProfitPercent}" if takeProfitPercent - 10 <= 0 else f"{takeProfitPercent}"
         self.stratName = strategy
         strategy = strategies.getStrat(self.stratName)
-        self.strategy = strategy(pair, candleSize)
+        self.strategy = strategy(pair, candleSize, 100)
         self.indicators = self.strategy.indicatorList
         print(self.indicators)
         self.stopLossPercent = stopLossPercent
@@ -60,18 +58,10 @@ class PaperTrader:
         while True:
             t = int(str(datetime.now())[14:16])
             if (t % self.timeStep == 0 or t == 0) and notBought:
-                time.sleep(60)
-                over = False
-                while notBought and not over:
-                    availableYet = self.reader.fetchRowFromSharedTable(self.pair, self.candleSize)
-                    print(availableYet)
-                    if availableYet == "True":
-                        data = self.reader.fetchCandlesWithIndicators(self.pair, self.candleSize, self.indicators, 1)
-                        notBought = self.tradingSession.update(data[0])
-                        over = True
+                time.sleep(30)
+                data = self.reader.fetchCandlesWithIndicators(self.pair, self.candleSize, 1)
+                notBought = self.tradingSession.update(data[0])
 
-                    else:
-                        time.sleep(5)
 
             elif not notBought:
                 price = getCurrentBinancePrice(self.pair)
