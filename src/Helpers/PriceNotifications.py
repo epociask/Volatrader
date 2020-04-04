@@ -85,6 +85,6 @@ def sendAbnormalVolumeNotification(pair: Pair):
 			elif stdDict_30m['2SD'] < stdDict_30m['current_vol'] and isCorrectTime(t, 30):
 				logToSlack(createMessage(pair, '3', Candle.THIRTY_MINUTE), tagChannel=True, channel=Channel.VOLATRADER)
 
-		time.sleep(1)
+		time.sleep(60)
 
 
