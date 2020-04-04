@@ -36,7 +36,7 @@ jobs:
           name: "Running unit tests"
           command: "python -m unittest src/test/*.py -v"
       - run:
-          name: "Deploying to Amazon EC2 Instance"
+          name: "Deploying to digital ocean"
           command: "sh deploy.sh"
 
 workflows:
