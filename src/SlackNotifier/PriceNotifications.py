@@ -2,23 +2,20 @@ import statistics as stats
 import time
 from datetime import datetime
 from threading import Thread
-
 import ccxt
 from DB.DBoperations import DBoperations
 from Helpers.Enums import Pair, Candle
 from Helpers.Logger import logToSlack, Channel
-
 f = ccxt.binance()
 
 
-def getAskBidVolume(pair: Pair):
-	pair = pair.value.replace("USDT", "/USDT")
+def getAskBidVolume(pair: str):
 	return f.fetch_ticker(pair)['askVolume'], f.fetch_ticker(pair)['bidVolume']
 
 
 
-def getVolumeData(pair: Pair, candleSize: Candle):
-	candles = f.fetchOHLCV(pair.value.replace("USDT", "/USDT"), candleSize.value)
+def getVolumeData(pair: str, candleSize: Candle):
+	candles = f.fetchOHLCV(pair, candleSize.value)
 	return [int(e[5]) for e in candles]
 
 
@@ -40,8 +37,8 @@ def getUpperNormalDistrubtion(pair: Pair, candleSize: Candle, volume=None):
 
 def sendAbnormalVolumeNotification(pair: Pair):
 
-	createMessage = lambda pair, devs, candleSize: f"[VOLATILITY ALERT] CURRENT {pair.value} VOLUME ABOVE {devs} STANDARD DEVIATIONS FOR {candleSize.value} CANDLE"
-	tickerMessage = lambda pair, devs, askbid: f"[VOLATILITY ALERT] CURRENT {pair.value} VOLUME ABOVE {devs} STANDARD DEVIATIONS FOR {askbid} VOLUME"
+	createMessage = lambda pair, devs, candleSize: f"[VOLATILITY ALERT] CURRENT {pair} VOLUME ABOVE {devs} STANDARD DEVIATIONS FOR {candleSize.value} CANDLE"
+	tickerMessage = lambda pair, devs, askbid: f"[VOLATILITY ALERT] CURRENT {pair} VOLUME ABOVE {devs} STANDARD DEVIATIONS FOR {askbid} VOLUME"
 	ask, bid = getAskBidVolume(pair)
 	isCorrectTime = lambda t,val : t % val == 0 or t == 0
 	while True:
@@ -86,5 +83,3 @@ def sendAbnormalVolumeNotification(pair: Pair):
 				logToSlack(createMessage(pair, '3', Candle.THIRTY_MINUTE), tagChannel=True, channel=Channel.VOLATRADER)
 
 		time.sleep(60)
-
-

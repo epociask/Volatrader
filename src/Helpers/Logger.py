@@ -7,7 +7,9 @@ from Helpers.HelpfulOperators import cleanDate
 import slack
 import os
 from enum import *
+from threading import Lock
 
+lock = Lock()
 class Channel(Enum):
     """
     Enum used to represent different slack channels
@@ -15,6 +17,7 @@ class Channel(Enum):
 
     DEBUG = '#debug'
     VOLATRADER = '#volatrader'
+    VOLATILITY = '#volatility_alerts'
 
 
 class MessageType(Enum):
@@ -75,11 +78,15 @@ def logToSlack(message, channel: Channel = Channel.DEBUG, tagChannel=False,
         logDebugToFile(message)
     elif messageType.ERROR:
         logDebugToFile(message)
-
-    client.chat_postMessage(
-        channel=channel.value,
-        text=f'{"<!channel>" if tagChannel else ""} *[{messageType.value.upper()}]* ```[{str(os.environ.get("DATABASE_NAME")).upper()}]{message}```'
-    )
+    global lock
+    lock.acquire()
+    try:
+        client.chat_postMessage(
+            channel=channel.value,
+            text=f'{"<!channel>" if tagChannel else ""} *[{messageType.value.upper()}]* ```[{str(os.environ.get("DATABASE_NAME")).upper()}]{message}```'
+        )
+    finally:
+        lock.release()
 
 
 def logDebugToFile(data: str) -> None:
