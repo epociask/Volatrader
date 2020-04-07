@@ -9,6 +9,8 @@ const logToDebug = require('./slackLogger')
 const secret = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtcG9jaWFza0Bkb25zLnVzZmNhLmVkdSIsImlhdCI6MTU4MzMxNzYwNSwiZXhwIjo3ODkwNTE3NjA1fQ.hfTvshR4HJuCSJ4XJNEgb_xkWIuW0ixZXm7OthcwUFk"
 const client = taapi.client(secret);
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 // Init bulk queries. This resets all previously added queries
 client.initBulkQueries();
 
@@ -31,31 +33,44 @@ function cleanIndResult(result, indResults){
   })
 }
 
-// Makes bulk queries to taapi.io
-async function makeQueries(pair, candleSize) {
-  for(let i=0; i < Object.keys(indicators).length; i++){
-    client.addBulkQuery(Object.values(indicators)[i], "binance", pair, candleSize)
-    if((i+1) % 20 == 0){
-      client.executeBulkQueries().then(result => {
+
+async function makeQueries(pair, candleSize){
+  let queries = []
+  client.initBulkQueries()
+  await sleep(1000)
+  for (let i=0; i < Object.keys(indicators).length; i++){
+    if ((i+1) % 20 == 0){
+      let t = new Date()
+      console.log(`STARTING EXECUTE BULK QUERY WITH ${queries.length} queries`)
+      queries = []
+      await client.executeBulkQueries()
+      .then(result => {
         cleanIndResult(result, indResults)
-        console.log("Getting candles from taapi.io")
-      }).catch(error => {
-        console.log("ERROR: ", error);
+        console.log(exceededRateLim ? "EXCEEDED RATE LIMIT" : "")
+        console.log("FINISHED EXECUTING BULK QUERY")
+      })
+      .catch(err => {
+        console.log("ERROR GETTING INDICATORS: ", err)
         logToDebug({
-          text:'Error getting candles from CCXT: ',
+          text:'Error getting indicators from TAAPI.IO: ',
           fields: {
-            'error': e,
+            'Error': err,
           }
         })
-      });
-      await sleep(1700)
-      client.initBulkQueries();
+      })
+      // let reqTime = new Date() - t
+      await sleep(1000)
+      client.initBulkQueries()
+    } else {
+      queries.push(client.addBulkQuery(Object.values(indicators)[i], "binance", pair, candleSize))
+      console.log(`Adding ${Object.values(indicators)[i]} to bulk queries` )
     }
   }
-
   console.log(`FINISHED WRITING FOR ${pair} ${candleSize}`)
   return indResults
 }
+
+
 
 // Get candles from ccxt
 async function getCandlesFromCCXT(pair, candleSize){
