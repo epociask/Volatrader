@@ -1,5 +1,7 @@
 const knex = require('knex')
 
+const { DATABASE_NAME } = process.env
+
 const db = knex({
   client: 'pg',
   connection: {
@@ -12,8 +14,20 @@ const db = knex({
   },
 });
 
+const localdb = knex({
+  client: 'pg',
+  connection: {
+    host: '127.0.0.1',
+    port: 5432,
+    database: 'coin-database',
+    password: '',
+    user: 'postgres'
+  }
+})
 
-module.exports = db
+console.log(DATABASE_NAME)
+
+module.exports = DATABASE_NAME == 'PRODUCTION' ? db : localdb
 
 
 // username = doadmin
