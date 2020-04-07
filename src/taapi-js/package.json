@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "forever stopall && forever start client.js && forever start index.js"
+    "start": "forever stopall && forever start client.js && forever start index.js",
+    "start-prod": "DATABASE_NAME=PRODUCTION npm run start"
   },
   "author": "Adrian smith, Ethen Pociask",
   "license": "ISC",
