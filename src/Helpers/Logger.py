@@ -17,7 +17,7 @@ class Channel(Enum):
 
     DEBUG = '#debug'
     VOLATRADER = '#volatrader'
-    VOLATILITY = '#volatility_alerts'
+    VOLATILITY_ALERTS = '#volatility_alerts'
 
 
 class MessageType(Enum):
@@ -27,6 +27,7 @@ class MessageType(Enum):
     ERROR = 'error'
     WARNING = 'warning'
     DEBUG = 'debug'
+    VOLATILITY_ALERTS = 'volatility_alerts'
 
 
 """"
