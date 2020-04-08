@@ -1,15 +1,17 @@
 from datetime import datetime
+import sys, os
+sys.path.append(os.path.dirname(os.getcwd()))
 from Helpers.HelpfulOperators import rewind
 from DB.DBReader import *
 from Helpers.Session import Session
 from Strategies import strategies
 from termcolor import colored
-from Helpers.Enums import *
+from Helpers.Enums import Pair, Candle 
 import re
 # from Strategies.strategies import STRAT
 
 
-def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProfitPercent, principle, timeEnum = None, shouldOutputToConsole = True) -> Session:
+def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProfitPercent, principle, timeEnum = None, shouldOutputToConsole = True, readFromDataBase=True) -> Session:
     """
     main backtest function, prints backtest results
     @:param pair -> pair you wish to run backtest on
@@ -33,11 +35,12 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     backTestingSession = Session(pair, strategy, takeProfitPercent, stopLossPercent, stratString, SessionType.BACKTEST)
     reader = DBReader()
 
-    if timeEnum is None:
-        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize)
+    if readFromDataBase:
+        if timeEnum is None:
+            DataSet = reader.fetchCandlesWithIndicators(pair, candleSize)
 
-    else:
-        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, (timeEnum.value * (60 / int(re.findall(r'\d+', candleSize.value)[0]))))
+        else:
+            DataSet = reader.fetchCandlesWithIndicators(pair, candleSize, (timeEnum.value * (60 / int(re.findall(r'\d+', candleSize.value)[0]))))
 
     DataSet = sorted(DataSet, key=lambda i: int(i['candle']['timestamp']), reverse=False)
     start = DataSet[0]['candle']['timestamp']
@@ -88,3 +91,5 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     return backTestingSession, start, finish
 
 
+
+backTest(Pair.ETHUSDT, Candle.THIRTY_MINUTE, "EMA_STRATEGY", 2, 1, 10000, readFromDataBase=False)
