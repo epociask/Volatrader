@@ -9,7 +9,11 @@ from DB.DBoperations import DBoperations
 from Helpers.Enums import Pair, Candle
 from Helpers.Logger import logToSlack, Channel, logDebugToFile
 from Indicators import IndicatorFunctions
-exchange = ccxt.kraken()
+
+exchange = ccxt.kraken({
+    'enableRateLimit': True,  # this option enables the built-in rate limiter
+})
+
 
 
 # def getAskBidVolume(pair: str):
