@@ -138,7 +138,7 @@ def fetchCandleData(api: ccxt.Exchange, pair: Pair, candleSize: Candle, args: (i
 
     arg = args[0]
     if type(arg) == int:
-        candles = api.fetchOHLCV(pair.value.replace("USDT", "/USDT"), candleSize.value, limit=args[0])
+        candles = api.fetchOHLCV(pair.value.replace("USD", "/USD"), candleSize.value, limit=args[0])
 
     else:
         candle = api.parse8601(dateFormat(arg))

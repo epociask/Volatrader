@@ -2,16 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8e2abe85-81f2-43ee-9c12-1e472d873d8a" name="Default Changelist" comment="REFACTOR!!">
-      <change afterPath="$PROJECT_DIR$/ML/tram.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.floo" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.flooignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/2020-03-25.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/API/CMC_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/API/CMC_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Helpers/Logger.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Helpers/Logger.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Helpers/PriceNotifications.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/priceNotificationsDriver.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/priceNotificationsDriver.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DB/DBReader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/DB/DBReader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DB/logs/2020-04-01.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DB/logs/2020-04-04.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SlackNotifier/PriceNotifications.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/SlackNotifier/PriceNotifications.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +71,7 @@
       <recent name="C:\Users\ethen\ccxt\ccxt-trader\src\" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.priceNotificationsDriver">
+  <component name="RunManager" selected="Python.DBReader">
     <configuration name="AutomateBacktest (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ccxt-trader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -88,6 +83,25 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/AutomateBacktest.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="DBReader" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ccxt-trader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/DB" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/DB/DBReader.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -110,25 +124,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/PaperTrader/PaperTrader.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="PriceNotifications" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="ccxt-trader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/Helpers" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/Helpers/PriceNotifications.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -236,11 +231,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.DBReader" />
         <item itemvalue="Python.priceNotificationsDriver" />
         <item itemvalue="Python.tram" />
         <item itemvalue="Python tests.Unittests in test" />
         <item itemvalue="Python.AutomateBacktest (1)" />
-        <item itemvalue="Python.PriceNotifications" />
       </list>
     </recent_temporary>
   </component>
@@ -301,7 +296,7 @@
       <workItem from="1585612659681" duration="500000" />
       <workItem from="1585613162499" duration="5869000" />
       <workItem from="1585639923125" duration="35997000" />
-      <workItem from="1585977562233" duration="20822000" />
+      <workItem from="1585977562233" duration="23030000" />
     </task>
     <task id="LOCAL-00001" summary="REFACTOR!!">
       <created>1583658008263</created>

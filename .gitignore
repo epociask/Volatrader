@@ -4,4 +4,5 @@ __pycache__/
 src/database.ini
 ccxt-trader.tar.gz
 .DS_Store
- notebooks
+notebooks/
+*/venv

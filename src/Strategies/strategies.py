@@ -1,6 +1,6 @@
 from Helpers.Enums import Indicator, Candle, Pair
-from Helpers.PriceNotifications import getUpperNormalDistrubtion
-
+from SlackNotifier.PriceNotifications import getUpperNormalDistrubtion
+from Indicators import IndicatorFunctions
 
 def getStrat(name: str):
     """
@@ -120,3 +120,23 @@ class CANDLESTICK_STRAT(strategy):
             return True, data['candle']['timestamp'], float(data['candle']['close'])
 
         return False, None, None
+
+class EMA_STRATEGY(strategy):
+    def __init__(self, candles, period):
+        self.emas = IndicatorFunctions.EMA(candles, period)
+        self.period = 9
+        self.count = 0
+
+    def update(self, data):
+        if self.count < self.period:
+            self.count+=1
+            return False, None, None
+
+        if self.emas[self.count] > data[4]:
+            self.count+=1
+            return True, data[0], data[4] 
+
+        self.count += 1 
+        return False, None, None
+
+

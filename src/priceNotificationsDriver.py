@@ -37,7 +37,7 @@ if __name__ == '__main__':
             l = getTopVolumeCoins(12)
             for coin in l:
                 que.append(Thread(target=sendAbnormalVolumeNotification, args=(coin,),))
-
+            
             startQueue()
 
 

@@ -43,8 +43,8 @@ def configureFile() -> None:
     """
     Configures basic configuration settings for txt log file
     """
-
     logDir = "logs/" + cleanDate(str(datetime.now())) + ".txt"
+    logDir = logDir if os.path.exists(logDir) else os.path.join("..", logDir)
     logging.basicConfig(filename= logDir,
                         filemode='a',
                         format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(lineno)d %(message)s',

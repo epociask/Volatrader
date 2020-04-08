@@ -1,5 +1,6 @@
 import collections
-
+import sys, os
+sys.path.append(os.path.dirname(os.getcwd()))
 from Helpers.Enums import *
 from Helpers import HelpfulOperators
 from DB import QueryHelpers
@@ -67,3 +68,16 @@ class DBReader(DBoperations):
 
 
 
+reader = DBReader()
+
+for val in reader.fetchCandlesWithIndicators(Pair.ETHUSDT, Candle.FIVE_MINUTE):
+    print(val['candle']['timestamp'])
+
+    for value in val:
+
+        try:
+            print(value, val[value]['value'], end=" ") if val[value]['value'] != 0 else ""
+
+        except Exception as e:
+            pass
+    print("\n")
