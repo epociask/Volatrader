@@ -1,13 +1,15 @@
 import pandas as pd
 import numpy as np 
+from scipy.stats import linregress
 
-def SMA(data, smaPeriod):
-    j = next(i for i, x in enumerate(data) if x is not None)
-    our_range = range(len(data))[j + smaPeriod - 1:]
-    empty_list = [None] * (j + smaPeriod - 1)
-    sub_result = [np.mean(data[i - smaPeriod + 1: i + 1]) for i in our_range]
 
-    return np.array(empty_list + sub_result)
+def SMA(data, period=3) :
+    ret = np.cumsum(data, dtype=float)
+    ret[period:] = ret[period:] - ret[:-period]
+    return ret[period - 1:] / period
+
+
+
 
 def EMA(values, window):
     """ Numpy implementation of EMA

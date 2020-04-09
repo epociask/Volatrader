@@ -62,7 +62,7 @@ async function makeQueries(pair, candleSize){
       await sleep(1000)
       client.initBulkQueries()
     } else {
-      queries.push(client.addBulkQuery(Object.values(indicators)[i], "binance", pair, candleSize))
+      queries.push(client.addBulkQuery(Object.values(indicators)[i], "kraken", pair, candleSize))
       console.log(`Adding ${Object.values(indicators)[i]} to bulk queries` )
     }
   }
@@ -75,7 +75,7 @@ async function makeQueries(pair, candleSize){
 // Get candles from ccxt
 async function getCandlesFromCCXT(pair, candleSize){
   let candleData
-  const exchange = new ccxt.binance()
+  const exchange = new ccxt.kraken()
   const candles = {}
   if (exchange.has.fetchOHLCV) {
     try {

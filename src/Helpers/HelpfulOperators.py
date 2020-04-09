@@ -3,10 +3,11 @@ import decimal
 import datetime
 import time
 from unicodedata import numeric
-
 import ccxt
+import numpy as np
 from Helpers.IndicatorConstants import candle
 from Helpers.Enums import Indicator, Pair, Candle
+import re
 
 '''
     Helper Script w/ utility functions that are referenced throughout master program
@@ -30,6 +31,75 @@ convertToVal = lambda candleEnum: int(candleEnum.value[0: len(candleEnum.value) 
     Helper utility functions     
 '''
 
+# common constants
+
+# -----------------------------------------------------------------------------
+
+
+# -----------------------------------------------------------------------------
+
+     #'2017-09-01 00:00:00'
+
+def getFromTime(from_datetime: str, pair: Pair, candleSize: Candle):
+
+        # function to get unique values 
+    def unique(list1): 
+        
+        # insert the list to the set 
+        list_set = set(list1) 
+        # convert the set to the list 
+        unique_list = (list(list_set)) 
+        
+        return unique_list
+    msec = 1000
+    minute = 60 * msec
+    fifteen_minute = minute * 15
+    five_minute = minute * 5
+    thirty_minute = minute * 30
+    hold = 30
+    exchange = ccxt.kraken()
+
+
+    if candleSize.value == "15m":
+        step = fifteen_minute
+
+    elif candleSize.value == "5m":
+        step = five_minute
+
+    else:
+        step = thirty_minute
+    # -----------------------------------------------------------------------------
+    from_timestamp = exchange.parse8601(from_datetime)
+
+    # -----------------------------------------------------------------------------
+
+    now = exchange.milliseconds()
+
+    # -----------------------------------------------------------------------------
+
+    data = []
+
+    while from_timestamp < now:
+
+        try:
+
+            print(exchange.milliseconds(), 'Fetching candles starting from', exchange.iso8601(from_timestamp))
+            ohlcvs = exchange.fetch_ohlcv(pair.value.replace("USD", '/USD'), candleSize.value, from_timestamp)
+            print(exchange.milliseconds(), 'Fetched', len(ohlcvs), 'candles')
+            first = ohlcvs[0][0]
+            last = ohlcvs[-1][0]
+            print('First candle epoch', first, exchange.iso8601(first))
+            print('Last candle epoch', last, exchange.iso8601(last))
+            from_timestamp += len(ohlcvs) * step
+            data += ohlcvs
+            time.sleep(5)
+
+        except (ccxt.ExchangeError, ccxt.AuthenticationError, ccxt.ExchangeNotAvailable, ccxt.RequestTimeout) as error:
+
+            print('Got an error', type(error).__name__, error.args, ', retrying in', hold, 'seconds...')
+            time.sleep(hold)
+
+    return data
 
 def rewind(timeStamp: str, limit: int, timeStep: int):
     """
@@ -59,27 +129,6 @@ def convertNumericTimeToString(numeric: (float, int, str)) -> (str, Exception):
     return date.strftime('%Y-%m-%d %H:%M:%S')
 
 
-def getLowHighBounds(candles: list) -> (int, int):
-    """
-    @returns low,high integer bounds of candleset to effectively format decimal size for CREATE TABLE query
-    @param candles = list of candles
-    """
-
-    lows = []
-    highs = []
-
-    for candle in candles:
-        for key in candle:
-            if key is not 'timestamp' and key is not 'volume':
-                lows.append(getLow(candle[key]))
-                highs.append(getHigh(candle[key]))
-
-    low = max(set(lows), key=lows.count)
-    high = max(set(highs), key=highs.count) - 1
-
-    return low, high
-
-
 def convertCandlesToDict(candles: list) -> str:
     """
     converts list candle data to list of dictionary
@@ -107,20 +156,21 @@ def cleanCandle(candle: dict) -> dict:
     """
 
     it = iter(candle)
-    time = int(next(it).strftime("%Y%m%d%H%M"))
+    time = int(next(it))
     open = cleaner(next(it))
     high = cleaner(next(it))
     low = cleaner(next(it))
     close = cleaner(next(it))
     volume = cleaner(next(it))
 
-    return {
+    return {"candle":{
         'timestamp': time,
         'open': open,
         'high': high,
         'low': low,
         'close': close,
         'volume': volume,
+    }
     }
 
 
@@ -157,6 +207,7 @@ def cleanCandlesWithIndicators(data: list) -> list:
     for i in data:
         it = iter(i)
         candle = {}
+
         candle['timestamp'] = int(next(it).strftime("%Y%m%d%H%M"))
         candle['open'] = str(next(it))
         candle['high'] = str(next(it))
@@ -171,7 +222,6 @@ def cleanCandlesWithIndicators(data: list) -> list:
     return ret
 
 
-
 from Helpers.Enums import  Pair
 
 
@@ -184,3 +234,5 @@ def getCurrentBinancePrice(pair: Pair):
     time.sleep(5)
     req = requests.get(f"https://api.binance.com/api/v1/ticker/price?symbol={pair.value}")
     return float(req.json()['price'])
+
+

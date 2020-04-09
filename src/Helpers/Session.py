@@ -136,23 +136,26 @@ class Session:
                 logDebugToFile("Checking buy condition")
                 self.buy, self.buyTime, self.buyPrice = self.buyStrat.update(data)
 
-                if self.buy and (self.type != SessionType.BACKTEST):
+                if self.buy and (self.type != SessionType.LIVETRADE):
+                    print("making decision for ", data)
                     self.buyPrice = getCurrentBinancePrice(self.pair)
                     self.buyTime = time.now()
                     logToSlack(f"Buying for [{self.stratString}]{self.pair.value} at price: {self.buyPrice}")
                     return False
 
                 elif self.buy:
+
+                
                     print(f"BUYING @ {data['candle']['timestamp']}")
 
 
         else:
+            self.buyStrat.update(data)
             self.takeProfit = float(self.buyPrice) * self.takeProfitPercent
-            if self.type == SessionType.BACKTEST:
-                self.sell = self.checkForBackTestSell(data)
+            self.sell = self.checkForBackTestSell(data)
 
-            elif self.type == SessionType.PAPERTRADE:
-                self.sell = self.checkForPaperTradeSell(data)
+            # elif self.type == SessionType.PAPERTRADE:
+            #     self.sell = self.checkForPaperTradeSell(data)
             if self.sell:
                 self.calcPL()
                 logToSlack(colored("--------------------------\n" + self.toString() + "--------------------------",

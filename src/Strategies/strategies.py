@@ -55,7 +55,6 @@ class SIMPLE_BUY_STRAT(strategy):
 
         return False, None, None
 
-
 class TEST_BUY_STRAT(strategy):
     def __init__(self, pair: Pair, candle: Candle, principle:int ):
         super().__init__(pair, candle, principle)
@@ -97,8 +96,8 @@ class NATHAN_STRAT(strategy):
 
 class CANDLESTICK_STRAT(strategy):
 
-    def __init__(self):
-        pass
+    def __init__(self, pair: Pair, candle: Candle, principle:int):
+        super().__init__(pair, candle, principle)
 
     def update(self, data):
         bullSigns = 0
@@ -106,13 +105,16 @@ class CANDLESTICK_STRAT(strategy):
         print(f"fib val; {data['fibonacciretracement']['value']}")
         for value in data:
             if value != 'candle':
-                print(f"{value}: {data[value]['value']}")
-                if data[value]['value'] == '100':
-                    bullSigns += 1
 
-                elif data[value]['value'] == '-100':
-                    bearSigns += 1
+                try:
+                    if data[value]['value'] == '100':
+                        bullSigns += 1
 
+                    elif data[value]['value'] == '-100':
+                        bearSigns += 1
+
+                except Exception:
+                    pass
         total = bullSigns - bearSigns
         if total >= 2 and (float(data['fibonacciretracement']['value']) < float(data['candle']['close'])) and \
                 data['longleggeddoji']['value'] == '100':
@@ -120,6 +122,7 @@ class CANDLESTICK_STRAT(strategy):
             return True, data['candle']['timestamp'], float(data['candle']['close'])
 
         return False, None, None
+
 
 class EMA_STRATEGY(strategy):
     def __init__(self, candles, period):
@@ -139,4 +142,44 @@ class EMA_STRATEGY(strategy):
         self.count += 1 
         return False, None, None
 
+
+class MA_STRATEGY(strategy):
+
+    
+    def __init__(self, pair: Pair, candle: Candle, principle:int):
+        super().__init__(pair, candle, principle)
+        self.ma_13_list = []
+        self.ma_8_list = []
+        self.ma_5_list = []
+        self.arr = []
+        self.candleLimit = 14
+        self.sdv = getUpperNormalDistrubtion(pair, candle, 500)
+
+
+    def update(self, data):
+
+        if len(self.arr) < self.candleLimit:
+
+            self.arr.append(float(data['candle']['close']))
+            print("APPEDEND CANDLE CLOSE", self.arr)
+            return False, None, None
+        else:
+            self.arr.append(float(data['candle']['close']))
+            del self.arr[0]
+
+        val_13 = IndicatorFunctions.SMA(self.arr, 13)[-1]
+        val_8 = IndicatorFunctions.SMA(self.arr, 8)[-1] 
+        val_5 = IndicatorFunctions.SMA(self.arr, 5)[-1] 
+        rsi = IndicatorFunctions.RSI(self.arr)[-1]
+
+        print("value 13", val_13)
+        print('value 8', val_8)
+        print("value 5", val_5)
+        if (val_5 > val_13 and val_5 > val_8) and data['candle']['volume'] >=  self.sdv['2SD']:
+            print("data =====================> ", data)
+            self.arr = []
+            return True, data['candle']['timestamp'], float(data['candle']['close'])
+ 
+
+        return False, None, None
 

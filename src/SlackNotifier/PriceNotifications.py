@@ -15,38 +15,31 @@ exchange = ccxt.kraken({
     'enableRateLimit': True,  # this option enables the built-in rate limiter
 })
 
-
-
-# def getAskBidVolume(pair: str):
-# 	print(exchange.has['fetchTicker'])
-# 	return exchange.fetch_ticker("ETH/USD")['askVolume'], exchange.fetch_ticker("ETH/USD")['bidVolume']
-
-
-
 def getVolumeData(pair: str, candleSize: Candle):
 	logDebugToFile(f"Getting volume data for {pair} {candleSize}")
+	pair = pair.value.replace("USD", "/USD") if type(pair) is not str else pair
 	candles = exchange.fetchOHLCV(pair, candleSize.value)
 	return [float(e[5]) for e in candles]
 
 
 def getUpperNormalDistrubtion(pair: Pair, candleSize: Candle, volume=None):
 
-	if volume is None:
-		try:
-			volume = getVolumeData(pair, candleSize)
-			stdev = stats.stdev(volume) if volume is not None else "Volume data not available"
-			mean = sum(volume) / len(volume)
+	# if volume is None:
+	try:
+		volume = getVolumeData(pair, candleSize)
+		stdev = stats.stdev(volume) if volume is not None else "Volume data not available"
+		mean = sum(volume) / len(volume)
 
-			return {
-				"1SD": mean + stdev,
-				"2SD": mean + 2 * stdev,
-				'3SD': mean + 3 * stdev,
-				"mean": mean,
-				"current_vol": volume[0]
-			}
+		return {
+			"1SD": mean + stdev,
+			"2SD": mean + 2 * stdev,
+			'3SD': mean + 3 * stdev,
+			"mean": mean,
+			"current_vol": volume[0]
+		}
 
-		except BadSymbol:
-			raise BadSymbol("Bad symbol provided to Kraken")
+	except BadSymbol:
+		raise BadSymbol("Bad symbol provided to Kraken")
 
 
 
@@ -54,8 +47,8 @@ def getUpperNormalDistrubtion(pair: Pair, candleSize: Candle, volume=None):
 
 
 def getUrl(pair: str, candleSize: Candle):
-	base_url = "https://trade.kraken.com/markets/kraken/" + pair.lower() + "/" + candleSize.value
-	return base_url
+	return 	"https://trade.kraken.com/markets/kraken/" + pair.lower() + "/" + candleSize.value
+	
 
 def crossover(pair, candleSize):
 	close = [e[4] for e in exchange.fetch_ohlcv(pair, timeframe=candleSize.value, limit=14)]
@@ -74,60 +67,44 @@ def crossover(pair, candleSize):
 	elif sma_5 <= sma_13 and sma_5 <= sma_8:
 		return "STRONG SELL" + string 
 	else:
-		return "No Signal"
+		return None 
 
 
-def sendAbnormalVolumeNotification(pair: Pair):
-
-	global exchange
+def handleLogging(stdDict: str, pair: str, candleSize: Candle):
+  
 	createMessage = lambda pair, devs, candleSize: f"[VOLATILITY ALERT] CURRENT {pair} VOLUME ABOVE {devs} STANDARD DEVIATIONS FOR {candleSize.value} CANDLE"
 	tickerMessage = lambda pair, devs, askbid: f"[VOLATILITY ALERT] CURRENT {pair} VOLUME ABOVE {devs} STANDARD DEVIATIONS FOR {askbid} VOLUME"
-	# ask, bid = getAskBidVolume(pair)
-	# print("askval", ask, "bidval", bid)
-	getUrl(pair, Candle.FIFTEEEN_MINUTE)
+
+	if stdDict['2SD'] < stdDict['current_vol']:
+		logToSlack(createMessage(pair, '2', candleSize.value), tagChannel=True, channel=Channel.VOLATILITY_ALERTS)
+
+	elif stdDict['3SD'] < stdDict['current_vol']:
+		logToSlack(createMessage(pair, '3', candleSize.value), tagChannel=True, channel=Channel.VOLATILITY_ALERTS)
+		
+	co = crossover(pair, candleSize.value) 
+
+	if co is not None:
+		logToSlack(co + f" [{pair}/{candleSize.value}]" + "\n" + getUrl(pair, candleSize.value) , channel=Channel.VOLATRADER)
+
+def sendAbnormalVolumeNotification(pair: Pair):
+	pair = pair.value if type(pair) is not str else pair
+	global exchange
 	isCorrectTime = lambda t,val : t % val == 0 or t == 0
 	while True:
 		t = int(str(datetime.now())[14:16])
-
-		#stdDict_1m = getUpperNormalDistrubtion(pair, Candle.ONE_MINUTE)
-
-		# if stdDict_1m['1SD'] < ask:
-		# 	logToSlack(tickerMessage(pair, '1', "ask"),  tagChannel=True, channel=Channel.VOLATRADER)
-
-		# if stdDict_1m['1SD'] < bid:
-		# 	logToSlack(tickerMessage(pair, '1', "bid"),  tagChannel=True, channel=Channel.VOLATRADER)
-
 		# 5m
 		if isCorrectTime(t, 5):
 			stdDict_5m = getUpperNormalDistrubtion(pair, Candle.FIVE_MINUTE)
-			if stdDict_5m['2SD'] < stdDict_5m['current_vol']:
-				logToSlack(createMessage(pair, '2', Candle.FIVE_MINUTE), tagChannel=True, channel=Channel.VOLATILITY_ALERTS)
-
-			elif stdDict_5m['3SD'] < stdDict_5m['current_vol']:
-				logToSlack(createMessage(pair, '3', Candle.FIVE_MINUTE), tagChannel=True, channel=Channel.VOLATILITY_ALERTS)
-				
-			logToSlack(crossover(pair, Candle.FIVE_MINUTE) + " " + getUrl(pair, Candle.FIVE_MINUTE), channel=Channel.VOLATRADER)
+			handleLogging(stdDict_5m, pair, Candle.FIVE_MINUTE)
+	
 		# 15m
 
 		if isCorrectTime(t, 15):
 			stdDict_15m = getUpperNormalDistrubtion(pair, Candle.FIFTEEEN_MINUTE)
-			if stdDict_15m['2SD'] < stdDict_15m['current_vol']:
-				logToSlack(createMessage(pair, '2', Candle.FIFTEEEN_MINUTE), tagChannel=True, channel=Channel.VOLATILITY_ALERTS)
-
-			elif stdDict_15m['3SD'] < stdDict_15m['current_vol']:
-				logToSlack(createMessage(pair, '3', Candle.FIFTEEEN_MINUTE), tagChannel=True, channel=Channel.VOLATILITY_ALERTS)
-			logToSlack(crossover(pair, Candle.FIFTEEEN_MINUTE) + " " + getUrl(pair, Candle.FIFTEEEN_MINUTE), channel=Channel.VOLATRADER)
-
+			handleLogging(stdDict_15m, pair, Candle.FIFTEEEN_MINUTE)
 		# 30m
 
 		if isCorrectTime(t, 30):
 			stdDict_30m = getUpperNormalDistrubtion(pair, Candle.THIRTY_MINUTE)
-
-			if stdDict_30m['2SD'] < stdDict_30m['current_vol'] and isCorrectTime(t, 30):
-				logToSlack(createMessage(pair, '2', Candle.THIRTY_MINUTE), tagChannel=True, channel=Channel.VOLATILITY_ALERTS)
-
-			elif stdDict_30m['2SD'] < stdDict_30m['current_vol'] and isCorrectTime(t, 30):
-				logToSlack(createMessage(pair, '3', Candle.THIRTY_MINUTE), tagChannel=True, channel=Channel.VOLATILITY_ALERTS)
-			logToSlack(crossover(pair, Candle.THIRTY_MINUTE) + " " + getUrl(pair, Candle.THIRTY_MINUTE), channel=Channel.VOLATRADER)
-
+			handleLogging(stdDict_30m, pair, Candle.THIRTY_MINUTE)
 		# time.sleep(60)

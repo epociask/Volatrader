@@ -29,6 +29,7 @@ class Pair(Enum):
     Enum to represent all base/quote currency pairs
     """
     ETHUSDT = "ETHUSDT"
+    ETHUSD = 'ETHUSD'
     BTCUSDT = "BTCUSD"
     STXUSDT = "STXUSD"
     XRPUSDT = 'XRPUSD'
