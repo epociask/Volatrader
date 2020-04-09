@@ -66,7 +66,7 @@ def getTopPercentChange(timePeriod, numCoins, minVolume=10000.00):
 
 def getTopVolumeCoins(numCoins):
     getVal = lambda key : key['quote']['USD']['volume_24h'] if key['quote']['USD']['volume_24h'] is not None else 0.0
-    blacklist_coins = ['USDT', 'BSV', 'PAX', 'USDC', 'TUSD']
-    x = lambda x: x not in blacklist_coins
+    whitelist_coins = ['ETH', 'BTC', 'XRP', 'LTC', 'EOS', 'BCH', 'XMR', 'XTZ']
+    x = lambda x: x in whitelist_coins
     recent = [f"{e}/USD" for e in filter(x , [e['symbol'] for e in sorted(getMarketData(), key = lambda key: getVal(key), reverse=True)[:14]])]
     return recent[:numCoins]

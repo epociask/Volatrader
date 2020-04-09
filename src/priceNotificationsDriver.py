@@ -22,7 +22,6 @@ def startQueue():
     for thread in que:
         thread.start()
 
-
 if __name__ == '__main__':
     try:
         while True:
