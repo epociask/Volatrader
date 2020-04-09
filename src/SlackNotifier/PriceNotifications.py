@@ -83,10 +83,10 @@ def handleLogging(stdDict: str, pair: str, candleSize: Candle):
 	elif stdDict['3SD'] < stdDict['current_vol']:
 		logToSlack(createMessage(pair, '3', candleSize.value), tagChannel=True, channel=Channel.VOLATILITY_ALERTS)
 		
-	co = crossover(pair, candleSize.value) 
+	# co = crossover(pair, candleSize.value) 
 
-	if co is not None:
-		logToSlack(co + f" [{pair}/{candleSize.value}]" + "\n" + getUrl(pair, candleSize.value) , channel=Channel.VOLATRADER)
+	# if co is not None:
+	# 	logToSlack(co + f" [{pair}/{candleSize.value}]" + "\n" + getUrl(pair, candleSize.value) , channel=Channel.VOLATRADER)
 
 def sendAbnormalVolumeNotification(pair: Pair):
 	pair = pair.value if type(pair) is not str else pair
