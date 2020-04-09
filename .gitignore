@@ -7,3 +7,4 @@ ccxt-trader.tar.gz
 notebooks/
 */venv
 */__pycache__
+*/logs/
