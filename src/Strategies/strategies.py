@@ -179,7 +179,7 @@ class MA_STRATEGY(strategy):
             print("data =====================> ", data)
             self.arr = []
             return True, data['candle']['timestamp'], float(data['candle']['close'])
- 
+
 
         return False, None, None
 

@@ -50,7 +50,9 @@ def getUrl(pair: str, candleSize: Candle):
 	return 	"https://trade.kraken.com/markets/kraken/" + pair.lower() + "/" + candleSize.value
 	
 
-def crossover(pair, candleSize):
+def crossover(pair, candleSize):		
+	pair = pair.value.replace("USD", "/USD") if type(pair) is not str else pair
+
 	close = [e[4] for e in exchange.fetch_ohlcv(pair, timeframe=candleSize.value, limit=14)]
 	sma_5 = IndicatorFunctions.SMA(close, 5)[-1]
 	sma_8 = IndicatorFunctions.SMA(close, 8)[-1]
