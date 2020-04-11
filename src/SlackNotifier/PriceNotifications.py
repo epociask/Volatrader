@@ -47,7 +47,7 @@ def getUpperNormalDistrubtion(pair: Pair, candleSize: Candle, volume=None):
 
 
 def getUrl(pair: str, candleSize: Candle):
-	return 	"https://trade.kraken.com/markets/kraken/" + pair.lower() + "/" + candleSize.value
+	return "https://trade.kraken.com/markets/kraken/" + pair.lower() + "/" + candleSize.value
 	
 
 def crossover(pair, candleSize):		
@@ -74,7 +74,7 @@ def crossover(pair, candleSize):
 
 def handleLogging(stdDict: str, pair: str, candleSize: Candle):
   
-	createMessage = lambda pair, devs, candleSize: f"[VOLATILITY ALERT] CURRENT {pair} VOLUME ABOVE {devs} STANDARD DEVIATIONS FOR {candleSize.value} CANDLE"
+	createMessage = lambda pair, devs, candleSize: f"[VOLATILITY ALERT] CURRENT {pair} VOLUME ABOVE {devs} STANDARD DEVIATIONS FOR {candleSize} CANDLE"
 	tickerMessage = lambda pair, devs, askbid: f"[VOLATILITY ALERT] CURRENT {pair} VOLUME ABOVE {devs} STANDARD DEVIATIONS FOR {askbid} VOLUME"
 
 	if stdDict['2SD'] < stdDict['current_vol']:
@@ -96,17 +96,20 @@ def sendAbnormalVolumeNotification(pair: Pair):
 		t = int(str(datetime.now())[14:16])
 		# 5m
 		if isCorrectTime(t, 5):
+			print("5 MIN TIME INTERVAL")
 			stdDict_5m = getUpperNormalDistrubtion(pair, Candle.FIVE_MINUTE)
 			handleLogging(stdDict_5m, pair, Candle.FIVE_MINUTE)
 	
 		# 15m
 
-		if isCorrectTime(t, 15):
+		elif isCorrectTime(t, 15):
+			print("15 MIN TIME INTERVAL")
 			stdDict_15m = getUpperNormalDistrubtion(pair, Candle.FIFTEEEN_MINUTE)
 			handleLogging(stdDict_15m, pair, Candle.FIFTEEEN_MINUTE)
 		# 30m
 
-		if isCorrectTime(t, 30):
+		elif isCorrectTime(t, 30):
+			print("30 MIN TIME INTERVAL")
 			stdDict_30m = getUpperNormalDistrubtion(pair, Candle.THIRTY_MINUTE)
 			handleLogging(stdDict_30m, pair, Candle.THIRTY_MINUTE)
 		# time.sleep(60)
