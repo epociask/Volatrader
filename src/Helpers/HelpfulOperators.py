@@ -174,7 +174,7 @@ def cleanCandle(candle: dict) -> dict:
     }
 
 
-def fetchCandleData(api: ccxt.Exchange, pair: Pair, candleSize: Candle, args: (int, None)):
+def fetchCandleData(api: ccxt.Exchange, pair: Pair, candleSize: Candle, limit=500):
     """
     @:returns candles fetched from an exchange
     @:param api = CCXT API instance
@@ -186,14 +186,7 @@ def fetchCandleData(api: ccxt.Exchange, pair: Pair, candleSize: Candle, args: (i
                 --> string type == Timestamp to collect candles from
     """
 
-    arg = args[0]
-    if type(arg) == int:
-        candles = api.fetchOHLCV(pair.value.replace("USD", "/USD"), candleSize.value, limit=args[0])
-
-    else:
-        candle = api.parse8601(dateFormat(arg))
-        candles = api.fetchOHLCV(pair.value.replace("USDT", "/USDT"), candleSize.value, candle)
-    return candles
+    return api.fetchOHLCV(pair.value.replace("USD", "/USD"), candleSize.value, limit=500)
 
 
 def cleanCandlesWithIndicators(data: list) -> list:

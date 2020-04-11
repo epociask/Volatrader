@@ -20,9 +20,8 @@ class strategy():
         self.indicatorList = None
         self.principle = principle
 
-#TODO 4/2
-#
-# class riskManager():
+
+# class riskManager():                              ######PORTFOLIO ALLOCATION TODO
 #
 #     def __init__(self, principle: int):
 #         self.principle = principle
@@ -38,9 +37,9 @@ class BBANDS_STRAT(strategy):
 
     def update(self, data):
         if data['bbands']['valueUpperBand'] < data['candle']['close']:
-            return True, data['candle']['timestamp'], float(data['candle']['close'])
+            return True
 
-        return False, None, None
+        return False
 
 class SIMPLE_BUY_STRAT(strategy):
 
@@ -51,9 +50,9 @@ class SIMPLE_BUY_STRAT(strategy):
             buyPrice = float(data['candle']['close'])
             buyTime = data['candle']['timestamp']
 
-            return True, buyTime, buyPrice
+            return True
 
-        return False, None, None
+        return False
 
 class TEST_BUY_STRAT(strategy):
     def __init__(self, pair: Pair, candle: Candle, principle:int ):
@@ -73,10 +72,10 @@ class TEST_BUY_STRAT(strategy):
         if float(data['candle']['volume']) > self.sdv['2SD'] and float(data['candle']['close']) < float(
                 data['candle']['open']) and bear is None and float(data['fibonacciretracement']['value']) > float(
             data['candle']['close']) and ind:
-            return True, data['candle']['timestamp'], float(data['candle']['close'])
+            return True
 
         else:
-            return False, None, None
+            return False
 
 
 class NATHAN_STRAT(strategy):
@@ -89,9 +88,9 @@ class NATHAN_STRAT(strategy):
         Nathan Haile's genius strategy
         """
         if data['macdfix']['valueMACDSignal'] > data['macdfix']['valueMACD']:
-            return True, data['candle']['timestamp'], float(data['candle']['close'])
+            return True
 
-        return False, None, None
+        return False
 
 
 class CANDLESTICK_STRAT(strategy):
@@ -119,9 +118,9 @@ class CANDLESTICK_STRAT(strategy):
         if total >= 2 and (float(data['fibonacciretracement']['value']) < float(data['candle']['close'])) and \
                 data['longleggeddoji']['value'] == '100':
             print(total)
-            return True, data['candle']['timestamp'], float(data['candle']['close'])
+            return True
 
-        return False, None, None
+        return False
 
 
 class EMA_STRATEGY(strategy):
@@ -133,14 +132,14 @@ class EMA_STRATEGY(strategy):
     def update(self, data):
         if self.count < self.period:
             self.count+=1
-            return False, None, None
+            return False
 
         if self.emas[self.count] > data[4]:
             self.count+=1
-            return True, data[0], data[4] 
+            return True 
 
         self.count += 1 
-        return False, None, None
+        return False
 
 
 class MA_STRATEGY(strategy):
@@ -162,7 +161,7 @@ class MA_STRATEGY(strategy):
 
             self.arr.append(float(data['candle']['close']))
             print("APPEDEND CANDLE CLOSE", self.arr)
-            return False, None, None
+            return False
         else:
             self.arr.append(float(data['candle']['close']))
             del self.arr[0]
@@ -178,8 +177,8 @@ class MA_STRATEGY(strategy):
         if (val_5 > val_13 and val_5 > val_8) and data['candle']['volume'] >=  self.sdv['2SD']:
             print("data =====================> ", data)
             self.arr = []
-            return True, data['candle']['timestamp'], float(data['candle']['close'])
+            return True
 
 
-        return False, None, None
+        return False
 

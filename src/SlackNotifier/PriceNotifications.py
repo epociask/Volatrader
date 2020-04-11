@@ -10,10 +10,13 @@ from Helpers.Enums import Pair, Candle
 from Helpers.Logger import logToSlack, Channel, logDebugToFile
 from Indicators import IndicatorFunctions
 from ccxt.base.errors import BadSymbol
+from threading import Lock 
 
 exchange = ccxt.kraken({
     'enableRateLimit': True,  # this option enables the built-in rate limiter
 })
+
+lock = Lock()
 
 def getVolumeData(pair: str, candleSize: Candle):
 	logDebugToFile(f"Getting volume data for {pair} {candleSize}")
@@ -23,7 +26,8 @@ def getVolumeData(pair: str, candleSize: Candle):
 
 
 def getUpperNormalDistrubtion(pair: Pair, candleSize: Candle, volume=None):
-
+	global lock
+	lock.acquire()
 	# if volume is None:
 	try:
 		volume = getVolumeData(pair, candleSize)
@@ -41,7 +45,8 @@ def getUpperNormalDistrubtion(pair: Pair, candleSize: Candle, volume=None):
 	except BadSymbol:
 		raise BadSymbol("Bad symbol provided to Kraken")
 
-
+	finally:
+		lock.release()
 
 
 
@@ -52,8 +57,15 @@ def getUrl(pair: str, candleSize: Candle):
 
 def crossover(pair, candleSize):		
 	pair = pair.value.replace("USD", "/USD") if type(pair) is not str else pair
+	global lock
+	lock.aquire()
+	try:
+		close = [e[4] for e in exchange.fetch_ohlcv(pair, timeframe=candleSize.value, limit=14)]
 
-	close = [e[4] for e in exchange.fetch_ohlcv(pair, timeframe=candleSize.value, limit=14)]
+
+	finally:
+		lock.release()
+
 	sma_5 = IndicatorFunctions.SMA(close, 5)[-1]
 	sma_8 = IndicatorFunctions.SMA(close, 8)[-1]
 	sma_13 = IndicatorFunctions.SMA(close, 13)[-1]
@@ -73,7 +85,7 @@ def crossover(pair, candleSize):
 
 
 def handleLogging(stdDict: str, pair: str, candleSize: Candle):
-  
+	pair = pair.value if type(pair) is not str else pair
 	createMessage = lambda pair, devs, candleSize: f"[VOLATILITY ALERT] CURRENT {pair} VOLUME ABOVE {devs} STANDARD DEVIATIONS FOR {candleSize} CANDLE"
 	tickerMessage = lambda pair, devs, askbid: f"[VOLATILITY ALERT] CURRENT {pair} VOLUME ABOVE {devs} STANDARD DEVIATIONS FOR {askbid} VOLUME"
 
@@ -82,11 +94,7 @@ def handleLogging(stdDict: str, pair: str, candleSize: Candle):
 
 	elif stdDict['3SD'] < stdDict['current_vol']:
 		logToSlack(createMessage(pair, '3', candleSize.value), tagChannel=True, channel=Channel.VOLATILITY_ALERTS)
-		
-	# co = crossover(pair, candleSize.value) 
 
-	# if co is not None:
-	# 	logToSlack(co + f" [{pair}/{candleSize.value}]" + "\n" + getUrl(pair, candleSize.value) , channel=Channel.VOLATRADER)
 
 def sendAbnormalVolumeNotification(pair: Pair):
 	pair = pair.value if type(pair) is not str else pair
@@ -95,21 +103,25 @@ def sendAbnormalVolumeNotification(pair: Pair):
 	while True:
 		t = int(str(datetime.now())[14:16])
 		# 5m
+
+		if isCorrectTime(t, 0):
+			print("Ending thread ", Thread.name)
+			return 
 		if isCorrectTime(t, 5):
-			print("5 MIN TIME INTERVAL")
+			logDebugToFile("5 MIN TIME INTERVAL")
 			stdDict_5m = getUpperNormalDistrubtion(pair, Candle.FIVE_MINUTE)
 			handleLogging(stdDict_5m, pair, Candle.FIVE_MINUTE)
 	
 		# 15m
 
 		elif isCorrectTime(t, 15):
-			print("15 MIN TIME INTERVAL")
+			logDebugToFile("15 MIN TIME INTERVAL")
 			stdDict_15m = getUpperNormalDistrubtion(pair, Candle.FIFTEEEN_MINUTE)
 			handleLogging(stdDict_15m, pair, Candle.FIFTEEEN_MINUTE)
 		# 30m
 
 		elif isCorrectTime(t, 30):
-			print("30 MIN TIME INTERVAL")
+			logDebugToFile("30 MIN TIME INTERVAL")
 			stdDict_30m = getUpperNormalDistrubtion(pair, Candle.THIRTY_MINUTE)
 			handleLogging(stdDict_30m, pair, Candle.THIRTY_MINUTE)
 		# time.sleep(60)

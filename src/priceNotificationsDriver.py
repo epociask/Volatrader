@@ -11,23 +11,16 @@ nest_asyncio.apply()
 hasRun = False
 
 
-class worker(threading.Thread):
-
-    def updateValue(self, arg: str):
-        self.args = arg
-
-
 que = []
 
 def updateQue(l: list):
     global  que
-    for thread in que:
-        thread.changeArg()
-
-def startQueue():
-    global que
+    for val in list:
+        que.append(Thread(args=sendAbnormalVolumeNotification, args=(val),))
+        
     for thread in que:
         thread.start()
+
 
 if __name__ == '__main__':
     try:
@@ -36,17 +29,8 @@ if __name__ == '__main__':
             if not hasRun or t == 0:
                 movers = getTopPercentChange("1h", 20, 10000)
                 logToSlack(f"Hourly Top price movers:\n {movers}", channel=Channel.VOLATRADER)
-
-                l = getTopVolumeCoins(12)
-
-                if not hasRun:
-                    hasRun = True
-                    for coin in l:
-                        que.append(worker(target=sendAbnormalVolumeNotification, args=(coin,),))
-                    startQueue()
-
-                else:
-                    updateQue(l)
+                updateQue(getTopVolumeCoins(12))
+                time.sleep(60)
 
 
     except Exception as e:

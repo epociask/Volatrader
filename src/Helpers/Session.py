@@ -115,47 +115,38 @@ class Session:
 
         return False
 
-    def checkForPaperTradeSell(self, price):
-        if self.sellStrat.run(price) or self.takeProfit <= price:
-            return True
-        
-        else:
-            return False
 
-
-    def update(self, data) -> bool:
+    def update(self, data, update=False) -> bool:
         """
         main function
         @:param data
         takes in @:param data and makes buy/sell or do-nothing decisions accordingly
         @:returns None
         """
-        if not self.buy:
+        if not self.buy:    #not bought 
 
             if self.prevData is None or self.prevData != data:
-                logDebugToFile("Checking buy condition")
-                self.buy, self.buyTime, self.buyPrice = self.buyStrat.update(data)
-
-                if self.buy and (self.type != SessionType.LIVETRADE):
-                    print("making decision for ", data)
-                    self.buyPrice = getCurrentBinancePrice(self.pair)
-                    self.buyTime = time.now()
-                    logToSlack(f"Buying for [{self.stratString}]{self.pair.value} at price: {self.buyPrice}")
-                    return False
-
-                elif self.buy:
-
+                logDebugToFile(f"Checking buy condition for {self.pair}/{self.candle}")
+                self.buy = self.buyStrat.update(data)
                 
-                    print(f"BUYING @ {data['candle']['timestamp']}")
+                if self.buy:
+                    self.buyPrice, self.buyTime = data['candle']['close'], data['candle']['timestamp']
+
+                    if self.type is not SessionType.BACKTEST:
+                        typ = "[PAPERTRADE]" if self.type is SessionType.PAPERTRADE else "[LIVETRADE]"
+                        logToSlack(f"{typ} Buying for [{self.stratString}]{self.pair.value} at price: {self.buyPrice}")
+                        return False
+                
 
 
-        else:
+        else: #is bought 
+
+            if update is True:
             self.buyStrat.update(data)
-            self.takeProfit = float(self.buyPrice) * self.takeProfitPercent
-            self.sell = self.checkForBackTestSell(data)
 
-            # elif self.type == SessionType.PAPERTRADE:
-            #     self.sell = self.checkForPaperTradeSell(data)
+            else:
+                self.takeProfit = float(self.buyPrice) * self.takeProfitPercent
+                self.sell = self.checkForBackTestSell(data)
             if self.sell:
                 self.calcPL()
                 logToSlack(colored("--------------------------\n" + self.toString() + "--------------------------",
