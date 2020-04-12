@@ -29,6 +29,14 @@ class strategy():
 #     def sellPercent(self, percent: float):
 #         self.principle = self.principle - (percent )
 
+class TEST_STRAT(strategy):
+    
+    def __init__(self, pair: Pair, candle: Candle, principle: int):
+        super().__init__(pair, candle, principle)
+
+    def update(self, data):
+        return True
+
 class BBANDS_STRAT(strategy):
 
     def __init__(self, pair: Pair, candle: Candle, principle : int):
@@ -151,7 +159,7 @@ class MA_STRATEGY(strategy):
         self.ma_8_list = []
         self.ma_5_list = []
         self.arr = []
-        self.candleLimit = 14
+        self.candleLimit = 13
         self.sdv = getUpperNormalDistrubtion(pair, candle, 500)
 
 

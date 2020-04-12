@@ -8,14 +8,15 @@ from Strategies import strategies
 from termcolor import colored
 from Helpers.Enums import Pair, Candle 
 import ccxt
-import re
+import pandas as pd
 from empyrical import max_drawdown, alpha_beta, sharpe_ratio
 from empyrical.periods import DAILY, WEEKLY, MONTHLY, QUARTERLY, YEARLY
 import numpy as np
+import argparse
 # from Strategies.strategies import STRAT
 
 
-def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProfitPercent, principle, timeEnum = None, shouldOutputToConsole = True, readFromDataBase=True, timeStart=None) -> Session:
+def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProfitPercent, principle, timeEnum = None, shouldOutputToConsole = True, readFromDataBase=True, timeStart=None, outputToCSV=False) -> Session:
     """
     main backtest function, prints backtest results
     @:param pair -> pair you wish to run backtest on
@@ -99,11 +100,34 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     print(colored(
         "\n"
         "------------------------------------------------------------------------------------------------------------\n",
-        attrs=['bold']))   
+        attrs=['bold']))
 
-    return backTestingSession, start, finish
+    if outputToCSV:
+        print(backTestingSession.results())
 
+        # returns = pd.DataFrame()
+        
+
+def main(args):
+    backTest(args.pair, args.candleSize, args.strategy, args.stoploss, args.takeprofit, args.principle, args.readFromDatabase, args.outputToCSV)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="Use this to backtest your strategies")
+    parser.add_argument('--pair', type=Pair, required=True,
+                    help='Pair to backtest for. Reference Enums.py for more details')
+    parser.add_argument('--candleSize', type=Candle, required=True,
+                    help="Candle size to get data for (5m, 15m, 30m, etc)")
+    parser.add_argument('--strategy', type=str, required=True,
+                    help="Strategy to backtest")
+    parser.add_argument('-sl', '--stoploss', type=float, default=1.0,
+                    help="Trailing stop loss percentage")
+    parser.add_argument('-tp', '--takeprofit', type=float, default=2.0,
+                    help="Take profit percentage")
+    parser.add_argument('-p', '--principle', type=float, default=10000,
+                    help="Starting capital")
+    parser.add_argument('--readFromDatabase', type=bool, default=False)
+
+    args = parser.parse_args(parser)
+    main(args)
+    #backTest(Pair.ETHUSDT, Candle.FIFTEEEN_MINUTE, "MA_STRATEGY", 2, 4, 10000, readFromDataBase=False, outputToCSV=True)
     
-
-backTest(Pair.ETHUSDT, Candle.FIFTEEEN_MINUTE, "MA_STRATEGY", 2, 4, 10000, readFromDataBase=False
-)

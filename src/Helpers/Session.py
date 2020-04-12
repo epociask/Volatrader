@@ -2,7 +2,7 @@ import time
 from termcolor import colored
 from BackTest.BackTesterSellLogic import Instance
 from Helpers.Enums import *
-from Helpers.Logger import logDebugToFile, logToSlack
+from Helpers.Logger import logDebugToFile, logToSlack, Channel
 from Helpers.HelpfulOperators import getCurrentBinancePrice
 
 class Session:
@@ -68,7 +68,7 @@ class Session:
         """
         reset function to reset class members after selling
         """
-        logDebugToFile(f"Resetting for {self.pair}")
+        logToFile(f"Resetting for {self.pair}")
         self.addResult()
         self.sellStrat.reset()
         self.buy = False
@@ -126,7 +126,7 @@ class Session:
         if not self.buy:    #not bought 
 
             if self.prevData is None or self.prevData != data:
-                logDebugToFile(f"Checking buy condition for {self.pair}/{self.candle}")
+                logDebugToFile(f"Checking buy condition for {self.pair}")
                 self.buy = self.buyStrat.update(data)
                 
                 if self.buy:
@@ -134,7 +134,7 @@ class Session:
 
                     if self.type is not SessionType.BACKTEST:
                         typ = "[PAPERTRADE]" if self.type is SessionType.PAPERTRADE else "[LIVETRADE]"
-                        logToSlack(f"{typ} Buying for [{self.stratString}]{self.pair.value} at price: {self.buyPrice}")
+                        logToSlack(f"{typ} Buying for [{self.stratString}]{self.pair.value} at price: {self.buyPrice}", channel=Channel.PAPERTRADER)
                         return False
                 
 
@@ -142,7 +142,7 @@ class Session:
         else: #is bought 
 
             if update is True:
-            self.buyStrat.update(data)
+                self.buyStrat.update(data)
 
             else:
                 self.takeProfit = float(self.buyPrice) * self.takeProfitPercent

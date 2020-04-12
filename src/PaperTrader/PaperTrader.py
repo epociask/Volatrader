@@ -6,8 +6,9 @@ from Helpers.Logger import Channel
 from Helpers.Enums import Pair, Candle, SessionType
 from DB.DBReader import DBReader
 from Strategies import strategies
-from Helpers.HelpfulOperators import getCurrentBinancePrice, fetchCandleData, convertCandlesToDict
+from Helpers.HelpfulOperators import getCurrentKrakenPrice, fetchCandleData, convertCandlesToDict
 import ccxt
+import re 
 
 convertToVal = lambda candleEnum: candleEnum.value[0: len(candleEnum.value) - 2]
 
@@ -24,11 +25,11 @@ class PaperTrader:
         self.strategy = None
         self.takeProfitPercent = None
         self.stopLossPercent = None
-        self.principle = principle
+        self.principle = None
 
 
 
-    def getResults() -> str:
+    def getResults(self) -> str:
         return self.tradingSession.getResults()
 
 
@@ -44,7 +45,8 @@ class PaperTrader:
         :param principle:
         :return:
         """
-        self.timeStep = ''.join(e for e in pair.value if e.isdigit())
+        self.timeStep = int(re.sub("[^0-9]", "", candleSize.value))
+        print(self.timeStep)
         self.pair = pair
         self.candleSize = candleSize
         self.takeProfitPercent = f"0{takeProfitPercent}" if takeProfitPercent - 10 <= 0 else f"{takeProfitPercent}"
@@ -64,25 +66,17 @@ class PaperTrader:
         :return:
         """
         first = True 
-        logToSlack(f"Starting Paper Trader for {self.pair.value}/{self.candleSize.value} \nstrat: {self.stratName}\n takeprofit: %{int(self.takeProfitPercent)}\n stoploss: %{self.stopLossPercent}", channel=Channel.VOLATRADER)
+        sold = False 
+        logToSlack(f"Starting Paper Trader for {self.pair.value}/{self.candleSize.value} \nstrat: {self.stratName}\n takeprofit: %{int(self.takeProfitPercent)}\n stoploss: %{self.stopLossPercent}", channel=Channel.PAPERTRADER)
         while True:
             t = int(str(datetime.now())[14:16])
-
-
-            if (t % self.timeStep == 0 or t == 0):
-                time.sleep(6)
-
-                if t == 0:
-                    logToSlack(f"[PAPERTRADER] hourly update for {self.pair.value}/{self.candleEnum.value} for strat: {self.stratName} \n {self.getResults()}")
-
-                data = convertCandlesToDict(fetchCandleData(ccxt.kraken(), self.pair, self.candleSize, 1))
-                self.tradingSession.update(data[0])
 
             if first:
                 first = False 
 
 
                 try:
+                    print("starting preinstall for strat")
                     for candle in convertCandlesToDict(fetchCandleData(ccxt.kraken(), self.pair, self.candleSize, self.strategy.candleLimit)):
                         self.tradingSession.update(candle)
 
@@ -90,6 +84,20 @@ class PaperTrader:
                 except:
                     logDebugToFile("Error instantiating strategy in paper trader")
 
+            if (t % self.timeStep == 0 or t == 0) and not sold:
+                time.sleep(6)
+                data = convertCandlesToDict(fetchCandleData(ccxt.kraken(), self.pair, self.candleSize, 1))
+                sold = self.tradingSession.update(data[0], True)
+                if not sold:    
+                    time.sleep(60)
 
 
+            if t == 0 or t == 15 or t == 30 or t == 45:
+                logToSlack(f"[PAPERTRADER] hourly update for {self.pair.value} for strat: {self.stratName} \n {self.getResults()}", channel=Channel.PAPERTRADER)
 
+
+            if sold:
+                time.sleep(5)
+                price, ts = getCurrentKrakenPrice(self.pair)
+                dummyCandle = {"candle" : {"close": price, "timestamp": ts}}
+                self.tradingSession.update(dummyCandle)

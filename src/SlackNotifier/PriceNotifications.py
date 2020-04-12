@@ -100,11 +100,12 @@ def sendAbnormalVolumeNotification(pair: Pair):
 	pair = pair.value if type(pair) is not str else pair
 	global exchange
 	isCorrectTime = lambda t,val : t % val == 0 or t == 0
+	first = True 
 	while True:
 		t = int(str(datetime.now())[14:16])
 		# 5m
 
-		if isCorrectTime(t, 0):
+		if t == 0 and not first:
 			print("Ending thread ", Thread.name)
 			return 
 		if isCorrectTime(t, 5):
@@ -124,4 +125,7 @@ def sendAbnormalVolumeNotification(pair: Pair):
 			logDebugToFile("30 MIN TIME INTERVAL")
 			stdDict_30m = getUpperNormalDistrubtion(pair, Candle.THIRTY_MINUTE)
 			handleLogging(stdDict_30m, pair, Candle.THIRTY_MINUTE)
-		# time.sleep(60)
+		time.sleep(60)
+
+		if first:
+			first = False 

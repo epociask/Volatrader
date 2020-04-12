@@ -7,26 +7,28 @@ from SlackNotifier.PriceNotifications import sendAbnormalVolumeNotification
 from queue import Queue
 import nest_asyncio
 import threading
+import time
 nest_asyncio.apply()
-hasRun = False
 
 
 que = []
 
 def updateQue(l: list):
-    global  que
-    for val in list:
-        que.append(Thread(args=sendAbnormalVolumeNotification, args=(val),))
-        
+    global que 
+    que = []
+    for coin in l:
+        que.append(Thread(target=sendAbnormalVolumeNotification, args=(coin,)))
+
     for thread in que:
+        print("starting for thread ", thread.getName())
         thread.start()
-
-
 if __name__ == '__main__':
+    hasRun = False
     try:
         while True:
             t = int(str(datetime.now())[14:16])
             if not hasRun or t == 0:
+                hasRun = True 
                 movers = getTopPercentChange("1h", 20, 10000)
                 logToSlack(f"Hourly Top price movers:\n {movers}", channel=Channel.VOLATRADER)
                 updateQue(getTopVolumeCoins(12))

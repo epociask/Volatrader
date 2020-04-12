@@ -1,5 +1,5 @@
 from PaperTrader.PaperTrader import PaperTrader
 from Helpers.Enums import *
 
-paper_trader = PaperTrader(15)
-paper_trader.trade(Pair.ETHUSD, Candle.FIFTEEEN_MINUTE, "MA_STRATEGY", 1, 2, 1000)
+paper_trader = PaperTrader()
+paper_trader.trade(Pair.ETHUSD, Candle.FIVE_MINUTE, "TEST_STRAT", 1, 1, 1000)

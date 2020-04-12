@@ -5,9 +5,12 @@ import time
 from unicodedata import numeric
 import ccxt
 import numpy as np
+import sys, os
+sys.path.append(os.path.dirname(os.getcwd()))
 from Helpers.IndicatorConstants import candle
 from Helpers.Enums import Indicator, Pair, Candle
 import re
+import requests 
 
 '''
     Helper Script w/ utility functions that are referenced throughout master program
@@ -186,7 +189,7 @@ def fetchCandleData(api: ccxt.Exchange, pair: Pair, candleSize: Candle, limit=50
                 --> string type == Timestamp to collect candles from
     """
 
-    return api.fetchOHLCV(pair.value.replace("USD", "/USD"), candleSize.value, limit=500)
+    return api.fetchOHLCV(pair.value.replace("USD", "/USD"), candleSize.value, limit )
 
 
 def cleanCandlesWithIndicators(data: list) -> list:
@@ -228,4 +231,16 @@ def getCurrentBinancePrice(pair: Pair):
     req = requests.get(f"https://api.binance.com/api/v1/ticker/price?symbol={pair.value}")
     return float(req.json()['price'])
 
+
+def getCurrentKrakenPrice(pair: Pair):
+    """
+    gets and returns the most recent kraken price of a given asset
+    """
+    args = {
+        "pair" : pair.value,
+        "count" : 1, 
+    }
+    req = requests.post("https://api.kraken.com/0/public/Depth", args)
+    data = req.json()
+    return data['result']['XETHZUSD']['bids'][0][0], data['result']['XETHZUSD']['bids'][0][1]
 

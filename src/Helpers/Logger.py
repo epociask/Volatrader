@@ -18,6 +18,7 @@ class Channel(Enum):
     DEBUG = '#debug'
     VOLATRADER = '#volatrader'
     VOLATILITY_ALERTS = '#volatility_alerts'
+    PAPERTRADER = "#papertrader"
 
 
 class MessageType(Enum):
@@ -36,6 +37,7 @@ class MessageType(Enum):
 
 configFile = None  # initally none, redefined in local scope of checkIfConfig()
 slack_token = os.environ.get('SLACK_API_TOKEN')
+print("Slack token -----------------------------<>", slack_token)
 client = slack.WebClient(token=slack_token)
 logger = None
 
