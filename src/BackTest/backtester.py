@@ -18,36 +18,89 @@ from plotly.subplots import make_subplots
 from colorama import init
 from termcolor import cprint 
 from pyfiglet import figlet_format
+import subprocess, platform
+from Indicators import IndicatorFunctions
 
+def clear():
+    if platform.system() == "Windows":
+        subprocess.Popen('cls', shell=True).communicate()
 
+    else:
+        print('\033c', end="")
 
 def printLogo():
     init(strip=not sys.stdout.isatty()) 
     cprint(figlet_format('VolaTrade\n Backtest', font='starwars'),
        'white', 'on_cyan', attrs=['blink'])
 
-def generateGraph(candle_data):
+def generateGraphs(candle_data, pair, candle, stratString):
 
     candle_data.index = pd.to_datetime(candle_data['timestamp'])
-    print("COLS: ", candle_data.columns)
     # del candle_data['Unnamed: 0']
     del candle_data['timestamp']
-    print(candle_data)
 
     fig = make_subplots(rows=1, cols=1)
+    fig1 = make_subplots(rows=1, cols=1)
+    fig1.add_trace(go.Scatter(x = candle_data.index,
+                              y = candle_data['principle'],
+                              name = "Principle"
+                              ))
 
-    fig.add_trace(go.Ohlc(x=candle_data.index,
+    fig.update_layout(
+        title={
+            'text': f"BACKTEST SUMMARY FOR {pair.value}/{candle.value} with {stratString}",
+            'y':0.9,
+            'x':0.5,
+            'xanchor': 'center',
+            'yanchor': 'top'})
+
+    fig.add_trace(go.Candlestick(x=candle_data.index, yaxis="y2",
                         open=candle_data['open'],
                         high=candle_data['high'],
                         low=candle_data['low'],
                         close=candle_data['close'],
-                        name="Candles"))
+                        name="CANDLES"))
 
-    fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['buy'], mode='markers', line=dict(color='royalblue', width=4), name = "BUY"))
-    fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['sell'], mode='markers', line=dict(color='yellow', width=4), name="SELL"))
+    fig1.update_layout(
+        title={
+            'text': "PRINCIPLE SUMMARY",
+            'y':0.9,
+            'x':0.5,
+            'xanchor': 'center',
+            'yanchor': 'top'})
 
-    fig.update_layout(autosize=True)
-    return fig
+
+    fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['buy'], yaxis="y2", mode='markers', line=dict(color='royalblue', width=4), name = "BUY"))
+    fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['sell'], yaxis="y2", mode='markers', line=dict(color='yellow', width=4), name="SELL"))
+
+    # fig2 = make_subplots(rows=1 , cols=1)
+    fig.add_trace(go.Line(x=candle_data.index, yaxis="y2",
+                           y=candle_data['sma_5'],
+                           name="SMA_5"))
+
+    fig.add_trace(go.Line(x=candle_data.index, yaxis="y2",
+                           y=candle_data['sma_8'],
+                           name="SMA_8"))
+
+    fig.add_trace(go.Line(x=candle_data.index, yaxis="y2",
+                           y=candle_data['sma_15'],
+                           name="SMA_15"))
+
+    fig.add_trace(go.Bar(x = candle_data.index, yaxis="y",
+                        y = candle_data['volume']))
+
+    return [fig, fig1]
+
+def figures_to_html(figs, filename="dashboard.html"):
+    if os.path.exists(filename):
+        os.remove(filename) #this deletes the file
+    dashboard = open(filename, 'w')
+    dashboard.write("<html><head></head><body>" + "\n")
+    for fig in figs:
+        inner_html = fig.to_html().split('<body>')[1].split('</body>')[0]
+        dashboard.write(inner_html)
+    dashboard.write("</body></html>" + "\n")
+    return filename
 
 
 def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProfitPercent, principle, shouldOutputToConsole = True, readFromDataBase=False, timeStart=None, outputGraph=False) -> Session:
@@ -92,6 +145,10 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     count = 0 
     for candle in DataSet:
         backTestingSession.update(candle)
+        # if count % 3 == 0:
+        #   clear()
+
+        # count+=1
 
 
     if shouldOutputToConsole:
@@ -99,10 +156,7 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
             "\n\n"
             "------------------------------------------------------------------------------------------------------------\n",
             attrs=['bold']))
-    if count % 3 == 0:
-        os.system("clear")
-
-    count+=1
+    
 
 
     endingPrice = float(principle + float(principle * (backTestingSession.getTotalPL() * .01)))
@@ -160,29 +214,44 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
 
         buyTimes = [e['buytime'] for e in results]
         sellTimes = [e['selltime'] for e in results]
+        pls = [e['profitloss'] for e in results]
         candles = [e['candle'] for e in DataSet]
-        
+        plIndex = 0
+        candleLimit = 15
+        closes = []
         for index, candle in enumerate(candles):
             if candle['timestamp'] in buyTimes:
                 candle['buy'] = candle['close']
                 candle['sell'] = "NaN"
-            
+                candle['principle'] = principle
 
             elif candle['timestamp'] in sellTimes:
                 candle['sell'] = candle['close']
+                principle = float(principle + float(principle * (pls[plIndex] * .01)))
+                candle['principle'] = principle
                 candle['buy'] = 'NaN'
+                plIndex+=1
 
             else:
                 candle['sell'] = 'NaN'
                 candle['buy'] = 'NaN'
+                candle['principle'] = principle
 
+            if candleLimit <= 0:
+                candle['sma_15'] = IndicatorFunctions.SMA(closes, 15)[-1]
+                candle['sma_5'] = IndicatorFunctions.SMA(closes, 5)[-1]
+                candle['sma_8'] = IndicatorFunctions.SMA(closes, 8)[-1]
             candle['timestamp'] = convertNumericTimeToString(candle['timestamp'])
             candles[index] = candle
+
+            closes.append(candle['close'])
+            candleLimit -= 1 
                 
 
         pnl_returns = pd.Series(index=timestamps, data=profitlosses)
         candles_returns = pd.DataFrame(candles)
-        generateGraph(candles_returns).show()
+        filename = figures_to_html(generateGraphs(candles_returns, pair, candleSize, stratString))
+        os.system(f"start {filename}")
 
 
 def main(args):
