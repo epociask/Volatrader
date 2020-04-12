@@ -68,7 +68,7 @@ class Session:
         """
         reset function to reset class members after selling
         """
-        logToFile(f"Resetting for {self.pair}")
+        logDebugToFile(f"Resetting for {self.pair}")
         self.addResult()
         self.sellStrat.reset()
         self.buy = False
@@ -126,16 +126,17 @@ class Session:
         if not self.buy:    #not bought 
 
             if self.prevData is None or self.prevData != data:
-                logDebugToFile(f"Checking buy condition for {self.pair}")
+                logDebugToFile(f"Checking buy condition for {self.pair} w/ {data}")
                 self.buy = self.buyStrat.update(data)
                 
                 if self.buy:
                     self.buyPrice, self.buyTime = data['candle']['close'], data['candle']['timestamp']
 
                     if self.type is not SessionType.BACKTEST:
+                        print(f"Buying @ {data['candle']['close']}")
                         typ = "[PAPERTRADE]" if self.type is SessionType.PAPERTRADE else "[LIVETRADE]"
                         logToSlack(f"{typ} Buying for [{self.stratString}]{self.pair.value} at price: {self.buyPrice}", channel=Channel.PAPERTRADER)
-                        return False
+                        return True
                 
 
 
@@ -148,6 +149,7 @@ class Session:
                 self.takeProfit = float(self.buyPrice) * self.takeProfitPercent
                 self.sell = self.checkForBackTestSell(data)
             if self.sell:
+                print(self.takeProfit)
                 self.calcPL()
                 logToSlack(colored("--------------------------\n" + self.toString() + "--------------------------",
                               'green') if self.profitLoss > 0 else colored(
@@ -158,7 +160,7 @@ class Session:
                 self.reset()
 
         self.prevData = data
-        return True
+        return False
     def getTotalTrades(self) -> int:
         """
         @:returns count of total trades

@@ -11,15 +11,32 @@ def SMA(data, period=3) :
 
 
 
-def EMA(values, window):
-    """ Numpy implementation of EMA
-    """
-    weights = np.exp(np.linspace(-1., 0., window))
-    weights /= weights.sum()
-    a =  np.convolve(values, weights, mode='full')[:len(values)]
-    a[:window] = a[window]
-    return a
-ewma = pd.Series.ewm
+def EMA(values, alpha = .3, epsilon = 0):
+
+   if not 0 < alpha < 1:
+      raise ValueError("out of range, alpha='%s'" % alpha)
+
+   if not 0 <= epsilon < alpha:
+      raise ValueError("out of range, epsilon='%s'" % epsilon)
+
+   result = [None] * len(values)
+
+   for i in range(len(result)):
+       currentWeight = 1.0
+
+       numerator     = 0
+       denominator   = 0
+       for value in values[i::-1]:
+           numerator     += value * currentWeight
+           denominator   += currentWeight
+
+           currentWeight *= alpha
+           if currentWeight < epsilon: 
+              break
+
+       result[i] = numerator / denominator
+
+   return result
 
 def RSI(prices, n=14):
     deltas = np.diff(prices)

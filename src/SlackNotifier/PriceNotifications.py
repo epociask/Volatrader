@@ -12,7 +12,7 @@ from Indicators import IndicatorFunctions
 from ccxt.base.errors import BadSymbol
 from threading import Lock 
 
-exchange = ccxt.kraken({
+exchange = ccxt.binance({
     'enableRateLimit': True,  # this option enables the built-in rate limiter
 })
 

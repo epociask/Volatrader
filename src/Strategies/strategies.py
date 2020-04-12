@@ -158,9 +158,11 @@ class MA_STRATEGY(strategy):
         self.ma_13_list = []
         self.ma_8_list = []
         self.ma_5_list = []
+        self.macd = []
         self.arr = []
-        self.candleLimit = 13
+        self.candleLimit = 26
         self.sdv = getUpperNormalDistrubtion(pair, candle, 500)
+        self.prevCandle = None 
 
 
     def update(self, data):
@@ -168,7 +170,8 @@ class MA_STRATEGY(strategy):
         if len(self.arr) < self.candleLimit:
 
             self.arr.append(float(data['candle']['close']))
-            print("APPEDEND CANDLE CLOSE", self.arr)
+            # print("APPEDEND CANDLE CLOSE", self.arr)
+            self.prevCandle = data
             return False
         else:
             self.arr.append(float(data['candle']['close']))
@@ -179,14 +182,14 @@ class MA_STRATEGY(strategy):
         val_5 = IndicatorFunctions.SMA(self.arr, 5)[-1] 
         rsi = IndicatorFunctions.RSI(self.arr)[-1]
 
-        print("value 13", val_13)
-        print('value 8', val_8)
-        print("value 5", val_5)
-        if (val_5 > val_13 and val_5 > val_8) and data['candle']['volume'] >=  self.sdv['2SD']:
-            print("data =====================> ", data)
+        # print("value 13", val_13)
+        # print('value 8', val_8)
+        # print("value 5", val_5)
+        if (val_5 > val_13 and val_5 > val_8) and data['candle']['close'] > data['candle']['open'] and  data['candle']['volume'] >=  self.sdv['2SD'] and rsi <= 45 :
+            # print("data =====================> ", data)
             self.arr = []
             return True
 
-
+        self.prevCandle = data
         return False
 

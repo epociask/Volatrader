@@ -60,7 +60,7 @@ def getFromTime(from_datetime: str, pair: Pair, candleSize: Candle):
     five_minute = minute * 5
     thirty_minute = minute * 30
     hold = 30
-    exchange = ccxt.kraken()
+    exchange = ccxt.binance()
 
 
     if candleSize.value == "15m":
@@ -95,7 +95,6 @@ def getFromTime(from_datetime: str, pair: Pair, candleSize: Candle):
             print('Last candle epoch', last, exchange.iso8601(last))
             from_timestamp += len(ohlcvs) * step
             data += ohlcvs
-            time.sleep(5)
 
         except (ccxt.ExchangeError, ccxt.AuthenticationError, ccxt.ExchangeNotAvailable, ccxt.RequestTimeout) as error:
 
@@ -189,7 +188,7 @@ def fetchCandleData(api: ccxt.Exchange, pair: Pair, candleSize: Candle, limit=50
                 --> string type == Timestamp to collect candles from
     """
 
-    return api.fetchOHLCV(pair.value.replace("USD", "/USD"), candleSize.value, limit )
+    return api.fetchOHLCV(pair.value.replace("USD", "/USD"), candleSize.value, limit=limit)
 
 
 def cleanCandlesWithIndicators(data: list) -> list:
@@ -229,7 +228,7 @@ def getCurrentBinancePrice(pair: Pair):
     """
     time.sleep(5)
     req = requests.get(f"https://api.binance.com/api/v1/ticker/price?symbol={pair.value}")
-    return float(req.json()['price'])
+    return float(req.json()['price']), datetime.datetime.now()
 
 
 def getCurrentKrakenPrice(pair: Pair):
@@ -243,4 +242,6 @@ def getCurrentKrakenPrice(pair: Pair):
     req = requests.post("https://api.kraken.com/0/public/Depth", args)
     data = req.json()
     return data['result']['XETHZUSD']['bids'][0][0], data['result']['XETHZUSD']['bids'][0][1]
+
+
 

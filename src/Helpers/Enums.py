@@ -29,12 +29,13 @@ class Pair(Enum):
     Enum to represent all base/quote currency pairs
     """
     ETHUSDT = "ETHUSDT"
-    ETHUSD = 'ETHUSD'
-    BTCUSDT = "BTCUSD"
+    BTCUSDT = "BTCUSDT"
     STXUSDT = "STXUSD"
-    XRPUSDT = 'XRPUSD'
+    XRPUSDT = 'XRPUSDT'
     ATOMBTC = "ATOMUSD"
-    LTCUSDT = 'LTCUSD'
+    LTCUSDT = 'LTCUSDT'
+    LINKUSDT = 'LINKUSDT'
+    ORBS = 'ORBSUSDT'
 
 
 class Time(Enum):

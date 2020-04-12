@@ -6,7 +6,7 @@ from Helpers.Logger import Channel
 from Helpers.Enums import Pair, Candle, SessionType
 from DB.DBReader import DBReader
 from Strategies import strategies
-from Helpers.HelpfulOperators import getCurrentKrakenPrice, fetchCandleData, convertCandlesToDict
+from Helpers.HelpfulOperators import fetchCandleData, convertCandlesToDict, getCurrentBinancePrice
 import ccxt
 import re 
 
@@ -74,10 +74,9 @@ class PaperTrader:
             if first:
                 first = False 
 
-
                 try:
                     print("starting preinstall for strat")
-                    for candle in convertCandlesToDict(fetchCandleData(ccxt.kraken(), self.pair, self.candleSize, self.strategy.candleLimit)):
+                    for candle in convertCandlesToDict(fetchCandleData(ccxt.binance(), self.pair, self.candleSize, self.strategy.candleLimit)):
                         self.tradingSession.update(candle)
 
 
@@ -86,8 +85,9 @@ class PaperTrader:
 
             if (t % self.timeStep == 0 or t == 0) and not sold:
                 time.sleep(6)
-                data = convertCandlesToDict(fetchCandleData(ccxt.kraken(), self.pair, self.candleSize, 1))
+                data = convertCandlesToDict(fetchCandleData(ccxt.binance(), self.pair, self.candleSize, 1))
                 sold = self.tradingSession.update(data[0], True)
+                print("sold status ->", sold)
                 if not sold:    
                     time.sleep(60)
 
@@ -98,6 +98,8 @@ class PaperTrader:
 
             if sold:
                 time.sleep(5)
-                price, ts = getCurrentKrakenPrice(self.pair)
+                price, ts = getCurrentBinancePrice(self.pair)
+                print(f"Checking for sell w/ {self.pair} @ {price}")
                 dummyCandle = {"candle" : {"close": price, "timestamp": ts}}
+                print(dummyCandle)
                 self.tradingSession.update(dummyCandle)

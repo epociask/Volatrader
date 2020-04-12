@@ -21,9 +21,7 @@ class Instance:
         """
           Checks if SL should be calculated
         """
-
-        if self.currentPrice > self.globalHigh or self.slVal == 0:
-            self.slVal = self.slValFunc(float(self.currentPrice))
+        self.slVal = self.slValFunc(float(self.globalHigh))
 
     def setStopLossPercent(self, p) -> None:
         """"
@@ -49,7 +47,7 @@ class Instance:
         toString method
         """
         return str(
-            self.pair + "\n" + "Current price :" + str(self.currentPrice) + "\n" + "Global high :" + str(
+            self.pair.value + "\n" + "Current price :" + str(self.currentPrice) + "\n" + "Global high :" + str(
                 self.globalHigh) + "\n" + "Stoploss value :" + str(self.slVal) + "\n" + "Stoploss percent :" + str(
                 self.percentStopLoss) + "\n")
 
@@ -58,6 +56,7 @@ class Instance:
         @:param price
         @:returns True/False based on percentageSL
         """
+        #print(self.toString())
         if type(price) != float:
             raise TypeError("Wrong parameter.... expecting float")
         self.currentPrice = price
