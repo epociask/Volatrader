@@ -1,111 +1,28 @@
-from datetime import datetime
+import datetime
 import sys, os
+from sys import platform
 sys.path.append(os.path.dirname(os.getcwd()))
-from Helpers.HelpfulOperators import convertNumericTimeToString
-from DB.DBReader import *
-from Helpers.Session import Session
+from Helpers.TimeHelpers import convertNumericTimeToString
+from DataBasePY.DBReader import *
+from Trader.TradeSession import TradeSession
 from Strategies import strategies
-from termcolor import colored
-from Helpers.Enums import Pair, Candle, Time
+from Helpers.Constants.Enums import Pair, Candle, Time
 import ccxt
 import pandas as pd
 from empyrical import max_drawdown, alpha_beta, sharpe_ratio
 from empyrical.periods import DAILY, WEEKLY, MONTHLY, QUARTERLY, YEARLY
 import numpy as np
 import argparse
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-from colorama import init
-from termcolor import cprint 
-from pyfiglet import figlet_format
 import subprocess, platform
-from Indicators import IndicatorFunctions
-
-def clear():
-    if platform.system() == "Windows":
-        subprocess.Popen('cls', shell=True).communicate()
-
-    else:
-        print('\033c', end="")
-
-def printLogo():
-    init(strip=not sys.stdout.isatty()) 
-    cprint(figlet_format('VolaTrade\n Backtest', font='starwars'),
-       'white', 'on_cyan', attrs=['blink'])
-
-def generateGraphs(candle_data, pair, candle, stratString):
-
-    candle_data.index = pd.to_datetime(candle_data['timestamp'])
-    # del candle_data['Unnamed: 0']
-    del candle_data['timestamp']
-
-    fig = make_subplots(rows=1, cols=1)
-    fig1 = make_subplots(rows=1, cols=1)
-    fig1.add_trace(go.Scatter(x = candle_data.index,
-                              y = candle_data['principle'],
-                              name = "Principle"
-                              ))
-
-    fig.update_layout(
-        title={
-            'text': f"BACKTEST SUMMARY FOR {pair.value}/{candle.value} with {stratString}",
-            'y':0.9,
-            'x':0.5,
-            'xanchor': 'center',
-            'yanchor': 'top'})
-
-    fig.add_trace(go.Candlestick(x=candle_data.index, yaxis="y2",
-                        open=candle_data['open'],
-                        high=candle_data['high'],
-                        low=candle_data['low'],
-                        close=candle_data['close'],
-                        name="CANDLES"))
-
-    fig1.update_layout(
-        title={
-            'text': "PRINCIPLE SUMMARY",
-            'y':0.9,
-            'x':0.5,
-            'xanchor': 'center',
-            'yanchor': 'top'})
+from Helpers.DataOperators import printLogo
+from Helpers import TimeHelpers
+from BacktestBuilder import * 
+from Trader.Indicators import IndicatorFunctions
 
 
-    fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['buy'], yaxis="y2", mode='markers', line=dict(color='royalblue', width=4), name = "BUY"))
-    fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['sell'], yaxis="y2", mode='markers', line=dict(color='yellow', width=4), name="SELL"))
-
-    # fig2 = make_subplots(rows=1 , cols=1)
-    fig.add_trace(go.Line(x=candle_data.index, yaxis="y2",
-                           y=candle_data['sma_5'],
-                           name="SMA_5"))
-
-    fig.add_trace(go.Line(x=candle_data.index, yaxis="y2",
-                           y=candle_data['sma_8'],
-                           name="SMA_8"))
-
-    fig.add_trace(go.Line(x=candle_data.index, yaxis="y2",
-                           y=candle_data['sma_15'],
-                           name="SMA_15"))
-
-    fig.add_trace(go.Bar(x = candle_data.index, yaxis="y",
-                        y = candle_data['volume']))
-
-    return [fig, fig1]
-
-def figures_to_html(figs, filename="dashboard.html"):
-    if os.path.exists(filename):
-        os.remove(filename) #this deletes the file
-    dashboard = open(filename, 'w')
-    dashboard.write("<html><head></head><body>" + "\n")
-    for fig in figs:
-        inner_html = fig.to_html().split('<body>')[1].split('</body>')[0]
-        dashboard.write(inner_html)
-    dashboard.write("</body></html>" + "\n")
-    return filename
-
-
-def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProfitPercent, principle, shouldOutputToConsole = True, readFromDataBase=False, timeStart=None, outputGraph=False) -> Session:
+def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int, takeProfitPercent: int, principle: int, timeStart: Time, readFromDataBase=False, outputGraph=False):
     """
-    main backtest function, prints backtest results
+    main backtest function, prints backtest results, outputs graph results to html if desired 
     @:param pair -> pair you wish to run backtest on
     @:param candleSize -> size of candle you wish to use
     @:param strategy -> Buying strategy that you wish to implement
@@ -123,75 +40,40 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
     stratString = strategy
     strategy = strategies.getStrat(stratString)
     strategy = strategy(pair, candleSize, principle)
-    backTestingSession = Session(pair, strategy, takeProfitPercent, stopLossPercent, stratString, SessionType.BACKTEST)
-    printLogo()
+    backTestingSession = TradeSession(pair, strategy, takeProfitPercent, stopLossPercent, stratString, SessionType.BACKTEST)
+    printLogo(type=SessionType.BACKTEST)
+
+
     if readFromDataBase:
         reader = DBReader()
-
         DataSet = reader.fetchCandlesWithIndicators(pair, candleSize)
 
     else:
+        DataSet = DataOperators.convertCandlesToDict(DataOperators.getCandlesFromTime(convertNumericTimeToString(TimeHelpers.rewind(str(datetime.datetime.now())[0: -7], 60, timeStart.value )), pair, candleSize))
 
-        if timeStart is not None:
-            DataSet = HelpfulOperators.convertCandlesToDict(HelpfulOperators.getFromTime(timeStart, pair, candleSize))
-
-        else:
-            DataSet = HelpfulOperators.convertCandlesToDict(HelpfulOperators.fetchCandleData(ccxt.binance(), pair, candleSize, 500))
+        # else:
+        #     DataSet = DataOperators.convertCandlesToDict(DataOperators.fetchCandleData(ccxt.binance(), pair, candleSize, 500))
 
     DataSet = sorted(DataSet, key=lambda i: int(i['candle']['timestamp']), reverse=False)
 
-    start = HelpfulOperators.convertNumericTimeToString(DataSet[0]['candle']['timestamp']) if type(DataSet[0]['candle']['timestamp']) is int else DataSet[0]['candle']['timestamp']
-    finish = HelpfulOperators.convertNumericTimeToString(DataSet[-1]['candle']['timestamp'])   if type(DataSet[-1]['candle']['timestamp']) is int else DataSet[-1]['candle']['timestamp']
-    count = 0 
     for candle in DataSet:
         backTestingSession.update(candle)
-        # if count % 3 == 0:
-        #   clear()
-
-        # count+=1
 
 
-    if shouldOutputToConsole:
-        print(colored(
-            "\n\n"
-            "------------------------------------------------------------------------------------------------------------\n",
-            attrs=['bold']))
-    
+    # Printing Results
+    start = TimeHelpers.convertNumericTimeToString(DataSet[0]['candle']['timestamp']) if type(DataSet[0]['candle']['timestamp']) is int else DataSet[0]['candle']['timestamp']
+    finish = TimeHelpers.convertNumericTimeToString(DataSet[-1]['candle']['timestamp'])   if type(DataSet[-1]['candle']['timestamp']) is int else DataSet[-1]['candle']['timestamp']
 
-
-    endingPrice = float(principle + float(principle * (backTestingSession.getTotalPL() * .01)))
-    endVal = colored("\t\tEnding Price: ", attrs=['bold']) + "$" + (
-        colored(str(endingPrice), "blue") if float(endingPrice) > float(principle) else colored(str(endingPrice),
-                                                                                                "red"))
+    totalPl = backTestingSession.getTotalPL()
+    endingPrice = float(principle + float(principle * (totalPl * .01)))
 
     gainCount, lossCount = backTestingSession.getTradeData()
 
-    print(
-        f"\t\tPair: {pair.value}" + f"\n\t\tCandleSize: {candleSize.value}" +
-        colored("\n\t\t Starting Principle Amount: $", attrs=['bold']) + str(principle) + "\n" +
-        endVal +
-        "\n\t\t" + colored("Total Profit Loss: ", attrs=['bold']) + (
-            colored(f"+%{str(backTestingSession.getTotalPL())}", "green",
-                    attrs=['underline']) if backTestingSession.getTotalPL() > 0 else colored(
-                str(f"%{backTestingSession.getTotalPL()}%"), "red")) +
-        colored("\n\t\tTotal Trades: ",
-                attrs=['bold']) + f"{colored(backTestingSession.getTotalTrades(), 'magenta', attrs=['underline'])}"
-                                  "\n\t\t" + colored("Starting Time:  ", attrs=['bold']) + colored(start, attrs=[
-            "underline"]) +
-        "\n\t\t" + colored("Finish: ", attrs=['bold']) + colored(finish, attrs=["underline"]) +
-        colored("\n\t\t Number of profitable trades: ", attrs=['bold']) + f'{colored(str(gainCount), "blue")}' +
-        "\n\t\t" + colored("Number of unprofitable trades: ", attrs=['bold']) + colored((lossCount), "red") +
-        '\n\t\t' + f"Take Profit: {takeProfitPercent}" +
-        '\n\t\t' + f"Stop Loss: {stopLossPercent}"
-    )
-    print(colored(f"\t\tSharp ratio: {sharpe_ratio(np.array(backTestingSession.profitlosses))}"))
-    print(f"\n\t\tMax Drawdown: {max_drawdown(np.array(backTestingSession.profitlosses))}")
+    print(getBacktestResultsString(stratString, candleSize, pair, principle, endingPrice, totalPl, 
+        gainCount+lossCount, start, finish, gainCount, lossCount, stopLossPercent, takeProfitPercent))
 
-    print(colored(
-        "\n"
-        "------------------------------------------------------------------------------------------------------------\n",
-        attrs=['bold']))
 
+    # Outputs Graphs to dashboard.html, rename file to save for future reference
     if outputGraph:
         getInt = lambda val : int(convertNumericTimeToString(val['buytime'])[8 : 10])
         results = backTestingSession.getResults()['tradeResults']
@@ -206,7 +88,7 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
 
             else:
                 ts = getInt(val)
-               
+            
                 timestamps.append(convertNumericTimeToString(prevData['buytime'])[0 : 10])
                 profitlosses.append(pl)
                 pl = val['profitloss']
@@ -215,6 +97,7 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
         buyTimes = [e['buytime'] for e in results]
         sellTimes = [e['selltime'] for e in results]
         pls = [e['profitloss'] for e in results]
+        print('profit losses ----------->', pls)
         candles = [e['candle'] for e in DataSet]
         plIndex = 0
         candleLimit = 15
@@ -223,40 +106,45 @@ def backTest(pair: Pair, candleSize: Candle, strategy, stopLossPercent, takeProf
             if candle['timestamp'] in buyTimes:
                 candle['buy'] = candle['close']
                 candle['sell'] = "NaN"
-                candle['principle'] = principle
 
             elif candle['timestamp'] in sellTimes:
                 candle['sell'] = candle['close']
-                principle = float(principle + float(principle * (pls[plIndex] * .01)))
-                candle['principle'] = principle
                 candle['buy'] = 'NaN'
                 plIndex+=1
 
             else:
                 candle['sell'] = 'NaN'
                 candle['buy'] = 'NaN'
-                candle['principle'] = principle
 
             if candleLimit <= 0:
                 candle['sma_15'] = IndicatorFunctions.SMA(closes, 15)[-1]
                 candle['sma_5'] = IndicatorFunctions.SMA(closes, 5)[-1]
                 candle['sma_8'] = IndicatorFunctions.SMA(closes, 8)[-1]
             candle['timestamp'] = convertNumericTimeToString(candle['timestamp'])
+            candle['principle'] = backTestingSession.principleOverTime[index]
             candles[index] = candle
 
             closes.append(candle['close'])
             candleLimit -= 1 
                 
-
-        pnl_returns = pd.Series(index=timestamps, data=profitlosses)
+        sharpe_ratios = []
+        temp = []
+        for pnl in profitlosses:
+            temp.append(pnl)
+            sharpe_ratios.append(sharpe_ratio(np.array(temp)))
         candles_returns = pd.DataFrame(candles)
         filename = figures_to_html(generateGraphs(candles_returns, pair, candleSize, stratString))
-        os.system(f"start {filename}")
+
+        # Open html doc on windows or mac
+        os.system(f"{'start' if platform.system() == 'Windows' else 'open'} {filename}")
+
 
 
 def main(args):
     print("RUNNING BACKTEST WITH ARGS: ", args)
-    backTest(args.pair, args.candleSize, args.strategy, args.stoploss, args.takeprofit, args.principle, args.readFromDatabase, outputGraph=args.outputGraph, timeStart="2020-04-01 00:00:00")
+    print(type(args.time))
+    backTest(args.pair, args.candleSize, args.strategy, args.stoploss, args.takeprofit, args.principle, Time[args.time], readFromDataBase=args.readFromDatabase,  outputGraph=args.outputGraph)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Use this to backtest your strategies")
@@ -276,7 +164,7 @@ if __name__ == '__main__':
                     help="Reads from database if true, otherwise gets live candle data from API")
     parser.add_argument('--outputGraph', type=bool, default=True,
                     help="Outputs backtest results into csv if true, otherwise does not")
-    parser.add_argument('-t','--time', type=Time, default=Time.MONTH,
+    parser.add_argument('-t','--time', type=str, default="MONTH",
                     help="Total time to backtest on")
 
     args = parser.parse_args()
