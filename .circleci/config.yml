@@ -14,12 +14,12 @@ jobs:
       - python/load-cache
       - python/install-deps
       - python/save-cache
-      - run:
-          name: "Creating DB config"
-          command: "sh create_db.sh"
-      - run:
-          name: "Running unit tests"
-          command: "python -m unittest src/test/*.py -v"
+      # - run:
+      #     name: "Creating DB config"
+      #     command: "sh create_db.sh"
+      # - run:
+      #     name: "Running unit tests"
+      #     command: "python -m unittest src/test/*.py -v"
 
   deploy:
     docker:
@@ -29,12 +29,12 @@ jobs:
       - python/load-cache
       - python/install-deps
       - python/save-cache
-      - run:
-          name: "Creating DB config"
-          command: "sh create_db.sh"
-      - run:
-          name: "Running unit tests"
-          command: "python -m unittest src/test/*.py -v"
+      # - run:
+      #     name: "Creating DB config"
+      #     command: "sh create_db.sh"
+      # - run:
+      #     name: "Running unit tests"
+      #     command: "python -m unittest src/test/*.py -v"
       - run:
           name: "Deploying to digital ocean"
           command: "sh deploy.sh"
