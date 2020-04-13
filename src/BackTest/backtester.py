@@ -18,7 +18,8 @@ from Helpers.DataOperators import printLogo
 from Helpers import TimeHelpers
 from BacktestBuilder import * 
 from Trader.Indicators import IndicatorFunctions
-
+import warnings
+warnings.filterwarnings("ignore")
 
 def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int, takeProfitPercent: int, principle: int, timeStart: Time, readFromDataBase=False, outputGraph=False):
     """
@@ -72,11 +73,13 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
     print(getBacktestResultsString(stratString, candleSize, pair, principle, endingPrice, totalPl, 
         gainCount+lossCount, start, finish, gainCount, lossCount, stopLossPercent, takeProfitPercent))
 
+    
 
     # Outputs Graphs to dashboard.html, rename file to save for future reference
     if outputGraph:
-        getInt = lambda val : int(convertNumericTimeToString(val['buytime'])[8 : 10])
+        getInt = lambda val : int((val['buytime'][8 : 10]))
         results = backTestingSession.getResults()['tradeResults']
+        # generateTransactionHistoryTable(results)
         ts = getInt(results[0])
         timestamps = []
         profitlosses = []
@@ -89,19 +92,22 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
             else:
                 ts = getInt(val)
             
-                timestamps.append(convertNumericTimeToString(prevData['buytime'])[0 : 10])
+                timestamps.append(prevData['buytime'][0 : 10])
                 profitlosses.append(pl)
                 pl = val['profitloss']
             prevData = val
+        rolling_sharps = pd.Series(profitlosses, index=pd.DatetimeIndex(timestamps), name='Date')
+        
 
+        # print(rolling_sharps)
         buyTimes = [e['buytime'] for e in results]
         sellTimes = [e['selltime'] for e in results]
         pls = [e['profitloss'] for e in results]
-        print('profit losses ----------->', pls)
+        # print('profit losses ----------->', pls)
         candles = [e['candle'] for e in DataSet]
         plIndex = 0
         candleLimit = 15
-        closes = []
+        closes = [] 
         for index, candle in enumerate(candles):
             if candle['timestamp'] in buyTimes:
                 candle['buy'] = candle['close']
@@ -132,8 +138,12 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
         for pnl in profitlosses:
             temp.append(pnl)
             sharpe_ratios.append(sharpe_ratio(np.array(temp)))
+        
         candles_returns = pd.DataFrame(candles)
-        filename = figures_to_html(generateGraphs(candles_returns, pair, candleSize, stratString))
+        candles_returns.index = pd.to_datetime(candles_returns['timestamp'])
+        del candles_returns['timestamp']
+
+        filename = figures_to_html(generateGraphs(candles_returns, pair, candleSize, stratString, results))
 
         # Open html doc on windows or mac
         os.system(f"{'start' if platform.system() == 'Windows' else 'open'} {filename}")

@@ -4,6 +4,8 @@ import pandas as pd
 import os 
 from Helpers.Constants.Enums import *
 from termcolor import colored
+import numpy as np
+
 
 def figures_to_html(figs, filename="dashboard.html"):
     if os.path.exists(filename):
@@ -25,7 +27,7 @@ def getBacktestResultsString(strategy, candleSize: Candle, pair: Pair, principle
     returnString+=f"\t\tResults for {strategy}"
     returnString+=f"\n\t\tPair: {pair.value}"
     returnString+=f"\n\t\tCandle Size: {candleSize.value}"
-    returnString+=f"\n\t\t'Starting Principle Amount: ${str(principle)}"
+    returnString+=f"\n\t\tStarting Principle Amount: ${str(principle)}"
     returnString+=f"\n\t\tFinal Portfolio Value: ${finalValStr}"
     returnString+=f"\n\t\tTotal PnL: {totalPlStr}%"
     returnString+=f"\n\t\tTotal Trades: {totalTrades}"
@@ -39,57 +41,101 @@ def getBacktestResultsString(strategy, candleSize: Candle, pair: Pair, principle
     return returnString
 
 
-def generateGraphs(candle_data: pd.DataFrame, pair: Pair, candle: Candle, stratString: str):
 
-    candle_data.index = pd.to_datetime(candle_data['timestamp'])
-    del candle_data['timestamp']
+# Returns a candlestick graph with buy and sell points
+def generateCandleGraph(candle_data: pd.DataFrame, pair: Pair, candle: Candle, stratString: str):
+
+    fig = make_subplots(rows=2, cols=1)
+    fig.update_layout(title={
+        'text': f"BACKTEST SUMMARY FOR {pair.value}/{candle.value} with {stratString}",
+        'y':0.9,
+        'x':0.5,
+        'xanchor': 'center',
+        'yanchor': 'top'})
+
+    color = []
+    for index, row in candle_data.iterrows():
+        if row['close'] >row['open']:
+            color.append('green')
+        else:
+            color.append('red')
+    
+    fig.add_trace(go.Candlestick(x=candle_data.index, yaxis="y2",
+                    open=candle_data['open'],
+                    high=candle_data['high'],
+                    low=candle_data['low'],
+                    close=candle_data['close'],
+                    name="CANDLES"), row=1, col=1)
+
+    fig.add_trace(go.Bar(x=candle_data.index, y=candle_data['volume'], name="Volume", marker=dict(color=color), yaxis='y'), row=2, col=1)
+
+
+    fig.add_trace(go.Line(x=candle_data.index, yaxis="y2",
+                        y=candle_data['sma_5'],
+                        name="SMA_5"), row=1, col=1)
+
+    fig.add_trace(go.Line(x=candle_data.index, yaxis="y2",
+                        y=candle_data['sma_8'],
+                        name="SMA_8"), row=1, col=1)
+
+    fig.add_trace(go.Line(x=candle_data.index, yaxis="y2",
+                        y=candle_data['sma_15'],
+                        name="SMA_15"), row=1, col=1)
+    
+
+
+    fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['buy'], yaxis="y2", mode='markers', line=dict(color='royalblue', width=4), name = "BUY"), row=1, col=1)
+    fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['sell'], yaxis="y2", mode='markers', line=dict(color='yellow', width=4), name="SELL"), row=1, col=1)
+
+    return fig
+
+import Helpers.TimeHelpers
+# buytime buyprice, selltime sellprice profitloss
+def generateTransactionHistoryTable(results):
+    df = pd.DataFrame(results)
+    cols = ['<b>Transaction Number</b>']
+    cols = cols + [f"<b>{e.capitalize()}</b>" for e in df.columns]
+
+    fig = go.Figure(data=[go.Table(
+        header=dict(
+            values=list(cols),
+            fill_color='paleturquoise',
+            align='left',
+            font=dict(color='black', size=14)),
+        cells=dict(values=[df.index, df.buytime, df.buyprice, df.selltime, df.sellprice, df.profitloss],
+        fill_color='lavender',
+        align='left',))
+    ])
+
+    fig.update_layout(title={
+        'text': "Transaction History"
+    })
+
+    return fig
+
+
+def generateLinePlot(data, y_value, graph_title):
     fig = make_subplots(rows=1, cols=1)
-    fig1 = make_subplots(rows=1, cols=1)
-    fig1.add_trace(go.Scatter(x = candle_data.index,
-                              y = candle_data['principle'],
-                              name = "Principle"
-                              ))
+    fig.add_trace(go.Scatter(x = data.index,
+                        y = data[y_value],
+                        name = y_value.upper()))    
 
     fig.update_layout(
-        title={
-            'text': f"BACKTEST SUMMARY FOR {pair.value}/{candle.value} with {stratString}",
-            'y':0.9,
-            'x':0.5,
-            'xanchor': 'center',
-            'yanchor': 'top'})
-
-    fig.add_trace(go.Candlestick(x=candle_data.index, yaxis="y2",
-                        open=candle_data['open'],
-                        high=candle_data['high'],
-                        low=candle_data['low'],
-                        close=candle_data['close'],
-                        name="CANDLES"))
-    
-    fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['buy'], yaxis="y2", mode='markers', line=dict(color='royalblue', width=4), name = "BUY"))
-    fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['sell'], yaxis="y2", mode='markers', line=dict(color='yellow', width=4), name="SELL"))
-
-    # fig2 = make_subplots(rows=1 , cols=1)
-    fig.add_trace(go.Line(x=candle_data.index, yaxis="y2",
-                           y=candle_data['sma_5'],
-                           name="SMA_5"))
-
-    fig.add_trace(go.Line(x=candle_data.index, yaxis="y2",
-                           y=candle_data['sma_8'],
-                           name="SMA_8"))
-
-    fig.add_trace(go.Line(x=candle_data.index, yaxis="y2",
-                           y=candle_data['sma_15'],
-                           name="SMA_15"))
-
-    fig.add_trace(go.Bar(x = candle_data.index, yaxis="y",
-                        y = candle_data['volume']))
-
-    fig1.update_layout(
-        title={
-            'text': "PRINCIPLE SUMMARY",
-            'y':0.9,
-            'x':0.5,
-        }
+            title={
+                'text': graph_title,
+                'y':0.9,
+                'x':0.5,
+            },
+      
     )
+    
+        
+    return fig
 
-    return [fig, fig1]
+
+
+def generateGraphs(candle_data: pd.DataFrame, pair: Pair, candle: Candle, stratString: str, results):
+    candleGraph = generateCandleGraph(candle_data, pair, candle, stratString)
+    linePlot = generateLinePlot(candle_data, 'principle', "Principle Over Time")
+    transactions = generateTransactionHistoryTable(results)
+    return [candleGraph, linePlot, transactions] 
