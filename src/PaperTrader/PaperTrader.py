@@ -1,14 +1,16 @@
 import time
 from datetime import datetime
 from Helpers.Logger import logToSlack, logDebugToFile
-from Helpers.Session import Session
+from Trader.TradeSession import TradeSession
 from Helpers.Logger import Channel
-from Helpers.Enums import Pair, Candle, SessionType
-from DB.DBReader import DBReader
+from Helpers.Constants.Enums import Pair, Candle, SessionType
+from DataBasePY.DBReader import DBReader
 from Strategies import strategies
-from Helpers.HelpfulOperators import fetchCandleData, convertCandlesToDict, getCurrentBinancePrice
+from Helpers.DataOperators import fetchCandleData, convertCandlesToDict
+from Helpers.API.MarketFunctions import getCurrentBinancePrice
 import ccxt
 import re 
+from Helpers.DataOperators import printLogo
 
 convertToVal = lambda candleEnum: candleEnum.value[0: len(candleEnum.value) - 2]
 
@@ -26,7 +28,6 @@ class PaperTrader:
         self.takeProfitPercent = None
         self.stopLossPercent = None
         self.principle = None
-
 
 
     def getResults(self) -> str:
@@ -54,7 +55,7 @@ class PaperTrader:
         strategy = strategies.getStrat(self.stratName)
         self.strategy = strategy(pair, candleSize, principle)
         self.stopLossPercent = stopLossPercent
-        self.tradingSession = Session(pair, self.strategy, takeProfitPercent, self.stopLossPercent, self.stratName,
+        self.tradingSession = TradeSession(pair, self.strategy, takeProfitPercent, self.stopLossPercent, self.stratName,
                                     SessionType.PAPERTRADE)
         self.principle = principle
         self.start()
@@ -65,6 +66,7 @@ class PaperTrader:
 
         :return:
         """
+        printLogo(SessionType.PAPERTRADE)
         first = True 
         sold = False 
         logToSlack(f"Starting Paper Trader for {self.pair.value}/{self.candleSize.value} \nstrat: {self.stratName}\n takeprofit: %{int(self.takeProfitPercent)}\n stoploss: %{self.stopLossPercent}", channel=Channel.PAPERTRADER)

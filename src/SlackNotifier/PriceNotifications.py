@@ -5,10 +5,10 @@ from threading import Thread
 import ccxt
 import sys, os
 sys.path.append(os.path.dirname(os.getcwd()))
-from DB.DBoperations import DBoperations
-from Helpers.Enums import Pair, Candle
+from DataBasePY.DBoperations import DBoperations
+from Helpers.Constants.Enums import Pair, Candle
 from Helpers.Logger import logToSlack, Channel, logDebugToFile
-from Indicators import IndicatorFunctions
+from Trader.Indicators import IndicatorFunctions
 from ccxt.base.errors import BadSymbol
 from threading import Lock 
 
@@ -20,7 +20,7 @@ lock = Lock()
 
 def getVolumeData(pair: str, candleSize: Candle):
 	logDebugToFile(f"Getting volume data for {pair} {candleSize}")
-	pair = pair.value.replace("USD", "/USD") if type(pair) is not str else pair
+	pair = pair.value.replace("USDT", "/USDT") if type(pair) is not str else pair
 	candles = exchange.fetchOHLCV(pair, candleSize.value)
 	return [float(e[5]) for e in candles]
 
@@ -43,7 +43,7 @@ def getUpperNormalDistrubtion(pair: Pair, candleSize: Candle, volume=None):
 		}
 
 	except BadSymbol:
-		raise BadSymbol("Bad symbol provided to Kraken")
+		raise BadSymbol("Bad symbol provided to Binance")
 
 	finally:
 		lock.release()
@@ -56,7 +56,7 @@ def getUrl(pair: str, candleSize: Candle):
 	
 
 def crossover(pair, candleSize):		
-	pair = pair.value.replace("USD", "/USD") if type(pair) is not str else pair
+	pair = pair.value.replace("USDT", "/USDT") if type(pair) is not str else pair
 	global lock
 	lock.aquire()
 	try:
@@ -101,6 +101,7 @@ def sendAbnormalVolumeNotification(pair: Pair):
 	global exchange
 	isCorrectTime = lambda t,val : t % val == 0 or t == 0
 	first = True 
+
 	while True:
 		t = int(str(datetime.now())[14:16])
 		# 5m
@@ -109,6 +110,8 @@ def sendAbnormalVolumeNotification(pair: Pair):
 			print("Ending thread ", Thread.name)
 			return 
 		if isCorrectTime(t, 5):
+			print("5m")
+
 			logDebugToFile("5 MIN TIME INTERVAL")
 			stdDict_5m = getUpperNormalDistrubtion(pair, Candle.FIVE_MINUTE)
 			handleLogging(stdDict_5m, pair, Candle.FIVE_MINUTE)
@@ -116,12 +119,16 @@ def sendAbnormalVolumeNotification(pair: Pair):
 		# 15m
 
 		elif isCorrectTime(t, 15):
+			print("15m")
+
 			logDebugToFile("15 MIN TIME INTERVAL")
 			stdDict_15m = getUpperNormalDistrubtion(pair, Candle.FIFTEEEN_MINUTE)
 			handleLogging(stdDict_15m, pair, Candle.FIFTEEEN_MINUTE)
 		# 30m
 
 		elif isCorrectTime(t, 30):
+			print("30m")
+
 			logDebugToFile("30 MIN TIME INTERVAL")
 			stdDict_30m = getUpperNormalDistrubtion(pair, Candle.THIRTY_MINUTE)
 			handleLogging(stdDict_30m, pair, Candle.THIRTY_MINUTE)

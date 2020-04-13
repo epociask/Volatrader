@@ -1,13 +1,14 @@
 from datetime import datetime
 from threading import Thread
-from API.CMC_api import getTopPercentChange, getTopVolumeCoins
-from Helpers.Enums import Pair
+from Helpers.API.CMC_api import getTopPercentChange, getTopVolumeCoins
+from Helpers.Constants.Enums import Pair
 from Helpers.Logger import logToSlack, Channel
 from SlackNotifier.PriceNotifications import sendAbnormalVolumeNotification
 from queue import Queue
 import nest_asyncio
 import threading
 import time
+from Helpers.DataOperators import printLogo
 nest_asyncio.apply()
 
 
@@ -23,6 +24,8 @@ def updateQue(l: list):
         print("starting for thread ", thread.getName())
         thread.start()
 if __name__ == '__main__':
+
+    printLogo(None)
     hasRun = False
     try:
         while True:
