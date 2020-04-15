@@ -21,7 +21,7 @@ from Trader.Indicators import IndicatorFunctions
 import warnings
 warnings.filterwarnings("ignore")
 
-def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int, takeProfitPercent: int, principle: int, timeStart: Time, readFromDataBase=False, outputGraph=False, market=ccxt.binance()):
+def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int, takeProfitPercent: int, principle: int, timeStart: Time, readFromDataBase=False, outputGraph=False, market=Market.BINANCE):
     """
     main backtest function, prints backtest results, outputs graph results to html if desired 
     @:param pair -> pair you wish to run backtest on
@@ -70,7 +70,7 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
 
     gainCount, lossCount = backTestingSession.getTradeData()
 
-    print(getBacktestResultsString(stratString, candleSize, pair, principle, endingPrice, totalPl, 
+    print(getBacktestResultsString(backTestingSession.getTotalFees(), stratString, candleSize, pair, principle, endingPrice, totalPl, 
         gainCount+lossCount, start, finish, gainCount, lossCount, stopLossPercent, takeProfitPercent, stratString, strategy.indicators))
 
     
@@ -161,12 +161,14 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
         candles_returns.index = pd.to_datetime(candles_returns['timestamp'])
         del candles_returns['timestamp']
 
-        filename = figures_to_html(getBacktestResultsString(stratString, candleSize, pair, principle, endingPrice, totalPl, 
+        filename = figures_to_html(getBacktestResultsString(backTestingSession.getTotalFees(), stratString, candleSize, pair, principle, endingPrice, totalPl, 
         (int(gainCount)+int(lossCount)), start, finish, gainCount, lossCount, stopLossPercent, takeProfitPercent, stratString, strategy.indicators, html=True), generateGraphs(candles_returns, pair, candleSize, stratString, results, strategy, rolling_sharps))
 
         # Open html doc on windows or mac
         os.system(f"{'start' if platform.system() == 'Windows' else 'open'} {filename}")
+        return 
 
+    return totalPl
 
 
 def main(args):

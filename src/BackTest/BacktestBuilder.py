@@ -21,7 +21,7 @@ def figures_to_html(string, figs, filename="analysis.html"):
     dashboard.write("</body></html>" + "\n")
     return filename
 
-def getBacktestResultsString(strategy, candleSize: Candle, pair: Pair, principle: int, endValue: float, totalPl: float, totalTrades, startDate, endDate, profitable, unprofitable , stopLoss, takeProfit, stratString: str, indicators: list, html=False):
+def getBacktestResultsString(fees, strategy, candleSize: Candle, pair: Pair, principle: int, endValue: float, totalPl: float, totalTrades, startDate, endDate, profitable, unprofitable , stopLoss, takeProfit, stratString: str, indicators: list, html=False):
     stratString = stratString.replace("_", " ").lower().title()
     valColor = 'green' if endValue > principle else 'red'
     totalPl = colored(str(totalPl)+ "%", valColor, attrs=['bold']) if not html else totalPl
@@ -41,8 +41,8 @@ def getBacktestResultsString(strategy, candleSize: Candle, pair: Pair, principle
     returnString+=("<h font-family: \'fantasy\'><br><strong>" if html else "") + "\n\t\tProfitable Trades: " + ("</strong>" if html else "") + (colored(str(profitable), 'green') if not html else str(profitable)) +  ("</h>" if html else "")
     returnString+= ("<h font-family: \'fantasy\'><br><strong>" if html else "") + "\n\t\tUnprofitable Trades: " +("</strong>" if html else "") + (colored(str(unprofitable), 'red') if not html else str(unprofitable)) +  ("</h>" if html else "")
     returnString+= ("<h font-family: \'fantasy\'><br><strong>" if html else "") + "\n\t\tTake Profit: " + ("</strong>" if html else "") +  f"{takeProfit[1:3]}%" +  ("</h>" if html else "")
-    returnString+= ("<h font-family: \'fantasy\'><br><strong>" if html else "") + "\n\t\tStop Loss: " + ("</strong>" if html else "") + f"{stopLoss}%"+  ("</h>" if html else "")
-
+    returnString+= ("<h font-family: \'fantasy\'><br><strong>" if html else "") + "\n\t\tStop Loss: " + ("</strong>" if html else "") + f"{stopLoss}%" + ("</h>" if html else "")
+    returnString+= ("<h font-family: \'fantasy\'><br><strong>" if html else "") + "\n\t\tTotal Fees: " + ("</strong>" if html else "") + f"${fees}" + ("</h>" if html else "")
     return returnString
 
 

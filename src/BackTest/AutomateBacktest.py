@@ -1,26 +1,38 @@
-from BackTest.backtester import backTest
-from DB.DBwriter import DBwriter
-from Helpers.Enums import Pair, Candle, Time
+import os 
+import sys
+from sys import platform
+sys.path.append(os.path.dirname(os.getcwd()))
+from BackTest.BackTester import backTest
+from Helpers.Constants.Enums import Pair, Candle, Time
+import argparse
+import os 
 
-writer = DBwriter()
 
-pairs = []
-
-
-def automateAndVariate(pair: Pair, candleSizes: list, stopLossRange: int, takeProfitRange: int, strategy, timeFrame=None, principle=1000):
-    for sl in range(stopLossRange):
-        sl+=1
-
-        for tp in range(takeProfitRange):
-            tp+=1
+def automateAndVariate(pairs: list, candleSizes: list, stopLossRange: int, strategy, timeFrame=None, principle=1000):
+    results = {}
+    for pair in pairs:
+        pair = Pair(pair)    
+    
+        for sl in range(stopLossRange):
+            sl+=1
+            tp = sl * 2
             for candleSize in candleSizes:
+                candleSize = Candle(candleSize)
+                result = backTest(pair, candleSize, strategy, sl, tp, principle, outputGraph=False, timeStart=Time["TWOWEEK"])
+                results[result] = [pair, candleSize, sl, tp]
+                os.system("cls")
 
-                if timeFrame is None:
-                    backTest(pair, candleSize, strategy, sl, tp, principle, shouldOutputToConsole=False)
+    best = 0
+    for result in results.keys():
+        if int(result) > best:
+            best = result 
 
-                else:
-                    backTest(pair, candleSize, strategy, sl, tp, principle, timeEnum=timeFrame, shouldOutputToConsole=False)
+    best_results = results[best]
 
+    print("RUNNING BEST RESULT TO WEBPAGE")
+    backTest(best_results[0], best_results[1], strategy, best_results[2], best_results[3], principle, outputGraph=True, timeStart=Time["TWOWEEK"])
+if __name__ == "__main__":
 
-automateAndVariate(Pair.ETHUSDT, [Candle.FIFTEEEN_MINUTE, Candle.FIVE_MINUTE, Candle.THIRTY_MINUTE], 4, 4,
-                "BBANDS_STRAT", Time.ONEWEEK)
+    automateAndVariate(['ETHUSDT', 'BTCUSDT', 'XRPUSDT'], ['5m', '15m', '30m'], 4, 'FIFTY_MOVING_AVERAGE_STRATEGY', 'TWOWEEK', 10000)
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument("--Pairs")
