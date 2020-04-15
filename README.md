@@ -1,40 +1,45 @@
-# CCXT-TRADER
+# The Volatrader
 
 --- author/creator =  @epociask ---
 --- author/creator = @a-drain ---
 
-## ***GENERAL COMPONENTS***
-1. [Backtester ](#Backtester)
-2. [_LiveTrader_](#LiveTrader)
-3. [_DataBase_](#DataBase)
-4. [_PaperTrader_](#PaperTrader)
+## Installation
+1. Clone the repo
+2. Create a python 3.7+ [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands)
+environment or a python virtualenv (do this so you dont have to worry about non-compatible dependencies/python versions and shit, can get annoying to deal with)
+3. Run `pip install -r requirements.txt` to get all the deps ya need
+4. Run something! Examples commands down below :)
 
+## Components
+1. [Backtester](#Backtester)
+2. [PaperTrader](#PaperTrader)
+3. [LiveTrader](#LiveTrader)
+4. [DataBase](#DataBase)
 
 
 ## Backtester
--- In baby phase, will need a lot of work
+To run a backtest, make sure you're in `src/BackTest` and run the following:
+```bash
+python Backtester.py -p <Pair> --candleSize <candlesize> --strategy <strategy> -sl <stoploss percentage> -tp <take profit percentage> --principle <principle> --readFromDatabase <optional; false> --outputGraph True -t <timet to backtest on>
+```
 
-
-### TO RUN (for now)
-1. Add `BINANCE_API_KEY` and `BINANCE_SECRET_KEY` to your path
-2. Make sure you have data in your local DB
-2. `py backtester.py`
-
+## PaperTrader
+To start a paper trading instance, run the following replacing <> with your own params
+```bash
+python PaperTraderDriver.py --pair <pair> --candlesize <candlesize> --strategy <strat> -sl <stoploss> -tp <takeprofit> -pr <principle>   
+```
 
 ## LiveTrader
-###  *(LIVETRADER)* CCXT TRAILING STOP LOSS (FUNCTIONAL APPROACH)
-let's ensure our investments don't crumble when the market decides to move unfavorably :)
+Yet to be implemented; Let's figure out a working strat before we blow all of our cash ;)
 
-
-#### TO RUN (for now)
-1. Ensure your api keys are put in the dictionary objects in ` authent.py `
-2. Make sure dependable packages are installed in `requirements.txt`
 
 ## DataBase
-
 ### To Access
-Ensure postgresql is installed
+Ensure [postgresql](https://www.postgresql.org/download/) is installed
 
+
+### Digital Ocean Database login info
+TODO: Move this info somewhere a bit more secure
 ```
 [postgresql]
 user=doadmin
@@ -46,29 +51,10 @@ database=defaultdb
 ```
 
 
-
-### To deploy:
-`git push heroku master`
-
-### To ssh into Heroku server:
-1. Make sure you've logged into Heroku via `heroku login`
-2. Pushing to heroku remote's master branch will deploy the code to Heroku
-3. `git push heroku master` will install deps and run
-4. `heroku run bash` will open a cli in the server
-
 ### HELPFUL LINKS
 
-[https://www.draw.io/#G1G2SjvvMVBpf-aHM6BmQZrGi0ucy79wNO]
+- [High Level Architecture Diagram](https://www.draw.io/#G1G2SjvvMVBpf-aHM6BmQZrGi0ucy79wNO)
+- [CCXT](https://github.com/ccxt/ccxt)
+- [Medium article about writing a trading bot with python lol](https://medium.com/@maxAvdyushkin/writing-crypto-trading-bot-in-python-with-telegram-and-ccxt-80632a00c637)
+- [Medium article about using ccxt](https://medium.com/coinmonks/python-scripts-for-ccxt-crypto-candlestick-ohlcv-charting-data-83926fa16a13)
 
-https://github.com/ccxt/ccxt]
-
-[https://medium.com/@maxAvdyushkin/writing-crypto-trading-bot-in-python-with-telegram-and-ccxt-80632a00c637]
-
-[https://medium.com/coinmonks/python-scripts-for-ccxt-crypto-candlestick-ohlcv-charting-data-83926fa16a13]
-
-
-
-### API KEYS
- 
-``` eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtcG9jaWFza0Bkb25zLnVzZmNhLmVkdSIsImlhdCI6MTU4MzIyNDIyNywiZXhwIjo3ODkwNDI0MjI3fQ.RzHJZLnEb4HzluravWjaQZg1W9jd7Jl4wDi0lgnY5jc
-```
