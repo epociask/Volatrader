@@ -61,7 +61,7 @@ class TradeSession:
         """
         @returns # of winning and # of losing trades
         """
-        return str(self.positiveTrades), str(self.NegativeTrades)
+        return self.positiveTrades, self.NegativeTrades
 
     def addResult(self) -> None:
         """
@@ -130,7 +130,7 @@ class TradeSession:
         return False
 
 
-    def update(self, data, update=False) -> bool:
+    def update(self, data, update=True) -> bool:
         """
         main function
         @:param data
@@ -164,9 +164,9 @@ class TradeSession:
             self.principle = data['candle']['close'] * self.quantity
             self.principleOverTime.append(self.principle)
             if update is True:
-                self.STRATEGY.update(data)
+                self.STRATEGY.checkBuy(data)
 
-            else:
+            if update is True and self.type is SessionType.BACKTEST:
                 self.takeProfit = float(self.buyPrice) * self.takeProfitPercent
 
                 if self.CHECK_STOPLOSS(data) or self.STRATEGY.checkSell(data):
@@ -174,7 +174,6 @@ class TradeSession:
                     self.sellPrice = self.calcWithFee(float(data['candle']['close']))
                     self.sellTime = data['candle']['timestamp']
             if self.sell:
-                print(self.takeProfit)
                 self.calcPL()
                 logToSlack(colored("--------------------------\n" + self.toString() + "--------------------------",
                               'green') if self.profitLoss > 0 else colored(
@@ -183,9 +182,10 @@ class TradeSession:
                     "--------------------------\n" + self.toString() + "--------------------------", 'red'))
                 self.profitlosses.append(self.profitLoss)
                 self.reset()
+                return False
 
         self.prevData = data
-        return False
+        return True 
     def getTotalTrades(self) -> int:
         """
         @:returns count of total trades

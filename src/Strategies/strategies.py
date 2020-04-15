@@ -1,7 +1,7 @@
 from Helpers.Constants.Enums import Indicator, Candle, Pair
 from SlackNotifier.PriceNotifications import getUpperNormalDistrubtion
 from Trader.Indicators import IndicatorFunctions
-
+from Helpers.TimeHelpers import convertNumericTimeToString
 BUY, SELL = True, True
 WAIT = False 
 def getStrat(name: str):
@@ -155,29 +155,54 @@ class EMA_STRATEGY(strategy):
         return WAIT
 
 
-class MA_STRATEGY(strategy):
+class FIFTY_MOVING_AVERAGE_STRATEGY(strategy):
 
+    def __init__(self, pair: Pair, candle: Candle, principle:int):
+        super().__init__(pair, candle, principle)
+        self.candleLimit = 50
+        self.arr = []
+        self.candles = []
+        self.indicators = {"SMA_50": True, "RSI_14": False, "UPTREND_4": True}
+
+    def checkBuy(self, data):
+        self.candles.append(data)
+        if len(self.arr) < self.candleLimit:
+            self.arr.append(float(data['candle']['close']))
+            return WAIT
+
+
+        self.arr.append(float(data['candle']['close']))
+        self.val_50 = IndicatorFunctions.SMA(self.arr, 50)[-1]
+        if self.val_50 < data['candle']['close'] and not IndicatorFunctions.DOWNTREND(self.candles, n=4):
+            return BUY
+
+        return WAIT 
+
+
+    def checkSell(self, data):
+        if self.val_50 > data['candle']['close'] and IndicatorFunctions.DOWNTREND(self.candles, n=4):
+            return SELL
+        return WAIT
+        
+
+class MA_STRATEGY(strategy):
     
     def __init__(self, pair: Pair, candle: Candle, principle:int):
         super().__init__(pair, candle, principle)
-        self.ma_13_list = []
-        self.ma_8_list = []
-        self.ma_5_list = []
-        self.momentums = []
         self.arr = []
-        self.candleLimit = 26
+        self.candleLimit = 13
+        self.indicators = {'SMA_13': True, 'SMA_8': True, 'SMA_5': True}
         self.sdv = getUpperNormalDistrubtion(pair, candle, 500)
         self.prevCandle = None 
-
 
 
     def update(self, data):
         if len(self.arr) < self.candleLimit:
 
-                    self.arr.append(float(data['candle']['close']))
-                    # print("APPEDEND CANDLE CLOSE", self.arr)
-                    self.prevCandle = data
-                    return WAIT
+            self.arr.append(float(data['candle']['close']))
+            # print("APPEDEND CANDLE CLOSE", self.arr)
+            self.prevCandle = data
+            return WAIT
         else:
             self.arr.append(float(data['candle']['close']))
             del self.arr[0]
@@ -192,7 +217,6 @@ class MA_STRATEGY(strategy):
         if self.update(data) is None:
     
             if (self.val_5 > self.val_13 and self.val_5 > self.val_8):
-                # print("data =====================> ", data)
                 self.arr = []
                 return BUY
 

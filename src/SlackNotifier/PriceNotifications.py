@@ -50,38 +50,9 @@ def getUpperNormalDistrubtion(pair: Pair, candleSize: Candle, volume=None):
 
 
 
-
 def getUrl(pair: str, candleSize: Candle):
 	return "https://trade.kraken.com/markets/kraken/" + pair.lower() + "/" + candleSize.value
-	
 
-def crossover(pair, candleSize):		
-	pair = pair.value.replace("USDT", "/USDT") if type(pair) is not str else pair
-	global lock
-	lock.aquire()
-	try:
-		close = [e[4] for e in exchange.fetch_ohlcv(pair, timeframe=candleSize.value, limit=14)]
-
-
-	finally:
-		lock.release()
-
-	sma_5 = IndicatorFunctions.SMA(close, 5)[-1]
-	sma_8 = IndicatorFunctions.SMA(close, 8)[-1]
-	sma_13 = IndicatorFunctions.SMA(close, 13)[-1]
-
-	string = f'\n SMA_5 {sma_5}  SMA_8 {sma_8}  SMA_13 {sma_13}'
-
-	if sma_5 >= sma_13 and sma_5 >= sma_8:
-		return "STRONG BUY" + string
-	elif sma_13 <= sma_5 and sma_13 <= sma_8:
-		return "HOLD" + string
-	elif sma_5 <= sma_8:
-		return "SOFT SELL" + string
-	elif sma_5 <= sma_13 and sma_5 <= sma_8:
-		return "STRONG SELL" + string 
-	else:
-		return None 
 
 
 def handleLogging(stdDict: str, pair: str, candleSize: Candle):
