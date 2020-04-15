@@ -1,14 +1,12 @@
 import datetime
-import time
-
-from Helpers.Enums import *
-from Helpers.Session import Session
-from API.CMC_api import getMarketData, getMacroEconomicData
-from DB.DBoperations import DBoperations
+import time     
+from Helpers.Constants.Enums import *
+from Trader.TradeSession import TradeSession
+from Helpers.API.CMC_api import getMarketData, getMacroEconomicData
+from DataBasePY.DBoperations import DBoperations
 import psycopg2
 from Helpers import HelpfulOperators
-from DB import QueryHelpers
-from API import IndicatorAPI
+from DataBasePY import QueryHelpers
 import ccxt
 from Helpers.Logger import logToSlack, MessageType, logDebugToFile, logErrorToFile
 indicatorENUMS = [e for e in Indicator]

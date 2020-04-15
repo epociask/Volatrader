@@ -21,7 +21,7 @@ from Trader.Indicators import IndicatorFunctions
 import warnings
 warnings.filterwarnings("ignore")
 
-def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int, takeProfitPercent: int, principle: int, timeStart: Time, readFromDataBase=False, outputGraph=False):
+def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int, takeProfitPercent: int, principle: int, timeStart: Time, readFromDataBase=False, outputGraph=False, market=Market.BINANCE):
     """
     main backtest function, prints backtest results, outputs graph results to html if desired 
     @:param pair -> pair you wish to run backtest on
@@ -50,7 +50,7 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
         DataSet = reader.fetchCandlesWithIndicators(pair, candleSize)
 
     else:
-        DataSet = DataOperators.convertCandlesToDict(DataOperators.getCandlesFromTime(convertNumericTimeToString(TimeHelpers.rewind(str(datetime.datetime.now())[0: -7], 60, timeStart.value )), pair, candleSize))
+        DataSet = DataOperators.convertCandlesToDict(DataOperators.getCandlesFromTime(convertNumericTimeToString(TimeHelpers.rewind(str(datetime.datetime.now())[0: -7], 60, timeStart.value )), pair, candleSize, market))
 
         # else:
         #     DataSet = DataOperators.convertCandlesToDict(DataOperators.fetchCandleData(ccxt.binance(), pair, candleSize, 500))
@@ -70,8 +70,8 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
 
     gainCount, lossCount = backTestingSession.getTradeData()
 
-    print(getBacktestResultsString(stratString, candleSize, pair, principle, endingPrice, totalPl, 
-        gainCount+lossCount, start, finish, gainCount, lossCount, stopLossPercent, takeProfitPercent))
+    print(getBacktestResultsString(backTestingSession.getTotalFees(), stratString, candleSize, pair, principle, endingPrice, totalPl, 
+        gainCount+lossCount, start, finish, gainCount, lossCount, stopLossPercent, takeProfitPercent, stratString, strategy.indicators))
 
     
 
@@ -79,7 +79,6 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
     if outputGraph:
         getInt = lambda val : int((val['buytime'][8 : 10]))
         results = backTestingSession.getResults()['tradeResults']
-        # generateTransactionHistoryTable(results)
         ts = getInt(results[0])
         timestamps = []
         profitlosses = []
@@ -96,24 +95,29 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
                 profitlosses.append(pl)
                 pl = val['profitloss']
             prevData = val
-        rolling_sharps = pd.Series(profitlosses, index=pd.DatetimeIndex(timestamps), name='Date')
-        
+        rolling_sharps = pd.DataFrame(profitlosses, index=pd.DatetimeIndex(timestamps))
+        rolling_sharps.columns = ['pNl']
 
-        # print(rolling_sharps)
         buyTimes = [e['buytime'] for e in results]
         sellTimes = [e['selltime'] for e in results]
-        pls = [e['profitloss'] for e in results]
-        # print('profit losses ----------->', pls)
+        pls = [e['profitloss'] for e in results]    #TODO condense all this 
         candles = [e['candle'] for e in DataSet]
         plIndex = 0
-        candleLimit = 15
-        closes = [] 
+        candleLimit = strategy.candleLimit
+        closes = []
+        indicatorFunctions = []
+        ohlcvs = []
+        for index, val in enumerate(strategy.indicators.keys()):
+            indicatorFunctions.append(IndicatorFunctions.getFunction("".join(e for e in val if not e.isdigit() and e != "_")))
+
         for index, candle in enumerate(candles):
-            if candle['timestamp'] in buyTimes:
+            closes.append(candle['close'])
+            ohlcvs.append(candle)
+            if convertNumericTimeToString(candle['timestamp']) in buyTimes:
                 candle['buy'] = candle['close']
                 candle['sell'] = "NaN"
 
-            elif candle['timestamp'] in sellTimes:
+            elif convertNumericTimeToString(candle['timestamp']) in sellTimes:
                 candle['sell'] = candle['close']
                 candle['buy'] = 'NaN'
                 plIndex+=1
@@ -123,14 +127,28 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
                 candle['buy'] = 'NaN'
 
             if candleLimit <= 0:
-                candle['sma_15'] = IndicatorFunctions.SMA(closes, 15)[-1]
-                candle['sma_5'] = IndicatorFunctions.SMA(closes, 5)[-1]
-                candle['sma_8'] = IndicatorFunctions.SMA(closes, 8)[-1]
+                for index1, val in enumerate(strategy.indicators.keys()):
+
+                    try:
+                        out = indicatorFunctions[index1](closes, int("".join(e for e in val if e.isdigit())))[-1]
+
+                    except TypeError:
+                        out = indicatorFunctions[index1](ohlcvs, int("".join(e for e in val if e.isdigit())))
+                    if type(out) is bool:
+                        if out:
+                            candle[val] = candle['close']
+
+                        else:
+                            candle[val] = 'NaN'
+
+                    else:
+
+                        candle[val] = out
+
+                    
             candle['timestamp'] = convertNumericTimeToString(candle['timestamp'])
             candle['principle'] = backTestingSession.principleOverTime[index]
             candles[index] = candle
-
-            closes.append(candle['close'])
             candleLimit -= 1 
                 
         sharpe_ratios = []
@@ -143,17 +161,20 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
         candles_returns.index = pd.to_datetime(candles_returns['timestamp'])
         del candles_returns['timestamp']
 
-        filename = figures_to_html(generateGraphs(candles_returns, pair, candleSize, stratString, results))
+        filename = figures_to_html(getBacktestResultsString(backTestingSession.getTotalFees(), stratString, candleSize, pair, principle, endingPrice, totalPl, 
+        (int(gainCount)+int(lossCount)), start, finish, gainCount, lossCount, stopLossPercent, takeProfitPercent, stratString, strategy.indicators, html=True), generateGraphs(candles_returns, pair, candleSize, stratString, results, strategy, rolling_sharps))
 
         # Open html doc on windows or mac
         os.system(f"{'start' if platform.system() == 'Windows' else 'open'} {filename}")
+        return 
 
+    return totalPl
 
 
 def main(args):
     print("RUNNING BACKTEST WITH ARGS: ", args)
     print(type(args.time))
-    backTest(args.pair, args.candleSize, args.strategy, args.stoploss, args.takeprofit, args.principle, Time[args.time], readFromDataBase=args.readFromDatabase,  outputGraph=args.outputGraph)
+    backTest(args.pair, args.candleSize, args.strategy, args.stoploss, args.takeprofit, args.principle, Time[args.time], readFromDataBase=args.readFromDatabase,  outputGraph=args.outputGraph, market=Market[args.market])
 
 
 if __name__ == '__main__':
@@ -176,6 +197,8 @@ if __name__ == '__main__':
                     help="Outputs backtest results into csv if true, otherwise does not")
     parser.add_argument('-t','--time', type=str, default="MONTH",
                     help="Total time to backtest on")
+
+    parser.add_argument("--market", type=str, default="BINANCE")
 
     args = parser.parse_args()
     main(args)
