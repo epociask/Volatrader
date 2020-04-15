@@ -1,5 +1,5 @@
 from enum import Enum
-
+import ccxt 
 
 class Candle(Enum):
     """
@@ -17,6 +17,9 @@ class Candle(Enum):
     ONE_WEEK = '1w'
     THRE_WEEK = "3w"
 
+class Market(Enum):
+    BINANCE = ccxt.binance()
+    KRAKEN = ccxt.kraken()
 
 class SessionType(Enum):
     BACKTEST = 0
@@ -49,6 +52,7 @@ class Time(Enum):
     MONTH = 700
     TWOMONTH = 1400
     THREEMONTH = 2100
+    SIXMONTH = 4200
 
 
 class Indicator(Enum):

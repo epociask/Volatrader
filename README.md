@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # The Volatrader
 
 --- author/creator =  @epociask ---

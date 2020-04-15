@@ -2,6 +2,11 @@ import pandas as pd
 import numpy as np 
 from scipy.stats import linregress
 
+def getFunction(name: str):
+
+    return globals()[name]
+
+
 
 def SMA(data, period=3) :
     ret = np.cumsum(data, dtype=float)
@@ -64,3 +69,26 @@ def RSI(prices, n=14):
         rsi[i] = 100. - 100./(1.+rs)
 
     return rsi
+
+def DOWNTREND(candles, n=3):
+    #TODO REFORMAT DATA TO ONLY BE IN TYPE candle['open'] instead of data['candle']['open'] in TradeSession, Strategies, & Indicator functions 
+
+    if candles[len(candles)-n]['candle']['close'] <  candles[-1]['candle']['close']:
+        return False 
+
+    return True 
+
+
+def UPTREND(candles, n=3):
+
+    try:
+        if candles[len(candles)-n]['close'] <  candles[-1]['close']:    
+            return True 
+
+        return False
+
+    except:
+        if candles[len(candles)-n]['close'] <  candles[-1]['close']:
+            return True 
+
+        return False

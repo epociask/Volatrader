@@ -14,6 +14,7 @@ import requests
 from colorama import init
 from termcolor import cprint 
 from pyfiglet import figlet_format
+from termcolor import colored
 
 '''
     Helper Script w/ utility functions that are referenced throughout master program
@@ -28,7 +29,7 @@ cleaner = lambda word: word if type(word) != decimal.Decimal else str(word)  # c
 
      #'2017-09-01 00:00:00'
 
-def getCandlesFromTime(from_datetime: str, pair: Pair, candleSize: Candle):
+def getCandlesFromTime(from_datetime: str, pair: Pair, candleSize: Candle, market):
     from_datetime = from_datetime[0 : 10] + " 00:00:00"
     print("------------------>", from_datetime)
 
@@ -46,9 +47,11 @@ def getCandlesFromTime(from_datetime: str, pair: Pair, candleSize: Candle):
     fifteen_minute = minute * 15
     five_minute = minute * 5
     thirty_minute = minute * 30
+    hour = minute * 60 
     hold = 30
-    exchange = ccxt.binance()
-
+    exchange = market.value
+    if candleSize.value == "1h":
+        step = hour
 
     if candleSize.value == "15m":
         step = fifteen_minute
@@ -72,18 +75,20 @@ def getCandlesFromTime(from_datetime: str, pair: Pair, candleSize: Candle):
     while from_timestamp < now:
 
         try:
-
-            print(exchange.milliseconds(), 'Fetching candles starting from', exchange.iso8601(from_timestamp))
+         
+            print(exchange.milliseconds(), colored('Fetching candles starting from', color="grey"), exchange.iso8601(from_timestamp))
             ohlcvs = exchange.fetch_ohlcv(pair.value.replace("USDT", '/USDT'), candleSize.value, from_timestamp)
             print(exchange.milliseconds(), 'Fetched', len(ohlcvs), 'candles')
             first = ohlcvs[0][0]
             last = ohlcvs[-1][0]
-            print('First candle epoch', first, exchange.iso8601(first))
-            print('Last candle epoch', last, exchange.iso8601(last))
+            if first == last:
+                return data
+            print(colored('First candle epoch', color='grey'), first, exchange.iso8601(first))
+            print(colored('Last candle epoch', color='grey'), last, exchange.iso8601(last))
             from_timestamp += len(ohlcvs) * step
             data += ohlcvs
 
-        except (ccxt.ExchangeError, ccxt.AuthenticationError, ccxt.ExchangeNotAvailable, ccxt.RequestTimeout) as error:
+        except(ccxt.ExchangeError, ccxt.AuthenticationError, ccxt.ExchangeNotAvailable, ccxt.RequestTimeout) as error:
 
             print('Got an error', type(error).__name__, error.args, ', retrying in', hold, 'seconds...')
             time.sleep(hold)
@@ -142,7 +147,7 @@ def cleanCandle(candle: dict) -> dict:
 import random
 
 def printLogo(type: SessionType=None):
-    colors = [ 'RED', 'GREEN', 'YELLOW', 'BLUE', 'MAGENTA', 'CYAN', 'WHITE']
+    colors = [ 'RED', 'GREEN', 'YELLOW', 'BLUE', 'MAGENTA', 'CYAN', 'grey']
 
     fonts = ['speed', 'starwars', "stampatello"]
 

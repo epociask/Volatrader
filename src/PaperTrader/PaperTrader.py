@@ -88,20 +88,22 @@ class PaperTrader:
             if (t % self.timeStep == 0 or t == 0) and not sold:
                 time.sleep(6)
                 data = convertCandlesToDict(fetchCandleData(ccxt.binance(), self.pair, self.candleSize, 1))
-                sold = self.tradingSession.update(data[0], True)
+                sold = self.tradingSession.update(data[0], False)
                 print("sold status ->", sold)
                 if not sold:    
                     time.sleep(60)
 
 
-            if t == 0 or t == 15 or t == 30 or t == 45:
+            if (t == 0 or t == 15 or t == 30 or t == 45) and datetime.now().seconds == 0:
                 logToSlack(f"[PAPERTRADER] hourly update for {self.pair.value} for strat: {self.stratName} \n {self.getResults()}", channel=Channel.PAPERTRADER)
 
 
             if sold:
                 time.sleep(5)
-                price, ts = getCurrentBinancePrice(self.pair)
+                price, _ = getCurrentBinancePrice(self.pair)
+                ts = datetime.now()
                 print(f"Checking for sell w/ {self.pair} @ {price}")
                 dummyCandle = {"candle" : {"close": price, "timestamp": ts}}
                 print(dummyCandle)
-                self.tradingSession.update(dummyCandle)
+                sold =  self.tradingSession.update(dummyCandle)
+
