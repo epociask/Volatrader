@@ -6,7 +6,7 @@ from Helpers.Logger import logDebugToFile, logToSlack, Channel
 from Helpers.API.MarketFunctions  import getCurrentBinancePrice
 import ccxt
 from Helpers.TimeHelpers import convertNumericTimeToString
-import uuid 
+import uuid
 from DataBasePY.DBwriter import DBwriter
 
 
@@ -15,7 +15,7 @@ class TradeSession:
     Class to hold buying and selling logic and execute each accordingly to price updates
     """
 
-    def __init__(self, pair, buyStrategy, takeProfitPercent, percentSL, stratString: str, sessionType: Enum, principle= 1000):
+    def __init__(self, pair, buyStrategy, takeProfitPercent, percentSL, stratString: str, sessionType: Enum, principle= 1000, sessionid=None):
         self.pair = pair
         self.sellStrat = Instance(pair)
         self.sellStrat.setStopLossPercent(percentSL)
@@ -29,7 +29,7 @@ class TradeSession:
         self.sellPrice = 0
         self.profitLoss = None
         self.sell = False
-        self.quantity = None 
+        self.quantity = None
         self.STRATEGY = buyStrategy
         self.takeProfitPercent = float(f"1.{takeProfitPercent}")
         self.results = []
@@ -42,21 +42,31 @@ class TradeSession:
         self.totalFees = []
         self.principle = principle
         self.principleOverTime = []
-        self.sessionid = uuid.uuid4()
         self.writer = DBwriter()
+        self.sessionid = sessionid
 
 
-    def getSessionId(self):
-        return self.sessionid
-    
     def getTotalFees(self):
         return sum(self.totalFees)
 
     def getCurrentPnl(self, currentPrice):
-        currentPnl = ((currentPrice - self.buyPrice) / self.buyPrice) * 100
-        allPnl = self.profitlosses
-        allPnl.append(currentPnl)
-        return sum(allPnl)
+            allPnl = self.profitlosses
+
+            if self.buyPrice is not 0:
+                print("first condition in getCurrentPNl")
+                currentPnl = ((currentPrice - self.buyPrice) / self.buyPrice) * 100
+                allPnl.append(currentPnl)
+
+            
+            try:
+                return sum(allPnl)
+
+            except Exception as e:
+                logDebugToFile(e)
+
+            
+
+       
 
     def getStopLossPercent(self):
         """
@@ -84,8 +94,8 @@ class TradeSession:
         @:returns None
         """
 
-        self.results.append({'buytime': convertNumericTimeToString(self.buyTime), 'buyprice': self.buyPrice, 'selltime': convertNumericTimeToString(self.sellTime),
-                             'sellprice': self.sellPrice, 'profitloss': self.profitLoss})
+        self.results.append({"buytime": convertNumericTimeToString(self.buyTime), "buyprice": self.buyPrice, "selltime": convertNumericTimeToString(self.sellTime),
+                             "sellprice": self.sellPrice, "profitloss": self.profitLoss})
         if self.profitLoss > 0:
             self.positiveTrades += 1
         else:
@@ -104,13 +114,14 @@ class TradeSession:
         self.sellPrice = 0
         self.profitLoss = None
         self.sell = False
-        self.quantity = 0 
+        self.quantity = 0
 
     def calcPL(self) -> None:
         """
         Calculate profit loss function
         @:returns None
         """
+
         self.profitLoss = (100 - (100 * (self.buyPrice / self.sellPrice))) if self.sellPrice > self.buyPrice else -(
                 100 - (100 * (self.sellPrice / self.buyPrice)))
 
@@ -120,7 +131,7 @@ class TradeSession:
         @:returns toString representation of Session instance
         """
 
-        return "Buy Price {} time: {}\nSell Price {} time: {}\nProfit Loss {}\n".format(self.buyPrice, self.buyTime,
+        return "Buy Price {} Buy Time: {} \nSell Price {} Sell time: {}\nProfit Loss: {}\n".format(self.buyPrice, self.buyTime,
                                                                                         self.sellPrice, self.sellTime,
                                                                                         self.profitLoss)
 
@@ -138,7 +149,7 @@ class TradeSession:
         """
         logDebugToFile("Checking sell")
         if self.sellStrat.run(float(candle['close'])) or self.takeProfit <= float(candle['close']):
-    
+
             return True
 
         return False
@@ -151,18 +162,18 @@ class TradeSession:
         takes in @:param candle and makes buy/sell or do-nothing decisions accordingly
         @:returns None
         """
-        if not self.buy:    #not bought 
-            
+        if not self.buy:    #not bought
+
             self.principleOverTime.append(self.principle)
 
             if self.prevcandle is None or self.prevcandle != candle:
                 logDebugToFile(f"Checking buy condition for {self.pair} w/ {candle}")
                 self.buy = self.STRATEGY.checkBuy(candle)
-                
+
                 if self.buy:
                     self.buyPrice, self.buyTime = self.calcWithFee(candle['close']), candle['timestamp']
                     self.totalFees.append(self.fee* candle['close'])
-                    self.quantity = self.principle / self.buyPrice 
+                    self.quantity = self.principle / self.buyPrice
 
                     if self.type is not SessionType.BACKTEST:
                         print(f"Buying @ {candle['close']}")
@@ -170,10 +181,10 @@ class TradeSession:
                         logToSlack(f"{typ} Buying for [{self.stratString}]{self.pair.value} at price: {self.buyPrice}", channel=Channel.PAPERTRADER)
 
                         return True
-                
 
 
-        else: #is bought 
+
+        else: #is bought
 
             self.principle = self.calcWithFee(candle['close']) * self.quantity
             self.principleOverTime.append(self.principle)
@@ -183,29 +194,26 @@ class TradeSession:
             self.takeProfit = float(self.buyPrice) * self.takeProfitPercent
 
             if self.CHECK_STOPLOSS(candle) or self.STRATEGY.checkSell(candle):
-                self.sell = True 
+                self.sell = True
                 self.sellPrice, self.sellTime = self.calcWithFee(float(candle['close'])), candle['timestamp']
                 self.totalFees.append(self.fee * float(candle['close']))
-                     
+
             if self.sell:
                 self.calcPL()
-                logToSlack(colored("--------------------------\n" + self.toString() + "--------------------------",
-                              'green') if self.profitLoss > 0 else colored(
-                    "--------------------------\n" + self.toString() + "--------------------------", 'red')) if self.type != SessionType.BACKTEST else print(colored("--------------------------\n" + self.toString() + "--------------------------",
-                              'green') if self.profitLoss > 0 else colored(
-                    "--------------------------\n" + self.toString() + "--------------------------", 'red'))
+                if self.type is not SessionType.BACKTEST:
+                    logToSlack(f"TRADE COMPLETE\nResults:\n{self.toString()}", channel=Channel.PAPERTRADER)
                 self.profitlosses.append(self.profitLoss)
-
-                if self.type is SessionType.PAPERTRADE:
-                    #write new transaction to database 
-                    results = self.getResults()
-                    writer.writeTransactioncandle(results, sessionid)
-
                 self.reset()
+                if self.type is SessionType.PAPERTRADE:
+                    #write new transaction to database
+                    results = self.getResults()["tradeResults"]
+                    self.writer.writeTransactionData(results, self.sessionid)
+
+
                 return False
 
         self.prevcandle = candle
-        return True 
+        return True
     def getTotalTrades(self) -> int:
         """
         @:returns count of total trades
@@ -214,7 +222,7 @@ class TradeSession:
 
     def getResults(self) -> dict:
         """
-        @:returns results in a dictionary that hold buytime, buyprice, selltime, sellprice, profitloss 
+        @:returns results in a dictionary that hold buytime, buyprice, selltime, sellprice, profitloss
         """
         return {
             "pair": self.pair.value,

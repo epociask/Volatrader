@@ -17,6 +17,20 @@ class DBoperations:
         self.cur = None
         self.lock = Lock()
 
+
+    def execute(self, query):
+
+        try:
+            params = config()
+            print("Connecting to PostgreSQL Databse")
+            self.conn = psycopg2.connect(**params)
+            self.cur = self.conn.cursor()
+            self.cur.execute(query)
+        except Exception as e:
+            print("Error executing query: ", e)
+            raise e
+
+
     def commit(self) -> None:
         """"
         Commits cursor data to Database

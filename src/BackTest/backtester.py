@@ -137,8 +137,7 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
                             out = indicatorFunctions[index1](ohlcvs, int("".join(e for e in val if e.isdigit())))  
                         else: 
                             for i in closes:
-                                print(type(i))
-                            out = indicatorFunctions[index1](closes)
+                                out = indicatorFunctions[index1](closes)
 
                         if type(out) is dict:
                             for key in out.keys():

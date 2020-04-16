@@ -1,5 +1,5 @@
 import time
-from datetime import datetime
+import datetime
 from Helpers.Logger import logToSlack, logDebugToFile
 from Trader.TradeSession import TradeSession
 from Helpers.Logger import Channel
@@ -10,8 +10,10 @@ from Strategies import strategies
 from Helpers.DataOperators import fetchCandleData, convertCandlesToDict
 from Helpers.API.MarketFunctions import getCurrentBinancePrice
 import ccxt
-import re 
+import re
 from Helpers.DataOperators import printLogo
+import uuid
+
 
 convertToVal = lambda candleEnum: candleEnum.value[0: len(candleEnum.value) - 2]
 
@@ -32,15 +34,15 @@ class PaperTrader:
         self.startTime = None
         self.currentPrice = None
         self.writer = DBwriter()
-        self.sessionId = None
-
+        self.sessionid = uuid.uuid4()
+        self.timeToRun = None
 
     def getResults(self) -> str:
         return self.tradingSession.getResults()
 
 
     def trade(self, pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int, takeProfitPercent: int,
-            principle: int):
+            principle: int, timeToRun):
         """
 
         :param pair:
@@ -61,9 +63,9 @@ class PaperTrader:
         self.strategy = strategy(pair, candleSize, principle)
         self.stopLossPercent = stopLossPercent
         self.tradingSession = TradeSession(pair, self.strategy, takeProfitPercent, self.stopLossPercent, self.stratName,
-                                    SessionType.PAPERTRADE)
+                                    SessionType.PAPERTRADE, sessionid=self.sessionid)
         self.principle = principle
-        self.sessionId = self.tradingSession.getSessionId()
+        self.timeToRun = timeToRun
         self.start()
 
 
@@ -71,20 +73,23 @@ class PaperTrader:
     def start(self):
         """
 
-        :return:
+        :return: unique session id
         """
         printLogo(SessionType.PAPERTRADE)
-        first = True 
-        sold = False 
-        logToSlack(f"Starting Paper Trader for {self.pair.value}/{self.candleSize.value} \nstrat: {self.stratName}\n takeprofit: %{int(self.takeProfitPercent)}\n stoploss: %{self.stopLossPercent}", channel=Channel.PAPERTRADER)
-        while True:
-            t = int(str(datetime.now())[14:16])
+        first = True
+        bought = False
+        end_time = datetime.datetime.now() + datetime.timedelta(hours=self.timeToRun)
+
+        logToSlack(f"Starting Paper Trader for {self.pair.value}/{self.candleSize.value} \nstrat: {self.stratName}\n takeprofit: %{int(self.takeProfitPercent)}\n stoploss: %{self.stopLossPercent}\n Finishing on {end_time}", channel=Channel.PAPERTRADER)
+
+        while datetime.datetime.now() < end_time:
+            t = int(str(datetime.datetime.now())[14:16])
 
             if first:
-                first = False 
+                first = False
 
                 try:
-                    print("starting preinstall for strat")
+                    logDebugToFile("starting preinstall for strat")
                     for candle in convertCandlesToDict(fetchCandleData(ccxt.binance(), self.pair, self.candleSize, self.strategy.candleLimit)):
                         self.tradingSession.update(candle)
 
@@ -92,29 +97,39 @@ class PaperTrader:
                 except:
                     logDebugToFile("Error instantiating strategy in paper trader")
 
+                try:
+                    logDebugToFile(f"Writing data to db for paper trader session {self.sessionid}")
+                    self.writer.writePaperTradeStart(self.sessionid, datetime.datetime.now(), self.stratName, self.pair)
+                except Exception as e:
+                    logDebugToFile("Eror writing to postgres")
+                    raise e
+
             if (t % self.timeStep == 0 or t == 0):
                 time.sleep(6)
                 data = convertCandlesToDict(fetchCandleData(ccxt.binance(), self.pair, self.candleSize, 1))
                 bought = self.tradingSession.update(data[0], True)
-                print("bought status ->", sold)
-                if not bought:    
+                logDebugToFile(F"bought status ->{bought}")
+                if not bought:
                     time.sleep(60)
 
 
-            if (t == 0) and datetime.now().seconds == 0:
+            if (t == 0) and datetime.datetime.now().second in range(0, 15):
                 logToSlack(f"[PAPERTRADER] hourly update for {self.pair.value} for strat: {self.stratName} \n {self.getResults()}", channel=Channel.PAPERTRADER)
-
-            if datetime.now().minutes % 5 == 0 and datetime.now().seconds == 0 and currentPrice not None:
-                currentpnl = self.tradingSessison.getCurrentPnl(self.currentPrice)
-                writer.writeCurrentPnl(currentPnl, self.sessionid)
-
 
             if bought:
                 time.sleep(5)
                 self.currentPrice, _ = getCurrentBinancePrice(self.pair)
-                ts = datetime.now()
-                print(f"Checking for sell w/ {self.pair} @ {price}")
+                ts = datetime.datetime.now()
+                logDebugToFile(f"Checking for sell w/ {self.pair} @ {self.currentPrice}")
                 dummyCandle = {"close": self.currentPrice, "timestamp": ts}
-                print(dummyCandle)
-                bought =  self.tradingSession.update(dummyCandle, False)
+                logDebugToFile(dummyCandle)
+                bought = self.tradingSession.update(dummyCandle, False)
 
+
+            if datetime.datetime.now().minute % 5 == 0 and self.currentPrice is not None:
+                logDebugToFile(f"WRITING CURRENT PNL for session{self.sessionid}")
+                currentpnl = self.tradingSession.getCurrentPnl(self.currentPrice)
+                logDebugToFile(f'PNL being written ---- > {currentpnl}')                
+                self.writer.writeTotalPnl(currentpnl, self.sessionid)
+        
+        return self.sessionid

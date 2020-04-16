@@ -101,7 +101,7 @@ def logDebugToFile(data: str) -> None:
     @:param data -> data to log to file
     @:returns Nothing
     """
-
+    print(data)
     checkIfConfig()
     global logger
     logger.debug(f'[DEBUG] {data}\n')

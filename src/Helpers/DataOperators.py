@@ -164,7 +164,7 @@ def printLogo(type: SessionType=None):
     text_color, None, attrs=['blink'])
 
     if type is SessionType.PAPERTRADE:
-        cprint(figlet_format('[PAPERTRADE]', font=font),
+        cprint(figlet_format('[PAPER]', font=font),
         text_color, None, attrs=['blink'])
 
     if type is SessionType.LIVETRADE:
