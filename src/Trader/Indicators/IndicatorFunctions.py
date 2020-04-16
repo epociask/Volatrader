@@ -1,23 +1,25 @@
 import pandas as pd
-import numpy as np 
+import numpy as np
 from scipy.stats import linregress
-import ta 
+import ta
+
+
 def getFunction(name: str):
 
     return globals()[name]
 
 
-""""
+"""
 Insert indicator graph logic here
-""""
-    
+"""
+
 
 
 def BB(data, period=10, ndev=2):
     data = [e['close'] for e in data]
     data = pd.Series(data)
     indicator_bb = ta.volatility.BollingerBands(close=data, n=20, ndev=2)
-    print (indicator_bb.bollinger_mavg().iat[-1])   
+    print (indicator_bb.bollinger_mavg().iat[-1])
     return {"MOVING AVERAGE BB" : indicator_bb.bollinger_mavg().iat[-1], "UPPER BAND BB": indicator_bb.bollinger_hband().iat[-1], "LOWER BAND BB": indicator_bb.bollinger_lband().iat[-1]}
 
 
@@ -51,7 +53,7 @@ def EMA(values, alpha = .3, epsilon = 0):
            denominator   += currentWeight
 
            currentWeight *= alpha
-           if currentWeight < epsilon: 
+           if currentWeight < epsilon:
               break
 
        result[i] = numerator / denominator
@@ -86,20 +88,18 @@ def RSI(prices, n=14):
     return rsi
 
 def DOWNTREND(candles, n=3):
-    #TODO REFORMAT DATA TO ONLY BE IN TYPE candle['open'] instead of data['candle']['open'] in TradeSession, Strategies, & Indicator functions 
+    #TODO REFORMAT DATA TO ONLY BE IN TYPE candle['open'] instead of data['candle']['open'] in TradeSession, Strategies, & Indicator functions
 
     if candles[len(candles)-n]['close'] <  candles[-1]['close']:
-        return False 
+        return False
 
-    return True 
+    return True
 
 
 def UPTREND(candles, n=3):
 
-    
-    if candles[len(candles)-n]['close'] <  candles[-1]['close']:    
-        return True 
+
+    if candles[len(candles)-n]['close'] <  candles[-1]['close']:
+        return True
 
     return False
-
-    
