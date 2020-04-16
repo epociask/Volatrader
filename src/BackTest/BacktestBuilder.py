@@ -33,7 +33,7 @@ def getBacktestResultsString(fees, strategy, candleSize: Candle, pair: Pair, pri
     if html:
         returnString = "<h>" +returnString + "</h>"
         returnString = f"<h1 style=\"color: black; font-family=\"Arial Black\"; class=\"dotted\";> <div align=\"center\"  style=\"border:2px solid {valColor}\"> Backtest Summary for {stratString} on {pair.value}/{candleSize.value} </div></h1>" + returnString
-    returnString+= ("<h font-family: \'fantasy\'><br><strong>" if html else "") + ("\n\t\tFinal Portfolio Value: ") + ("</strong>" if html else "") + (f"${colored(str(endValue), valColor, attrs=['bold'])}" if not html else f"${endValue}") +  ("</h>" if html else "")
+    returnString+= ("<h font-family: \"fantasy\"><br><strong>" if html else "") + ("\n\t\tFinal Portfolio Value: ") + ("</strong>" if html else "") + (f"${colored(str(endValue), valColor, attrs=['bold'])}" if not html else f"${endValue}") +  ("</h>" if html else "")
     returnString+=("<h font-family: \'fantasy\'><br><strong>" if html else "") + f"\n\t\tTotal PnL:  " + ("</strong>" if html else "") + str(totalPl) +  ("</h>" if html else "")
     returnString+= ("<h font-family: \'fantasy\'><br><strong>" if html else "") + "\n\t\tTotal Trades: " + ("</strong>" if html else "") + str(totalTrades) +  ("</h>" if html else "")
     returnString+= ("<h font-family: \'fantasy\'><br><strong>" if html else "") + "\n\t\tStarting Backtest at: " + ("</strong>" if html else "") + startDate +  ("</h>" if html else "")
@@ -101,18 +101,32 @@ def generateCandleGraph(candle_data: pd.DataFrame, pair: Pair, candle: Candle, s
     #                     name="SMA_5"), row=1, col=1)
     delete = []
     for indicator in indicators.keys():
-        print("indicator ----------------> ", indicator)
         rowNum = 3
-        if indicators[indicator]:
-            fig.add_trace(go.Scatter(x=candle_data.index, yaxis="y2",
+        if indicators[indicator][0]: 
+            if len(indicators[indicator]) == 1:
+                fig.add_trace(go.Scatter(x=candle_data.index, yaxis="y2",
                             y=candle_data[indicator],
                             name=indicator.upper()), row=1, col=1)
+
+            else:
+                for val in indicators[indicator]:
+                    if type(val) is not bool:
+                        print("adding for ", val)
+                        fig.add_trace(go.Scatter(x=candle_data.index, yaxis="y2",
+                            y=candle_data[val],
+                            name=val.upper()), row=1, col=1)
         
         else:
-            fig.add_trace(go.Scatter(x=candle_data.index, yaxis=f'y{rowNum}', y=candle_data[indicator], name=indicator), row=rowNum, col=1)
-            if indicator.find('RSI') != -1:
-                fig.add_trace(go.Scatter(x=candle_data.index, yaxis=f'y{rowNum}', y=([30] * candle_data['open'].count()),  line=dict(color='black', width=1, dash='dot')), row=rowNum, col=1)
-                fig.add_trace(go.Scatter(x=candle_data.index, yaxis=f'y{rowNum}', y=([70] * candle_data['open'].count()),  line=dict(color='black', width=1, dash='dot')), row=rowNum, col=1)
+                if len(indicators[indicator]) == 1:
+                    fig.add_trace(go.Scatter(x=candle_data.index, yaxis=f'y{rowNum}', y=candle_data[indicator], name=indicator), row=rowNum, col=1)
+
+                for val in indicators[indicator]:
+                    if type(val) is not bool:
+                        fig.add_trace(go.Scatter(x=candle_data.index, yaxis=f'y{rowNum}', y=candle_data[val], name=val), row=rowNum, col=1)
+                        
+                if indicator.find('RSI') != -1:
+                    fig.add_trace(go.Scatter(x=candle_data.index, yaxis=f'y{rowNum}', y=([30] * candle_data['open'].count()),  line=dict(color='black', width=1, dash='dot')), row=rowNum, col=1)
+                    fig.add_trace(go.Scatter(x=candle_data.index, yaxis=f'y{rowNum}', y=([70] * candle_data['open'].count()),  line=dict(color='black', width=1, dash='dot')), row=rowNum, col=1)
 
     fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['buy'], yaxis="y2", mode='markers', line=dict(color='white', width=14), name = "BUY"), row=1, col=1)
     fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['sell'], yaxis="y2", mode='markers', line=dict(color='black', width=14), name="SELL"), row=1, col=1)

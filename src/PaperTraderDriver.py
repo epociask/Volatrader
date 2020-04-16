@@ -1,11 +1,18 @@
 import argparse
 from PaperTrader.PaperTrader import PaperTrader
 from Helpers.Constants.Enums import *
+from Helpers.Logger import logToSlack
 
 
 def main(args):
 	paper_trader = PaperTrader()
-	paper_trader.trade(args.pair, args.candlesize, args.strategy, args.stoploss, args.takeprofit, args.principle)
+
+	try:
+		paper_trader.trade(args.pair, args.candlesize, args.strategy, args.stoploss, args.takeprofit, args.principle)
+  			
+
+	except Exception as e:
+		logToSlack(e)
 
 
 if __name__ == '__main__':

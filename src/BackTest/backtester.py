@@ -55,15 +55,15 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
         # else:
         #     DataSet = DataOperators.convertCandlesToDict(DataOperators.fetchCandleData(ccxt.binance(), pair, candleSize, 500))
 
-    DataSet = sorted(DataSet, key=lambda i: int(i['candle']['timestamp']), reverse=False)
+    DataSet = sorted(DataSet, key=lambda i: int(i['timestamp']), reverse=False)
 
     for candle in DataSet:
         backTestingSession.update(candle)
 
 
     # Printing Results
-    start = TimeHelpers.convertNumericTimeToString(DataSet[0]['candle']['timestamp']) if type(DataSet[0]['candle']['timestamp']) is int else DataSet[0]['candle']['timestamp']
-    finish = TimeHelpers.convertNumericTimeToString(DataSet[-1]['candle']['timestamp'])   if type(DataSet[-1]['candle']['timestamp']) is int else DataSet[-1]['candle']['timestamp']
+    start = TimeHelpers.convertNumericTimeToString(DataSet[0]['timestamp']) if type(DataSet[0]['timestamp']) is int else DataSet[0]['timestamp']
+    finish = TimeHelpers.convertNumericTimeToString(DataSet[-1]['timestamp'])   if type(DataSet[-1]['timestamp']) is int else DataSet[-1]['timestamp']
 
     totalPl = backTestingSession.getTotalPL()
     endingPrice = float(principle + float(principle * (totalPl * .01)))
@@ -101,7 +101,7 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
         buyTimes = [e['buytime'] for e in results]
         sellTimes = [e['selltime'] for e in results]
         pls = [e['profitloss'] for e in results]    #TODO condense all this 
-        candles = [e['candle'] for e in DataSet]
+        candles = DataSet
         plIndex = 0
         candleLimit = strategy.candleLimit
         closes = []
@@ -131,28 +131,32 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
 
                     try:
                         out = indicatorFunctions[index1](closes, int("".join(e for e in val if e.isdigit())))[-1]
-
-                    except TypeError:
-                        out = indicatorFunctions[index1](ohlcvs, int("".join(e for e in val if e.isdigit())))
-                    if type(out) is bool:
-                        if out:
-                            candle[val] = candle['close']
-
-                        else:
-                            candle[val] = 'NaN'
-
-                    else:
-
                         candle[val] = out
 
-                    
+                    except Exception as e:
+
+                        if type(e) is TypeError:
+                            out = indicatorFunctions[index1](ohlcvs, int("".join(e for e in val if e.isdigit())))
+
+                            if type(out) is dict:
+                                out = indicatorFunctions[index1](ohlcvs, int("".join(e for e in val if e.isdigit())))
+                                for key in out.keys():
+                                    candle[key] = out[key]
+
+                            else:
+                                if out is True:
+                                    candle[val] = candle['close']  
+                                else:
+                                    candle[val] = 'NaN'
+
+                               
             candle['timestamp'] = convertNumericTimeToString(candle['timestamp'])
             candle['principle'] = backTestingSession.principleOverTime[index]
             candles[index] = candle
             candleLimit -= 1 
-                
         sharpe_ratios = []
         temp = []
+
         for pnl in profitlosses:
             temp.append(pnl)
             sharpe_ratios.append(sharpe_ratio(np.array(temp)))

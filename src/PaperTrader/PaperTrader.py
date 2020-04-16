@@ -5,6 +5,7 @@ from Trader.TradeSession import TradeSession
 from Helpers.Logger import Channel
 from Helpers.Constants.Enums import Pair, Candle, SessionType
 from DataBasePY.DBReader import DBReader
+from DataBasePY.DBwriter import DBwriter
 from Strategies import strategies
 from Helpers.DataOperators import fetchCandleData, convertCandlesToDict
 from Helpers.API.MarketFunctions import getCurrentBinancePrice
@@ -28,6 +29,10 @@ class PaperTrader:
         self.takeProfitPercent = None
         self.stopLossPercent = None
         self.principle = None
+        self.startTime = None
+        self.currentPrice = None
+        self.writer = DBwriter()
+        self.sessionId = None
 
 
     def getResults(self) -> str:
@@ -58,7 +63,9 @@ class PaperTrader:
         self.tradingSession = TradeSession(pair, self.strategy, takeProfitPercent, self.stopLossPercent, self.stratName,
                                     SessionType.PAPERTRADE)
         self.principle = principle
+        self.sessionId = self.tradingSession.getSessionId()
         self.start()
+
 
 
     def start(self):
@@ -85,25 +92,29 @@ class PaperTrader:
                 except:
                     logDebugToFile("Error instantiating strategy in paper trader")
 
-            if (t % self.timeStep == 0 or t == 0) and not sold:
+            if (t % self.timeStep == 0 or t == 0):
                 time.sleep(6)
                 data = convertCandlesToDict(fetchCandleData(ccxt.binance(), self.pair, self.candleSize, 1))
-                sold = self.tradingSession.update(data[0], False)
-                print("sold status ->", sold)
-                if not sold:    
+                bought = self.tradingSession.update(data[0], True)
+                print("bought status ->", sold)
+                if not bought:    
                     time.sleep(60)
 
 
-            if (t == 0 or t == 15 or t == 30 or t == 45) and datetime.now().seconds == 0:
+            if (t == 0) and datetime.now().seconds == 0:
                 logToSlack(f"[PAPERTRADER] hourly update for {self.pair.value} for strat: {self.stratName} \n {self.getResults()}", channel=Channel.PAPERTRADER)
 
+            if datetime.now().minutes % 5 == 0 and datetime.now().seconds == 0 and currentPrice not None:
+                currentpnl = self.tradingSessison.getCurrentPnl(self.currentPrice)
+                writer.writeCurrentPnl(currentPnl, self.sessionid)
 
-            if sold:
+
+            if bought:
                 time.sleep(5)
-                price, _ = getCurrentBinancePrice(self.pair)
+                self.currentPrice, _ = getCurrentBinancePrice(self.pair)
                 ts = datetime.now()
                 print(f"Checking for sell w/ {self.pair} @ {price}")
-                dummyCandle = {"candle" : {"close": price, "timestamp": ts}}
+                dummyCandle = {"candle" : {"close": self.currentPrice, "timestamp": ts}}
                 print(dummyCandle)
-                sold =  self.tradingSession.update(dummyCandle)
+                bought =  self.tradingSession.update(dummyCandle, False)
 

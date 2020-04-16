@@ -133,7 +133,7 @@ def cleanCandle(candle: dict) -> dict:
     close = cleaner(next(it))
     volume = cleaner(next(it))
 
-    return {"candle":{
+    return {
         'timestamp': time,
         'open': open,
         'high': high,
@@ -141,7 +141,7 @@ def cleanCandle(candle: dict) -> dict:
         'close': close,
         'volume': volume,
     }
-    }
+    
 
 
 import random
@@ -210,7 +210,6 @@ def cleanCandlesWithIndicators(data: list) -> list:
         candle['close'] = str(next(it))
         candle['volume'] = str(next(it))
         l = (next(it))
-        l['candle'] = candle
         ret.append(l)
 
 

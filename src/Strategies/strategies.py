@@ -22,7 +22,7 @@ class strategy():
         self.indicatorList = None
         self.principle = principle
 
-    def checkSell(self, data):
+    def checkSell(self, candle):
         return WAIT 
 
 
@@ -39,7 +39,7 @@ class TEST_STRAT(strategy):
     def __init__(self, pair: Pair, candle: Candle, principle: int):
         super().__init__(pair, candle, principle)
 
-    def checkBuy(self, data):
+    def checkBuy(self, candle):
         return BUY
 
 class BBANDS_STRAT(strategy):
@@ -48,8 +48,8 @@ class BBANDS_STRAT(strategy):
         super().__init__(pair, candle, principle)
         self.indicatorList = [Indicator.BBANDS]
 
-    def checkBuy(self, data):
-        if data['bbands']['valueUpperBand'] < data['candle']['close']:
+    def checkBuy(self, candle):
+        if candle['bbands']['valueUpperBand'] < candle['close']:
             return BUY
 
         return WAIT
@@ -58,10 +58,10 @@ class SIMPLE_BUY_STRAT(strategy):
 
     def __init__(self):
         pass
-    def checkBuy(self, data):
-        if data['3outside']['value'] != '0' or float(data['invertedhammer']['value']) != "0":
-            buyPrice = float(data['candle']['close'])
-            buyTime = data['candle']['timestamp']
+    def checkBuy(self, candle):
+        if candle['3outside']['value'] != '0' or float(candle['invertedhammer']['value']) != "0":
+            buyPrice = float(candle['close'])
+            buyTime = candle['timestamp']
 
             return BUY
 
@@ -73,18 +73,18 @@ class TEST_BUY_STRAT(strategy):
         self.dumbass = NATHAN_STRAT(pair, candle, 100)
         self.sdv = getUpperNormalDistrubtion(pair, candle, 300)
 
-    def checkBuy(self, data):
+    def checkBuy(self, candle):
         bear = None
-        for i in data:
+        for i in candle:
             if i != 'candle' and i != 'macdfix':
-                print(i, data[i])
-                if data[i]['value'] == '-100':
+                print(i, candle[i])
+                if candle[i]['value'] == '-100':
                     bear = True
 
-        ind, _, _, = self.dumbass.checkBuy(data)
-        if float(data['candle']['volume']) > self.sdv['2SD'] and float(data['candle']['close']) < float(
-                data['candle']['open']) and bear is None and float(data['fibonacciretracement']['value']) > float(
-            data['candle']['close']) and ind:
+        ind, _, _, = self.dumbass.checkBuy(candle)
+        if float(candle['volume']) > self.sdv['2SD'] and float(candle['close']) < float(
+                candle['open']) and bear is None and float(candle['fibonacciretracement']['value']) > float(
+            candle['close']) and ind:
             return BUY
 
         else:
@@ -96,11 +96,11 @@ class NATHAN_STRAT(strategy):
     def __init__(self, pair: Pair, candle: Candle, principle:int):
         super().__init__(pair, candle, principle)
 
-    def checkBuy(self, data):
+    def checkBuy(self, candle):
         """
         Nathan Haile's genius strategy
         """
-        if data['macdfix']['valueMACDSignal'] > data['macdfix']['valueMACD']:
+        if candle['macdfix']['valueMACDSignal'] > candle['macdfix']['valueMACD']:
             return BUY
 
         return WAIT
@@ -111,25 +111,25 @@ class CANDLESTICK_STRAT(strategy):
     def __init__(self, pair: Pair, candle: Candle, principle:int):
         super().__init__(pair, candle, principle)
 
-    def checkBuy(self, data):
+    def checkBuy(self, candle):
         bullSigns = 0
         bearSigns = 0
-        print(f"fib val; {data['fibonacciretracement']['value']}")
-        for value in data:
+        print(f"fib val; {candle['fibonacciretracement']['value']}")
+        for value in candle:
             if value != 'candle':
 
                 try:
-                    if data[value]['value'] == '100':
+                    if candle[value]['value'] == '100':
                         bullSigns += 1
 
-                    elif data[value]['value'] == '-100':
+                    elif candle[value]['value'] == '-100':
                         bearSigns += 1
 
                 except Exception:
                     pass
         total = bullSigns - bearSigns
-        if total >= 2 and (float(data['fibonacciretracement']['value']) < float(data['candle']['close'])) and \
-                data['longleggeddoji']['value'] == '100':
+        if total >= 2 and (float(candle['fibonacciretracement']['value']) < float(candle['close'])) and \
+                candle['longleggeddoji']['value'] == '100':
             print(total)
             return BUY
 
@@ -142,12 +142,12 @@ class EMA_STRATEGY(strategy):
         self.period = 9
         self.count = 0
 
-    def checkBuy(self, data):
+    def checkBuy(self, candle):
         if self.count < self.period:
             self.count+=1
             return WAIT
 
-        if self.emas[self.count] > data[4]:
+        if self.emas[self.count] > candle[4]:
             self.count+=1
             return BUY 
 
@@ -162,25 +162,26 @@ class FIFTY_MOVING_AVERAGE_STRATEGY(strategy):
         self.candleLimit = 50
         self.arr = []
         self.candles = []
-        self.indicators = {"SMA_50": True, "RSI_14": False, "UPTREND_4": True}
+        self.indicators = {"SMA_50": [True], "RSI_14": [False], "UPTREND_4": [True], 'BB_20': [True, 'MOVING AVERAGE BB', 'UPPER BAND BB', 'LOWER BAND BB']}
 
-    def checkBuy(self, data):
-        self.candles.append(data)
+    def checkBuy(self, candle):
+        self.candles.append(candle)
         if len(self.arr) < self.candleLimit:
-            self.arr.append(float(data['candle']['close']))
+            self.arr.append(float(candle['close']))
             return WAIT
 
 
-        self.arr.append(float(data['candle']['close']))
+        self.arr.append(float(candle['close']))
         self.val_50 = IndicatorFunctions.SMA(self.arr, 50)[-1]
-        if self.val_50 < data['candle']['close'] and not IndicatorFunctions.DOWNTREND(self.candles, n=4):
+        self.bb = IndicatorFunctions.BB(candles, 20)
+        if self.val_50 < candle['close'] and not IndicatorFunctions.DOWNTREND(self.candles, n=4):
             return BUY
 
         return WAIT 
 
 
-    def checkSell(self, data):
-        if self.val_50 > data['candle']['close'] and IndicatorFunctions.DOWNTREND(self.candles, n=4):
+    def checkSell(self, candle):
+        if self.val_50 > candle['close'] and IndicatorFunctions.DOWNTREND(self.candles, n=4):
             return SELL
         return WAIT
         
@@ -191,20 +192,20 @@ class MA_STRATEGY(strategy):
         super().__init__(pair, candle, principle)
         self.arr = []
         self.candleLimit = 13
-        self.indicators = {'SMA_13': True, 'SMA_8': True, 'SMA_5': True}
+        self.indicators = {'SMA_13': [True], 'SMA_8': [True], 'SMA_5': [True], 'BB_20': [True, 'MOVING AVERAGE BB', 'UPPER BAND BB', 'LOWER BAND BB']}
         self.sdv = getUpperNormalDistrubtion(pair, candle, 500)
         self.prevCandle = None 
 
 
-    def update(self, data):
+    def update(self, candle):
         if len(self.arr) < self.candleLimit:
 
-            self.arr.append(float(data['candle']['close']))
+            self.arr.append(float(candle['close']))
             # print("APPEDEND CANDLE CLOSE", self.arr)
-            self.prevCandle = data
+            self.prevCandle = candle
             return WAIT
         else:
-            self.arr.append(float(data['candle']['close']))
+            self.arr.append(float(candle['close']))
             del self.arr[0]
             self.val_13 = IndicatorFunctions.SMA(self.arr, 13)[-1]
             self.val_8 = IndicatorFunctions.SMA(self.arr, 8)[-1] 
@@ -212,20 +213,20 @@ class MA_STRATEGY(strategy):
             self.rsi = IndicatorFunctions.RSI(self.arr)[-1]
             return None 
 
-    def checkBuy(self, data):
+    def checkBuy(self, candle):
 
-        if self.update(data) is None:
+        if self.update(candle) is None:
     
             if (self.val_5 > self.val_13 and self.val_5 > self.val_8):
                 self.arr = []
                 return BUY
 
-            self.prevCandle = data
+            self.prevCandle = candle
             return WAIT 
 
 
-    def checkSell(self, data):
-        if self.update(data) is None:
+    def checkSell(self, candle):
+        if self.update(candle) is None:
             if self.val_5 < self.val_13 and self.val_5 < self.val_8:
                 return SELL
 

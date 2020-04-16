@@ -25,6 +25,7 @@ class DBoperations:
 
         print("Comitting to database\n")
         self.conn.commit()
+        self.terminateConnection()
         print("success :0")
 
     def connect(self) -> (None, Exception):

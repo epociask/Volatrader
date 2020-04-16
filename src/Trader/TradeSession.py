@@ -6,6 +6,9 @@ from Helpers.Logger import logDebugToFile, logToSlack, Channel
 from Helpers.API.MarketFunctions  import getCurrentBinancePrice
 import ccxt
 from Helpers.TimeHelpers import convertNumericTimeToString
+import uuid 
+from DataBasePY.DBwriter import DBwriter
+
 
 class TradeSession:
     """
@@ -33,17 +36,27 @@ class TradeSession:
         self.positiveTrades = 0
         self.NegativeTrades = 0
         self.type = sessionType
-        self.prevData = None
+        self.prevcandle = None
         self.fee = .1/100
         self.calcWithFee = lambda price: price * float(1 - self.fee)
         self.totalFees = []
         self.principle = principle
         self.principleOverTime = []
+        self.sessionid = uuid.uuid4()
+        self.writer = DBwriter()
 
+
+    def getSessionId(self):
+        return self.sessionid
     
     def getTotalFees(self):
         return sum(self.totalFees)
 
+    def getCurrentPnl(self, currentPrice):
+        currentPnl = ((currentPrice - self.buyPrice) / self.buyPrice) * 100
+        allPnl = self.profitlosses
+        allPnl.append(currentPnl)
+        return sum(allPnl)
 
     def getStopLossPercent(self):
         """
@@ -62,6 +75,7 @@ class TradeSession:
         @returns # of winning and # of losing trades
         """
         return self.positiveTrades, self.NegativeTrades
+
 
     def addResult(self) -> None:
         """
@@ -117,41 +131,41 @@ class TradeSession:
 
         return sum(self.profitlosses)
 
-    def CHECK_STOPLOSS(self, data):
+    def CHECK_STOPLOSS(self, candle):
         """
         Uses sell logic instance to see if it's time to sell
         @:returns boolean
         """
         logDebugToFile("Checking sell")
-        if self.sellStrat.run(float(data['candle']['close'])) or self.takeProfit <= float(data['candle']['close']):
+        if self.sellStrat.run(float(candle['close'])) or self.takeProfit <= float(candle['close']):
     
             return True
 
         return False
 
 
-    def update(self, data, update=True) -> bool:
+    def update(self, candle, update=True) -> bool:
         """
         main function
-        @:param data
-        takes in @:param data and makes buy/sell or do-nothing decisions accordingly
+        @:param candle
+        takes in @:param candle and makes buy/sell or do-nothing decisions accordingly
         @:returns None
         """
         if not self.buy:    #not bought 
             
             self.principleOverTime.append(self.principle)
 
-            if self.prevData is None or self.prevData != data:
-                logDebugToFile(f"Checking buy condition for {self.pair} w/ {data}")
-                self.buy = self.STRATEGY.checkBuy(data)
+            if self.prevcandle is None or self.prevcandle != candle:
+                logDebugToFile(f"Checking buy condition for {self.pair} w/ {candle}")
+                self.buy = self.STRATEGY.checkBuy(candle)
                 
                 if self.buy:
-                    self.buyPrice, self.buyTime = self.calcWithFee(data['candle']['close']), data['candle']['timestamp']
-                    self.totalFees.append(self.fee* data['candle']['close'])
+                    self.buyPrice, self.buyTime = self.calcWithFee(candle['close']), candle['timestamp']
+                    self.totalFees.append(self.fee* candle['close'])
                     self.quantity = self.principle / self.buyPrice 
 
                     if self.type is not SessionType.BACKTEST:
-                        print(f"Buying @ {data['candle']['close']}")
+                        print(f"Buying @ {candle['close']}")
                         typ = "[PAPERTRADE]" if self.type is SessionType.PAPERTRADE else "[LIVETRADE]"
                         logToSlack(f"{typ} Buying for [{self.stratString}]{self.pair.value} at price: {self.buyPrice}", channel=Channel.PAPERTRADER)
 
@@ -161,18 +175,18 @@ class TradeSession:
 
         else: #is bought 
 
-            self.principle = data['candle']['close'] * self.quantity
+            self.principle = self.calcWithFee(candle['close']) * self.quantity
             self.principleOverTime.append(self.principle)
             if update is True:
-                self.STRATEGY.checkBuy(data)
+                self.STRATEGY.checkBuy(candle)
 
-            if update is True and self.type is SessionType.BACKTEST:
-                self.takeProfit = float(self.buyPrice) * self.takeProfitPercent
+            self.takeProfit = float(self.buyPrice) * self.takeProfitPercent
 
-                if self.CHECK_STOPLOSS(data) or self.STRATEGY.checkSell(data):
-                    self.sell = True 
-                    self.sellPrice = self.calcWithFee(float(data['candle']['close']))
-                    self.sellTime = data['candle']['timestamp']
+            if self.CHECK_STOPLOSS(candle) or self.STRATEGY.checkSell(candle):
+                self.sell = True 
+                self.sellPrice, self.sellTime = self.calcWithFee(float(candle['close'])), candle['timestamp']
+                self.totalFees.append(self.fee * float(candle['close']))
+                     
             if self.sell:
                 self.calcPL()
                 logToSlack(colored("--------------------------\n" + self.toString() + "--------------------------",
@@ -181,10 +195,16 @@ class TradeSession:
                               'green') if self.profitLoss > 0 else colored(
                     "--------------------------\n" + self.toString() + "--------------------------", 'red'))
                 self.profitlosses.append(self.profitLoss)
+
+                if self.type is SessionType.PAPERTRADE:
+                    #write new transaction to database 
+                    results = self.getResults()
+                    writer.writeTransactioncandle(results, sessionid)
+
                 self.reset()
                 return False
 
-        self.prevData = data
+        self.prevcandle = candle
         return True 
     def getTotalTrades(self) -> int:
         """
@@ -194,9 +214,8 @@ class TradeSession:
 
     def getResults(self) -> dict:
         """
-        @:returns results in a dictionary
+        @:returns results in a dictionary that hold buytime, buyprice, selltime, sellprice, profitloss 
         """
-
         return {
             "pair": self.pair.value,
             "tradeResults": self.results
