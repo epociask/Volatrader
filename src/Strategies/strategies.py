@@ -162,7 +162,7 @@ class FIFTY_MOVING_AVERAGE_STRATEGY(strategy):
         self.candleLimit = 50
         self.arr = []
         self.candles = []
-        self.indicators = {"SMA_50": [True], "RSI_14": [False], "UPTREND_4": [True], 'BB_20': [True, 'MOVING AVERAGE BB', 'UPPER BAND BB', 'LOWER BAND BB']}
+        self.indicators = ["SMA_50", "UPTREND_5", "MACD_12"]
 
     def checkBuy(self, candle):
         self.candles.append(candle)
@@ -170,11 +170,14 @@ class FIFTY_MOVING_AVERAGE_STRATEGY(strategy):
             self.arr.append(float(candle['close']))
             return WAIT
 
-
+        self.arr.pop(1)
+        self.candles.pop(1)
         self.arr.append(float(candle['close']))
         self.val_50 = IndicatorFunctions.SMA(self.arr, 50)[-1]
-        self.bb = IndicatorFunctions.BB(candles, 20)
-        if self.val_50 < candle['close'] and not IndicatorFunctions.DOWNTREND(self.candles, n=4):
+        self.bb = IndicatorFunctions.BB(self.candles, 20)
+        self.adx = IndicatorFunctions.ADX(self.candles)
+        self.macd = IndicatorFunctions.MACD(self.arr)
+        if self.val_50 < candle['close'] and IndicatorFunctions.UPTREND(self.candles, n=3):
             return BUY
 
         return WAIT 

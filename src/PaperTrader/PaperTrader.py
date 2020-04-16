@@ -114,7 +114,7 @@ class PaperTrader:
                 self.currentPrice, _ = getCurrentBinancePrice(self.pair)
                 ts = datetime.now()
                 print(f"Checking for sell w/ {self.pair} @ {price}")
-                dummyCandle = {"candle" : {"close": self.currentPrice, "timestamp": ts}}
+                dummyCandle = {"close": self.currentPrice, "timestamp": ts}
                 print(dummyCandle)
                 bought =  self.tradingSession.update(dummyCandle, False)
 

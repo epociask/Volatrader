@@ -7,28 +7,29 @@ def getFunction(name: str):
     return globals()[name]
 
 
-""""
-Insert indicator graph logic here
-""""
-    
+# """"
+# Insert indicator graph logic here
+# """"
+
+def ADX(data, n=14):
+    low = [e['low'] for e in data]
+    closes = [e['close'] for e in data]
+    data = [e['high'] for e in data]
+    highs = pd.Series(data) 
+    low = pd.Series(low)
+    closes = pd.Series(closes)
+    adx_values = ta.trend.ADXIndicator(highs, low, closes, n) 
+    return{ "ADX VALUE" :adx_values.adx().iat[-1], "DI+": adx_values.adx_neg().iat[-1], "DI-": adx_values.adx_pos().iat[-1]}
+
+
+
 
 
 def BB(data, period=10, ndev=2):
     data = [e['close'] for e in data]
     data = pd.Series(data)
     indicator_bb = ta.volatility.BollingerBands(close=data, n=20, ndev=2)
-    print (indicator_bb.bollinger_mavg().iat[-1])   
     return {"MOVING AVERAGE BB" : indicator_bb.bollinger_mavg().iat[-1], "UPPER BAND BB": indicator_bb.bollinger_hband().iat[-1], "LOWER BAND BB": indicator_bb.bollinger_lband().iat[-1]}
-
-
-
-
-def SMA(data, period=3) :
-    ret = np.cumsum(data, dtype=float)
-    ret[period:] = ret[period:] - ret[:-period]
-    return ret[period - 1:] / period
-
-
 
 
 def EMA(values, alpha = .3, epsilon = 0):
@@ -57,6 +58,22 @@ def EMA(values, alpha = .3, epsilon = 0):
        result[i] = numerator / denominator
 
    return result
+
+def MACD(closes, n_fast=12, n_slow=26 , n_sign= 9):
+    # closes = np.array([e['close'] for e in closes])
+
+    result_MACD = ta.trend.MACD(pd.Series(closes), n_fast, n_slow, n_sign)
+    return {"MACD Line": result_MACD.macd().iat[-1], "MACD Histogram" : result_MACD.macd_diff().iat[-1], "Signal Line" : result_MACD.macd_signal().iat[-1]}
+
+def SMA(data, period=3) :
+    ret = np.cumsum(data, dtype=float)
+    ret[period:] = ret[period:] - ret[:-period]
+    return ret[period - 1:] / period
+
+
+
+
+
 
 def RSI(prices, n=14):
     deltas = np.diff(prices)
@@ -96,9 +113,14 @@ def DOWNTREND(candles, n=3):
 
 def UPTREND(candles, n=3):
 
-    
-    if candles[len(candles)-n]['close'] <  candles[-1]['close']:    
-        return True 
+
+    if candles[len(candles)-n]['close'] <  candles[-1]['close']:   
+        temp = candles[len(candles)-n :len(candles)]
+        print(temp)
+        for candle in temp:
+            if candle['close'] < candle['open']:
+                return False
+        return True
 
     return False
 

@@ -107,11 +107,11 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
         closes = []
         indicatorFunctions = []
         ohlcvs = []
-        for index, val in enumerate(strategy.indicators.keys()):
+        for index, val in enumerate(strategy.indicators):
             indicatorFunctions.append(IndicatorFunctions.getFunction("".join(e for e in val if not e.isdigit() and e != "_")))
 
         for index, candle in enumerate(candles):
-            closes.append(candle['close'])
+            closes.append(float(candle['close']))
             ohlcvs.append(candle)
             if convertNumericTimeToString(candle['timestamp']) in buyTimes:
                 candle['buy'] = candle['close']
@@ -127,27 +127,29 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
                 candle['buy'] = 'NaN'
 
             if candleLimit <= 0:
-                for index1, val in enumerate(strategy.indicators.keys()):
-
+                for index1, val in enumerate(strategy.indicators):
                     try:
                         out = indicatorFunctions[index1](closes, int("".join(e for e in val if e.isdigit())))[-1]
                         candle[val] = out
 
                     except Exception as e:
-
                         if type(e) is TypeError:
-                            out = indicatorFunctions[index1](ohlcvs, int("".join(e for e in val if e.isdigit())))
+                            out = indicatorFunctions[index1](ohlcvs, int("".join(e for e in val if e.isdigit())))  
+                        else: 
+                            for i in closes:
+                                print(type(i))
+                            out = indicatorFunctions[index1](closes)
 
-                            if type(out) is dict:
-                                out = indicatorFunctions[index1](ohlcvs, int("".join(e for e in val if e.isdigit())))
-                                for key in out.keys():
-                                    candle[key] = out[key]
+                        if type(out) is dict:
+                            for key in out.keys():
+                                print(key)
+                                candle[key] = out[key]
 
+                        if type(out) is bool:
+                            if out is True:
+                                candle[val] = candle['close']  
                             else:
-                                if out is True:
-                                    candle[val] = candle['close']  
-                                else:
-                                    candle[val] = 'NaN'
+                                candle[val] = 'NaN'
 
                                
             candle['timestamp'] = convertNumericTimeToString(candle['timestamp'])
@@ -163,8 +165,7 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
         
         candles_returns = pd.DataFrame(candles)
         candles_returns.index = pd.to_datetime(candles_returns['timestamp'])
-        del candles_returns['timestamp']
-
+        del candles_returns['timestamp']    
         filename = figures_to_html(getBacktestResultsString(backTestingSession.getTotalFees(), stratString, candleSize, pair, principle, endingPrice, totalPl, 
         (int(gainCount)+int(lossCount)), start, finish, gainCount, lossCount, stopLossPercent, takeProfitPercent, stratString, strategy.indicators, html=True), generateGraphs(candles_returns, pair, candleSize, stratString, results, strategy, rolling_sharps))
 

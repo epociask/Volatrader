@@ -5,7 +5,7 @@ import os
 from Helpers.Constants.Enums import *
 from termcolor import colored
 import numpy as np
-
+from Trader.Indicators.IndicatorConstants import getIndicator
 
 def figures_to_html(string, figs, filename="analysis.html"):
 
@@ -50,7 +50,7 @@ def getBacktestResultsString(fees, strategy, candleSize: Candle, pair: Pair, pri
 # Returns a candlestick graph with buy and sell points
 def generateCandleGraph(candle_data: pd.DataFrame, pair: Pair, candle: Candle, stratString: str, indicators: list):
 
-    fig = make_subplots(rows=3, cols=1)
+    fig = make_subplots(rows=5, cols=1)
     fig.update_layout(
         autosize=False,
         height=1200,
@@ -96,39 +96,54 @@ def generateCandleGraph(candle_data: pd.DataFrame, pair: Pair, candle: Candle, s
                     name="CANDLES"), row=1, col=1)
 
     fig.add_trace(go.Bar(x=candle_data.index, y=candle_data['volume'], name="Volume", marker=dict(color=color), yaxis='y'), row=2, col=1)
-    # fig.add_trace(go.Line(x=candle_data.index, yaxis="y2",
-    #                     y=candle_data['sma_5'],
-    #                     name="SMA_5"), row=1, col=1)
-    delete = []
-    for indicator in indicators.keys():
-        rowNum = 3
-        if indicators[indicator][0]: 
-            if len(indicators[indicator]) == 1:
+
+    rowNum = 3
+
+    for indicator in indicators:
+
+        values = getIndicator(indicator)
+        if values[0]: 
+            if len(values) == 1:
                 fig.add_trace(go.Scatter(x=candle_data.index, yaxis="y2",
                             y=candle_data[indicator],
                             name=indicator.upper()), row=1, col=1)
 
             else:
-                for val in indicators[indicator]:
+                for val in values:
                     if type(val) is not bool:
                         print("adding for ", val)
+                        color = 'red' if val == 'MOVING AVERAGE BB' else 'grey' 
+            
+                        
                         fig.add_trace(go.Scatter(x=candle_data.index, yaxis="y2",
-                            y=candle_data[val],
+                            y=candle_data[val], line=dict(color=color, width=1, dash='dot' if val == 'MOVING AVERAGE BB' else 'solid'),
                             name=val.upper()), row=1, col=1)
         
         else:
-                if len(indicators[indicator]) == 1:
-                    fig.add_trace(go.Scatter(x=candle_data.index, yaxis=f'y{rowNum}', y=candle_data[indicator], name=indicator), row=rowNum, col=1)
 
-                for val in indicators[indicator]:
-                    if type(val) is not bool:
-                        fig.add_trace(go.Scatter(x=candle_data.index, yaxis=f'y{rowNum}', y=candle_data[val], name=val), row=rowNum, col=1)
-                        
+                print(f"row # {rowNum} adding for {indicator}")
+
+                if len(values) == 1:
+                    fig.add_trace(go.Scatter(x=candle_data.index, yaxis=f'y{rowNum}', y=candle_data[indicator], name=indicator), row=rowNum, col=1)
+                    rowNum+=1
+
+                else:
+                    for val in values:
+                        if type(val) is not bool:
+
+                            if val == 'MACD Histogram':
+                                fig.add_trace(go.Bar(x=candle_data.index, yaxis=f'y{rowNum}', y=candle_data[val], name=val), row=rowNum, col=1)
+                                
+                            else:
+                                fig.add_trace(go.Scatter(x=candle_data.index, yaxis=f'y{rowNum}', y=candle_data[val], name=val), row=rowNum, col=1)
+                    rowNum+=1
+
                 if indicator.find('RSI') != -1:
                     fig.add_trace(go.Scatter(x=candle_data.index, yaxis=f'y{rowNum}', y=([30] * candle_data['open'].count()),  line=dict(color='black', width=1, dash='dot')), row=rowNum, col=1)
                     fig.add_trace(go.Scatter(x=candle_data.index, yaxis=f'y{rowNum}', y=([70] * candle_data['open'].count()),  line=dict(color='black', width=1, dash='dot')), row=rowNum, col=1)
 
-    fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['buy'], yaxis="y2", mode='markers', line=dict(color='white', width=14), name = "BUY"), row=1, col=1)
+               
+    fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['buy'], yaxis="y2", mode='markers', line=dict(color='blue', width=14), name = "BUY"), row=1, col=1)
     fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['sell'], yaxis="y2", mode='markers', line=dict(color='black', width=14), name="SELL"), row=1, col=1)
     # fig.update_layout(sliders=sliders)
     return fig

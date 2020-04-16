@@ -7,7 +7,6 @@ import ccxt
 import numpy as np
 import sys, os
 sys.path.append(os.path.dirname(os.getcwd()))
-from Helpers.Constants.IndicatorConstants import candle
 from Helpers.Constants.Enums import Indicator, Pair, Candle, SessionType
 import re   
 import requests 
