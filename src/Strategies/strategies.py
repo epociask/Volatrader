@@ -3,7 +3,7 @@ from SlackNotifier.PriceNotifications import getUpperNormalDistrubtion
 from Trader.Indicators import IndicatorFunctions
 from Helpers.TimeHelpers import convertNumericTimeToString
 BUY, SELL = True, True
-WAIT = False 
+HOLD = False 
 def getStrat(name: str):
     """
     returns strategy function with a list of indicators to use with it
@@ -23,7 +23,7 @@ class strategy():
         self.principle = principle
 
     def checkSell(self, candle):
-        return WAIT 
+        return HOLD 
 
 
 # class riskManager():                              ######PORTFOLIO ALLOCATION TODO
@@ -42,17 +42,16 @@ class TEST_STRAT(strategy):
     def checkBuy(self, candle):
         return BUY
 
-class BBANDS_STRAT(strategy):
+# class BBANDS_STRATEGY(strategy):
 
-    def __init__(self, pair: Pair, candle: Candle, principle : int):
-        super().__init__(pair, candle, principle)
-        self.indicatorList = [Indicator.BBANDS]
+#     def __init__(self, pair: Pair, candle: Candle, principle : int):
+#         super().__init__(pair, candle, principle)
+#         self.indicatorList = [Indicator.BBANDS]
 
-    def checkBuy(self, candle):
-        if candle['bbands']['valueUpperBand'] < candle['close']:
-            return BUY
+#     def checkBuy(self, candle):
+    
 
-        return WAIT
+#     def checkSell(self, )
 
 class SIMPLE_BUY_STRAT(strategy):
 
@@ -65,7 +64,7 @@ class SIMPLE_BUY_STRAT(strategy):
 
             return BUY
 
-        return WAIT
+        return HOLD
 
 class TEST_BUY_STRAT(strategy):
     def __init__(self, pair: Pair, candle: Candle, principle:int ):
@@ -88,7 +87,7 @@ class TEST_BUY_STRAT(strategy):
             return BUY
 
         else:
-            return WAIT
+            return HOLD
 
 
 class NATHAN_STRAT(strategy):
@@ -103,7 +102,7 @@ class NATHAN_STRAT(strategy):
         if candle['macdfix']['valueMACDSignal'] > candle['macdfix']['valueMACD']:
             return BUY
 
-        return WAIT
+        return HOLD
 
 
 class CANDLESTICK_STRAT(strategy):
@@ -133,7 +132,7 @@ class CANDLESTICK_STRAT(strategy):
             print(total)
             return BUY
 
-        return WAIT
+        return HOLD
 
 
 class EMA_STRATEGY(strategy):
@@ -145,15 +144,38 @@ class EMA_STRATEGY(strategy):
     def checkBuy(self, candle):
         if self.count < self.period:
             self.count+=1
-            return WAIT
+            return HOLD
 
         if self.emas[self.count] > candle[4]:
             self.count+=1
             return BUY 
 
         self.count += 1 
-        return WAIT
+        return HOLD
 
+
+class THREELINESTRIKE_STRATEGY(strategy):
+
+    def __init__(self, pair: Pair, candle: Candle, principle:int):
+        super().__init__(pair, candle, principle)
+        self.candleLimit = 100
+        self.candles = []
+        self.indicators = ['PATTERNTHREELINESTRIKE_3', 'PATTERNMORNINGSTAR_3']
+
+    def checkBuy(self, candle):
+        self.candles.append(candle)
+        if len(self.candles) < self.candleLimit:
+            return HOLD
+
+        self.candles.pop(0)
+        if IndicatorFunctions.PATTERNTHREELINESTRIKE(self.candles):
+            print("indication")
+            return BUY 
+
+
+        return HOLD
+
+        
 
 class FIFTY_MOVING_AVERAGE_STRATEGY(strategy):
 
@@ -162,31 +184,38 @@ class FIFTY_MOVING_AVERAGE_STRATEGY(strategy):
         self.candleLimit = 50
         self.arr = []
         self.candles = []
-        self.indicators = ["SMA_50", "UPTREND_5", "MACD_12"]
+        self.indicators = ["SMA_50", "UPTREND_5", 'RSI_14', "SMA_15", 'PATTERNTHREELINESTRIKE_3']
+        self.sdv = getUpperNormalDistrubtion(pair, candle, 500)
+
 
     def checkBuy(self, candle):
         self.candles.append(candle)
         if len(self.arr) < self.candleLimit:
             self.arr.append(float(candle['close']))
-            return WAIT
+            return HOLD
 
         self.arr.pop(1)
         self.candles.pop(1)
         self.arr.append(float(candle['close']))
         self.val_50 = IndicatorFunctions.SMA(self.arr, 50)[-1]
-        self.bb = IndicatorFunctions.BB(self.candles, 20)
-        self.adx = IndicatorFunctions.ADX(self.candles)
-        self.macd = IndicatorFunctions.MACD(self.arr)
-        if self.val_50 < candle['close'] and IndicatorFunctions.UPTREND(self.candles, n=3):
+        self.val_15 = IndicatorFunctions.SMA(self.arr, 15)[-1]
+        self.rsi = IndicatorFunctions.RSI(self.arr, 14)[-1]
+
+
+        if self.val_50 < candle['close'] and self.val_15 < candle['close'] and IndicatorFunctions.UPTREND(self.candles, n=3) and self.sdv['3SD'] > candle['volume'] and self.rsi < 70:
+            self.passed = True 
             return BUY
 
-        return WAIT 
+
+        self.passed = False 
+
+        return HOLD 
 
 
     def checkSell(self, candle):
-        if self.val_50 > candle['close'] and IndicatorFunctions.DOWNTREND(self.candles, n=4):
+        if (self.val_50 > candle['close'] and IndicatorFunctions.DOWNTREND(self.candles, n=4) and not self.passed) or self.rsi > 70:
             return SELL
-        return WAIT
+        return HOLD
         
 
 class MA_STRATEGY(strategy):
@@ -206,7 +235,7 @@ class MA_STRATEGY(strategy):
             self.arr.append(float(candle['close']))
             # print("APPEDEND CANDLE CLOSE", self.arr)
             self.prevCandle = candle
-            return WAIT
+            return HOLD
         else:
             self.arr.append(float(candle['close']))
             del self.arr[0]
@@ -225,7 +254,7 @@ class MA_STRATEGY(strategy):
                 return BUY
 
             self.prevCandle = candle
-            return WAIT 
+            return HOLD 
 
 
     def checkSell(self, candle):
@@ -233,5 +262,5 @@ class MA_STRATEGY(strategy):
             if self.val_5 < self.val_13 and self.val_5 < self.val_8:
                 return SELL
 
-            return WAIT 
+            return HOLD 
             

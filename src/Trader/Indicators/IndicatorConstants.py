@@ -12,9 +12,18 @@ def getIndicator(name:  str):
 #    return{ "ADX VALUE" :adx_values.adx().iat[-1], "DI+": adx_values.adx_neg().iat[-1], "DI-": adx_values.adx_pos().iat[-1]}
 ADX = [False, 'ADX VALUE', "DI+", "DI-"]
 BB = [True, 'MOVING AVERAGE BB', 'UPPER BAND BB', 'LOWER BAND BB']
+PATTERNTHREEINSIDE = [True]
+PATTERNTHREEBULLISHSOLDIERS = [True]
+PATTERNTHREEBEARISHSOLDIERS = [True]
+PATTERNONNECKLINE = [True]
+PATTERNTHREELINESTRIKE = [True]
+PATTERNMORNINGSTAR = [True]
+HAMMER = [True]
+EMA = [True]
 MACD = [False, "MACD Line", "MACD Histogram", "Signal Line"]
 SMA = [True]
 RSI = [False]
+RSIDIVERGENCE = [False]
 UPTREND = [True]
 
 

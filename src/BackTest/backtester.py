@@ -141,7 +141,6 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
 
                         if type(out) is dict:
                             for key in out.keys():
-                                print(key)
                                 candle[key] = out[key]
 
                         if type(out) is bool:

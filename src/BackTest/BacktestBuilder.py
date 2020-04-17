@@ -53,7 +53,7 @@ def generateCandleGraph(candle_data: pd.DataFrame, pair: Pair, candle: Candle, s
     fig = make_subplots(rows=5, cols=1)
     fig.update_layout(
         autosize=False,
-        height=1200,
+        height=3000,
         width=1500,
         title={
         'text': f"CANDLE STICK GRAPH WITH USED INDICATORS",
@@ -103,10 +103,15 @@ def generateCandleGraph(candle_data: pd.DataFrame, pair: Pair, candle: Candle, s
 
         values = getIndicator(indicator)
         if values[0]: 
-            if len(values) == 1:
+            if len(values) == 1 and indicator.find('PATTERN') == -1:
                 fig.add_trace(go.Scatter(x=candle_data.index, yaxis="y2",
                             y=candle_data[indicator],
                             name=indicator.upper()), row=1, col=1)
+
+            elif indicator.find('PATTERN') != -1:
+                fig.add_trace(go.Scatter(x=candle_data.index, yaxis="y2",
+                            y=candle_data[indicator],
+                            name=indicator.upper(),  mode='markers', line=dict(color='orange', width=14)), row=1, col=1)
 
             else:
                 for val in values:
@@ -125,7 +130,6 @@ def generateCandleGraph(candle_data: pd.DataFrame, pair: Pair, candle: Candle, s
 
                 if len(values) == 1:
                     fig.add_trace(go.Scatter(x=candle_data.index, yaxis=f'y{rowNum}', y=candle_data[indicator], name=indicator), row=rowNum, col=1)
-                    rowNum+=1
 
                 else:
                     for val in values:
@@ -136,13 +140,13 @@ def generateCandleGraph(candle_data: pd.DataFrame, pair: Pair, candle: Candle, s
                                 
                             else:
                                 fig.add_trace(go.Scatter(x=candle_data.index, yaxis=f'y{rowNum}', y=candle_data[val], name=val), row=rowNum, col=1)
-                    rowNum+=1
 
-                if indicator.find('RSI') != -1:
+                if indicator.find('RSI') != -1 and indicator.find('DIVERGE') == -1:
                     fig.add_trace(go.Scatter(x=candle_data.index, yaxis=f'y{rowNum}', y=([30] * candle_data['open'].count()),  line=dict(color='black', width=1, dash='dot')), row=rowNum, col=1)
                     fig.add_trace(go.Scatter(x=candle_data.index, yaxis=f'y{rowNum}', y=([70] * candle_data['open'].count()),  line=dict(color='black', width=1, dash='dot')), row=rowNum, col=1)
 
-               
+        rowNum+=1
+      
     fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['buy'], yaxis="y2", mode='markers', line=dict(color='blue', width=14), name = "BUY"), row=1, col=1)
     fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['sell'], yaxis="y2", mode='markers', line=dict(color='black', width=14), name="SELL"), row=1, col=1)
     # fig.update_layout(sliders=sliders)

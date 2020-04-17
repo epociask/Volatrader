@@ -105,7 +105,7 @@ class TradeSession:
         """
         reset function to reset class members after selling
         """
-        logDebugToFile(f"Resetting for {self.pair}")
+        # logDebugToFile(f"Resetting for {self.pair}")
 
         self.addResult()
         self.sellStrat.reset()
@@ -147,7 +147,7 @@ class TradeSession:
         Uses sell logic instance to see if it's time to sell
         @:returns boolean
         """
-        logDebugToFile("Checking sell")
+        # logDebugToFile("Checking sell")
         if self.sellStrat.run(float(candle['close'])) or self.takeProfit <= float(candle['close']):
 
             return True
@@ -167,19 +167,17 @@ class TradeSession:
             self.principleOverTime.append(self.principle)
 
             if self.prevcandle is None or self.prevcandle != candle:
-                logDebugToFile(f"Checking buy condition for {self.pair} w/ {candle}")
+                #   logDebugToFile(f"Checking buy condition for {self.pair} w/ {candle}")
                 self.buy = self.STRATEGY.checkBuy(candle)
 
                 if self.buy:
                     self.buyPrice, self.buyTime = self.calcWithFee(candle['close']), candle['timestamp']
                     self.totalFees.append(self.fee* candle['close'])
                     self.quantity = self.principle / self.buyPrice
-
+                    print(f"Buying @ {candle['close']}")
                     if self.type is not SessionType.BACKTEST:
-                        print(f"Buying @ {candle['close']}")
                         typ = "[PAPERTRADE]" if self.type is SessionType.PAPERTRADE else "[LIVETRADE]"
                         logToSlack(f"{typ} Buying for [{self.stratString}]{self.pair.value} at price: {self.buyPrice}", channel=Channel.PAPERTRADER)
-
                         return True
 
 
@@ -202,6 +200,11 @@ class TradeSession:
                 self.calcPL()
                 if self.type is not SessionType.BACKTEST:
                     logToSlack(f"TRADE COMPLETE\nResults:\n{self.toString()}", channel=Channel.PAPERTRADER)
+
+                else:
+                    print(colored("--------------------------\n" + self.toString() + "--------------------------",
+                              'green') if self.profitLoss > 0 else colored(
+                    "--------------------------\n" + self.toString() + "--------------------------", 'red')) 
                 self.profitlosses.append(self.profitLoss)
                 self.reset()
                 if self.type is SessionType.PAPERTRADE:

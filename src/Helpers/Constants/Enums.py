@@ -47,6 +47,7 @@ class Time(Enum):
     enum to represent all time instances
     """
     DAY = 24
+    THREEDAY = 72
     ONEWEEK = 168
     TWOWEEK = 336
     THREEWEEK = 504
