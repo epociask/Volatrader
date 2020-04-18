@@ -36,6 +36,8 @@ def convertNumericTimeToString(numeric: (float, int, str)) -> (str, Exception):
     @returns Exception if error
     @returns string timestamp
     """
+    if type(numeric) == datetime.datetime:
+        return numeric
 
     try:
         date = datetime.datetime.fromtimestamp(numeric / 1e3)

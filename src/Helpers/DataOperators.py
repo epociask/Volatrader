@@ -7,7 +7,6 @@ import ccxt
 import numpy as np
 import sys, os
 sys.path.append(os.path.dirname(os.getcwd()))
-from Helpers.Constants.IndicatorConstants import candle
 from Helpers.Constants.Enums import Indicator, Pair, Candle, SessionType
 import re   
 import requests 
@@ -133,7 +132,7 @@ def cleanCandle(candle: dict) -> dict:
     close = cleaner(next(it))
     volume = cleaner(next(it))
 
-    return {"candle":{
+    return {
         'timestamp': time,
         'open': open,
         'high': high,
@@ -141,7 +140,7 @@ def cleanCandle(candle: dict) -> dict:
         'close': close,
         'volume': volume,
     }
-    }
+    
 
 
 import random
@@ -165,7 +164,7 @@ def printLogo(type: SessionType=None):
     text_color, None, attrs=['blink'])
 
     if type is SessionType.PAPERTRADE:
-        cprint(figlet_format('[PAPERTRADE]', font=font),
+        cprint(figlet_format('[PAPER]', font=font),
         text_color, None, attrs=['blink'])
 
     if type is SessionType.LIVETRADE:
@@ -210,7 +209,6 @@ def cleanCandlesWithIndicators(data: list) -> list:
         candle['close'] = str(next(it))
         candle['volume'] = str(next(it))
         l = (next(it))
-        l['candle'] = candle
         ret.append(l)
 
 

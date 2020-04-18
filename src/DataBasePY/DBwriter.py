@@ -1,14 +1,18 @@
 import datetime
-import time     
+import time
 from Helpers.Constants.Enums import *
-from Trader.TradeSession import TradeSession
 from Helpers.API.CMC_api import getMarketData, getMacroEconomicData
 from DataBasePY.DBoperations import DBoperations
 import psycopg2
+from psycopg2.extras import Json
+import json
 from DataBasePY import QueryHelpers
 import ccxt
 from Helpers.Logger import logToSlack, MessageType, logDebugToFile, logErrorToFile
+
+
 indicatorENUMS = [e for e in Indicator]
+
 
 class DBwriter(DBoperations):
     """
@@ -18,9 +22,9 @@ class DBwriter(DBoperations):
 
     def __init__(self):
         super().__init__()
-        self.connect()
 
-    def writeBackTestData(self, session: Session, startTimeStamp: str, finishTimeStamp: str):
+
+    def writeBackTestData(self, session, startTimeStamp: str, finishTimeStamp: str):
         """
 
         :param session:
@@ -31,7 +35,7 @@ class DBwriter(DBoperations):
         query = QueryHelpers.getInsertBackTestDataQuery(session, startTimeStamp, finishTimeStamp)
         try:
             logDebugToFile(query)
-            self.cur.execute(query)
+            self.execute(query)
 
         except Exception as e:
             logErrorToFile(e)
@@ -40,7 +44,77 @@ class DBwriter(DBoperations):
                 createTableQuery = ""
             raise e
 
+        self.commit()
 
+
+    def writePaperTradeStart(self, sessionId, start_time, strategy, pair):
+        """
+        Writes initial strategy information when a PaperTrade Session is started
+        """
+
+        query = f"INSERT INTO papertrader_results (session_id, session_start_time, strategy, pair) " \
+            f"VALUES ('{sessionId}', '{start_time}', '{strategy}', '{pair.value}')"
+
+        try:
+            self.execute(query)
+
+        except Exception as e:
+            print("Eror writing paper trade data: ")
+            raise e
+
+        self.commit()
+
+
+    def writePaperTradeEnd(self, sessionId):
+        """
+        Writes the time of the paper trade session when the session is completed
+        """
+        query = f"UPDATE papertrader_results set session_end_time = '{datetime.datetime.now()}' WHERE session_id = '{sessionId}';"
+        logDebugToFile("Finished paper trader, writing results")
+        
+
+        try:
+            self.execute(query)
+        except Exception as e:
+            print("Error writing paper trader end data")
+            raise e
+
+
+        self.commit()
+
+
+    def writeTransactionData(self, results, sessionId):
+        """
+        Writes transaction data to jsonb using sessionId as a key
+        """
+
+        logDebugToFile("Inserting paper trader results...")
+        query = f"UPDATE papertrader_results SET transactions = '{json.dumps(results, default=str)}' WHERE session_id = '{sessionId}';"
+        print(query)
+        try:
+            self.execute(query)
+
+        except Exception as e:
+            print("Error updating transaction data: ")
+            raise e
+
+        self.commit()
+
+    def writeTotalPnl(self, pnl, sessionId):
+        """
+        Writes the total pnl to the database every 5 mins
+        """
+        query = f"UPDATE papertrader_results SET total_pnl = {pnl} WHERE session_id = '{sessionId}';"
+        print("Writing total pnl to database")
+        print(query)
+        try:
+            self.execute(query)
+
+        except Exception as e:
+            print("Error updating pnl value")
+            raise e
+
+        self.commit()
 
 
     def writeStaticMarketDataQuerys(self, coin, timeStamp):
@@ -145,4 +219,3 @@ class DBwriter(DBoperations):
         dataDict = getMarketData()
         for coin in dataDict:
             self.writeStaticMarketDataQuerys(coin)
-

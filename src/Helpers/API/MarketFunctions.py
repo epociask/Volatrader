@@ -2,6 +2,7 @@ from Helpers.Constants.Enums import Pair
 import datetime as datetime 
 import requests
 import time 
+# from Helpers.logger import logDebugToFile
 
 def getCurrentBinancePrice(pair: Pair):
     """
@@ -10,7 +11,14 @@ def getCurrentBinancePrice(pair: Pair):
     :return: float
     """
     time.sleep(5)
-    req = requests.get(f"https://api.binance.com/api/v1/ticker/price?symbol={pair.value}")
+
+    try:
+        req = requests.get(f"https://api.binance.com/api/v1/ticker/price?symbol={pair.value}")
+
+    except Exception as e:
+        print(f"GOT EXCEPTION FROM BINANCE API {e}.. retrying in 10 seconds")
+        getCurrentBinancePrice(pair
+        )
     return float(req.json()['price']), datetime.datetime.now()
 
 

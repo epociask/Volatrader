@@ -1,12 +1,29 @@
 import argparse
+import sys, os
 from PaperTrader.PaperTrader import PaperTrader
 from Helpers.Constants.Enums import *
-
+from Helpers.Logger import logToSlack
+from DataBasePY.DBwriter import DBwriter
+from datetime import datetime
 
 def main(args):
 	paper_trader = PaperTrader()
-	paper_trader.trade(args.pair, args.candlesize, args.strategy, args.stoploss, args.takeprofit, args.principle)
+	writer = DBwriter()
 
+	try:
+		paper_trader.trade(args.pair, args.candlesize, args.strategy, args.stoploss, args.takeprofit, args.principle, Time[args.time].value)
+
+	except Exception as e:
+		raise e
+		logToSlack(e)
+
+	# except KeyboardInterrupt:
+		#
+		# # writer.writePaperTradeEnd(paper_trader.sessionid)
+		# try:
+		# 	sys.exit(0)
+		# except SystemExit:
+		# 	os._exit(0)
 
 if __name__ == '__main__':
 	ap = argparse.ArgumentParser()
@@ -23,6 +40,8 @@ if __name__ == '__main__':
 	                help="Desired take profit percentage.")
 	ap.add_argument('--principle', '-pr', required=True, type=int,
 	                help="Desired base principle investment to run strategy with")
+	ap.add_argument('--time', '-t', required=True, type=str,
+	                help="How long to run paper trader for")
 
 	args = ap.parse_args()
 

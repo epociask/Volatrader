@@ -1,6 +1,6 @@
 from enum import Enum
 import ccxt 
-
+# from Helpers.API.Stock_API import STOCK_MARKET
 class Candle(Enum):
     """
     Enum to represent all possible candle sizes
@@ -20,6 +20,7 @@ class Candle(Enum):
 class Market(Enum):
     BINANCE = ccxt.binance()
     KRAKEN = ccxt.kraken()
+    # STOCK = STOCK_MARKET()
 
 class SessionType(Enum):
     BACKTEST = 0
@@ -46,6 +47,7 @@ class Time(Enum):
     enum to represent all time instances
     """
     DAY = 24
+    THREEDAY = 72
     ONEWEEK = 168
     TWOWEEK = 336
     THREEWEEK = 504
