@@ -5,7 +5,6 @@ from Trader.TradeSession import TradeSession
 from Helpers.API.CMC_api import getMarketData, getMacroEconomicData
 from DataBasePY.DBoperations import DBoperations
 import psycopg2
-from Helpers import HelpfulOperators
 from DataBasePY import QueryHelpers
 import ccxt
 from Helpers.Logger import logToSlack, MessageType, logDebugToFile, logErrorToFile
