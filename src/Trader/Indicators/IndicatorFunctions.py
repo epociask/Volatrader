@@ -216,6 +216,20 @@ def PATTERNTHREELINESTRIKE(candles, n=4):
             return True 
 
     return False 
+
+def PATTERNTHREELINESTRIKEBEARISHREVERSAL(candles, n=4):
+    
+    candle1, candle2, candle3, candle4 = candles[-4], candles[-3], candles[-2], candles[-1]
+
+    if BULL_CANDLE(candle1) and BULL_CANDLE(candle2) and BULL_CANDLE(candle3) and BEAR_CANDLE(candle4):
+        for candle in [candle1, candle2, candle3]:
+            if candle['open'] > candle4['open'] or candle['close'] < candle4['close']:
+                return False 
+        
+        if candle3['open'] >= candle2['close'] and candle2['open'] >= candle1['close']:
+            return True 
+
+    return False 
 def PATTERNTHREEINSIDE(candles, n=3):
     #  a large down candle, SOON 
     #  a smaller up candle contained within the prior candle, xx 
@@ -251,6 +265,32 @@ def PATTERNTHREEBULLISHSOLDIERS(candles, n=3):
                     return True 
 
     return False
+
+def PATTERNBEARISHENGULFING(candles, n=3):
+    c1, c2, c3 = candles[-3], candles[-2], candles[-1]
+    if UPTREND(candles[0 : len(candles)-2], n=3):
+        if BEAR_CANDLE(c2) and BULL_CANDLE(c1) and BEAR_CANDLE(c3):
+            print("here")
+            if c1['high'] > c2['close'] and c1['low'] < c2['open']:
+                if (DIFFERENCE(c2) * 2) <= DIFFERENCE(c3):
+                    return True 
+
+
+    return False 
+
+
+
+
+
+def PATTERNTWEEZER(candles, n=3):
+    c1, c2, c3 = candles[-3], candles[-2], candles[-1]
+
+    if BEAR_CANDLE(c1) and BEAR_CANDLE(c2):
+        if c2['open'] == c3['close']:
+            return True 
+
+    return False 
+
 
 def PATTERNTHREEBEARISHSOLDIERS(candles, n=3):
     thirdCandle = candles[-3]

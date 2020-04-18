@@ -10,12 +10,12 @@ class Candle(Enum):
     FIFTEEEN_MINUTE = "15m"
     THIRTY_MINUTE = '30m'
     HOUR = '1h'
-    THREE_HOUR = "3h"
-    TWELVE_HOUR = "12h"
-    ONE_DAY = '1d'
-    THREE_DAY = '3d'
-    ONE_WEEK = '1w'
-    THRE_WEEK = "3w"
+    # THREE_HOUR = "3h"
+    # TWELVE_HOUR = "12h"
+    # ONE_DAY = '1d'
+    # THREE_DAY = '3d'
+    # ONE_WEEK = '1w'
+    # THRE_WEEK = "3w"
 
 class Market(Enum):
     BINANCE = ccxt.binance()
@@ -27,6 +27,11 @@ class SessionType(Enum):
     PAPERTRADE = 1
     LIVETRADE = 2
 
+
+class Strategies(Enum):
+    THREELINESTRIKE = "THREELINESTRIKE_STRATEGY"
+    FIFTY_MOVING_AVERAGE = "FIFTY_MOVING_AVERAGE_STRATEGY"
+    MA = "MA_STRATEGY"
 
 class Pair(Enum):
     """

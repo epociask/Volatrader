@@ -17,13 +17,12 @@ def main(args):
 		raise e
 		logToSlack(e)
 
-	# except KeyboardInterrupt:
-		#
-		# # writer.writePaperTradeEnd(paper_trader.sessionid)
-		# try:
-		# 	sys.exit(0)
-		# except SystemExit:
-		# 	os._exit(0)
+	except KeyboardInterrupt:
+		writer.writePaperTradeEnd(paper_trader.sessionid)
+		try:
+			sys.exit(0)
+		except SystemExit:
+			os._exit(0)
 
 if __name__ == '__main__':
 	ap = argparse.ArgumentParser()

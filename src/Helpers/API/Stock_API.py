@@ -6,6 +6,9 @@ from Constants.Enums import Candle
 
 
 
+class STOCK_MARKET():
+
+
 def getOHLCV(stock: str, candleSize: Candle) -> dict:
 
     resp = requests.get(f'https://financialmodelingprep.com/api/v3/historical-chart/{candleSize.value}in/{stock}')

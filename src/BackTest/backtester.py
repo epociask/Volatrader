@@ -6,6 +6,7 @@ from Helpers.TimeHelpers import convertNumericTimeToString
 from DataBasePY.DBReader import *
 from Trader.TradeSession import TradeSession
 from Strategies import strategies
+from Strategies.Math import Math 
 from Helpers.Constants.Enums import Pair, Candle, Time
 import ccxt
 import pandas as pd
@@ -16,12 +17,12 @@ import argparse
 import subprocess, platform
 from Helpers.DataOperators import printLogo
 from Helpers import TimeHelpers
-from BacktestBuilder import * 
+from BackTest.BacktestBuilder import * 
 from Trader.Indicators import IndicatorFunctions
 import warnings
 warnings.filterwarnings("ignore")
 
-def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int, takeProfitPercent: int, principle: int, timeStart: Time, readFromDataBase=False, outputGraph=False, market=Market.BINANCE):
+def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int, takeProfitPercent: int, principle: int, timeStart: Time, readFromDataBase=False, outputGraph=True, market=Market.BINANCE, server=False):
     """
     main backtest function, prints backtest results, outputs graph results to html if desired 
     @:param pair -> pair you wish to run backtest on
@@ -36,7 +37,7 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
     assert takeProfitPercent in range(1, 100)
     assert type(pair) is Pair
     assert (type(candleSize)) is Candle
-
+    print("STARTING BACKTEST")
     takeProfitPercent = f"0{takeProfitPercent}" if takeProfitPercent - 10 <= 0 else f"{takeProfitPercent}"
     stratString = strategy
     strategy = strategies.getStrat(stratString)
@@ -73,13 +74,18 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
     print(getBacktestResultsString(backTestingSession.getTotalFees(), stratString, candleSize, pair, principle, endingPrice, totalPl, 
         gainCount+lossCount, start, finish, gainCount, lossCount, stopLossPercent, takeProfitPercent, stratString, strategy.indicators))
 
-    
 
     # Outputs Graphs to dashboard.html, rename file to save for future reference
     if outputGraph:
         getInt = lambda val : int((val['buytime'][8 : 10]))
         results = backTestingSession.getResults()['tradeResults']
-        ts = getInt(results[0])
+
+        try:
+            ts = getInt(results[0])
+
+        except Exception as e:
+            print(e)
+            return "NO RESULTS TO BE FOUND"
         timestamps = []
         profitlosses = []
         prevData = None
@@ -149,7 +155,7 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
                             else:
                                 candle[val] = 'NaN'
 
-                               
+
             candle['timestamp'] = convertNumericTimeToString(candle['timestamp'])
             candle['principle'] = backTestingSession.principleOverTime[index]
             candles[index] = candle
@@ -165,10 +171,16 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
         candles_returns.index = pd.to_datetime(candles_returns['timestamp'])
         del candles_returns['timestamp']    
         filename = figures_to_html(getBacktestResultsString(backTestingSession.getTotalFees(), stratString, candleSize, pair, principle, endingPrice, totalPl, 
-        (int(gainCount)+int(lossCount)), start, finish, gainCount, lossCount, stopLossPercent, takeProfitPercent, stratString, strategy.indicators, html=True), generateGraphs(candles_returns, pair, candleSize, stratString, results, strategy, rolling_sharps))
+        (int(gainCount)+int(lossCount)), start, finish, gainCount, lossCount, stopLossPercent, takeProfitPercent, stratString, strategy.indicators, html=True), generateGraphs(candles_returns, pair, candleSize, stratString, results, strategy, rolling_sharps), server)
 
         # Open html doc on windows or mac
-        os.system(f"{'start' if platform.system() == 'Windows' else 'open'} {filename}")
+
+        if not server:
+            os.system(f"{'start' if platform.system() == 'Windows' else 'open'} {filename}")
+
+        else:
+            os.system("mv analysis.html templates")
+
         return 
 
     return totalPl
