@@ -103,17 +103,20 @@ def papertradeRoute():
     sessions = DBReader().getPaperTradeSessions()
     active = []
     unactive = []
-    for index, session in enumerate(sessions):
-        print(session)
-        session[2] = str(f"{session[2]}-{session[3]}-{session[4]} {session[5]}:{session[6]}:{session[7]}")
-        print("-------------------------------->", session[12])
-        print(type(session[12]))
-        if session[12] == 'True':
+    for session in sessions:
+        if session['active'] == 'True':
             active.append(session)
 
         else:
             unactive.append(session)
+        
+
     return render_template('papertrader.html', active_sessions=active, unactive_sessions=unactive)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+
+    try:
+        app.run(debug=True)
+
+    except KeyboardInterrupt:
+        DBwriter().killPaperTraderSession()

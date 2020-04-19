@@ -22,13 +22,16 @@ class DBReader(DBoperations):
 
  
     def getPaperTradeSessions(self):
-        query = 'SELECT * FROM papertrader_results;'
+        query = 'select row_to_json(t) from (SELECT * FROM papertrader_results) t ;'
         self.execute(query)
-        y =  str(self.cur.fetchall()).replace("Decimal(", "").replace("datetime.datetime", "").replace("(", "[").replace(")", "").replace("[2", "2").replace("[{", "{").replace("\'", "\"").replace("None,", "").replace("True", "\"True\"").replace("False", "\"False\"").replace(", []", ']')
-        y = y.replace("[[","[") if y.count("2020") == 1 else y
+        y =  str(self.cur.fetchall())
+        print(y)   
+        y= y.replace("(", "").replace(",)", "").replace("\'", "\"").replace("None,", "\"None\",").replace("True", "\"True\"").replace("False","\"False\"")
+        self.terminateConnection()
         print(y)
-        self.commit()
-        return json.loads(y)
+        y = json.loads(y)
+        print(y)
+        return y
 
     # def getUnactivePaperTrades(self):
     #     query = 'SELECT * FROM papertrader_results WHERE ACTIVE = False;'
@@ -46,4 +49,4 @@ class DBReader(DBoperations):
 
 
 
-
+DBReader().getPaperTradeSessions()

@@ -53,8 +53,13 @@ class DBwriter(DBoperations):
         self.commit()
         return 
 
-    def killPaperTraderSession(self, sessionId):
-        query = f"UPDATE papertrader_results set ACTIVE = False WHERE session_id = \'{sessionId}\';"
+    def killPaperTraderSession(self, sessionId=None):
+
+        if sessionId is not None:
+            query = f"UPDATE papertrader_results set ACTIVE = False WHERE session_id = \'{sessionId}\';"
+
+        else:
+            query = f'UPDATE papertrade_results set ACTIVE = False WHERE running_on = {os.environ.get("DATABASE_NAME")}'
         self.execute(query)
         self.commit()
         return 

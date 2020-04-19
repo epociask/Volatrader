@@ -8,8 +8,8 @@ open DECIMAL({lowHigh}), high  DECIMAL({lowHigh}), low DECIMAL({lowHigh})
 CREATE TABLE papertrader_results (
     session_id uuid PRIMARY KEY,
     running_on character varying, 
-    session_start_time timestamp without time zone,
-    session_end_time timestamp without time zone,
+    session_start_time character varying,
+    session_end_time character varying,
     strategy character varying,
     pair character varying,
     candle character varying,

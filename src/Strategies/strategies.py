@@ -3,7 +3,7 @@ from SlackNotifier.PriceNotifications import getUpperNormalDistrubtion
 from Trader.Indicators import IndicatorFunctions
 from Helpers.TimeHelpers import convertNumericTimeToString
 
-strats = ['THREELINESTRIKE_STRATEGY', 'FIFTY_MOVING_AVERAGE_STRATEGY']
+strats = ['THREELINESTRIKE_STRATEGY', 'FIFTY_MOVING_AVERAGE_STRATEGY', 'TEST_BUY_STRAT']
 BUY, SELL = True, True
 HOLD = False 
 def getStrat(name: str):

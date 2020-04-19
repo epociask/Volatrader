@@ -14,9 +14,9 @@
 
  
     {% for session in active_sessions %}
-       <p>Session ID: {{session[0]}}<br>Running location: {{session[1]}}<br> Start Time: {{session[2]}}  <br>Strategy: {{session[11]}}<br> Pair: {{session[12]}} <br>Candle: {{session[13]}}<br> pNl so far: %{{session[20]}}<br> Current Principle: ${{session[21]}}</p>
+       <p>Session ID: {{session['session_id']}}<br>Running location: {{session['running_on']}}<br> Start Time: {{session['session_start_time']}} <br>Strategy: {{session['strategy']}}<br> Pair: {{session['pair']}} <br>Candle: {{session['candle']}}<br> pNl so far: %{{session['total_pnl']}}<br> Current Principle: ${{session['principle']}}</p>
        <form method="post" action="/end">
-       <input type="submit" value="TERMINATE" name={{session[0]}}>
+       <input type="submit" value="TERMINATE" name={{session['session_id']}}>
        </form>
 
     {% endfor %}
@@ -25,9 +25,9 @@
 <h1> UNACTIVE PAPER TRADER SESSIONS </h1>
 
      {% for session in unactive_sessions %}
-       <p>Session ID: {{session[0]}}<br>Running location: {{session[1]}}<br> Start Time: {{session[2]}}  <br>Strategy: {{session[16]}}<br> Pair: {{session[17]}} <br>Candle: {{session[18]}}<br> pNl so far: %{{session[20]}}<br> Current Principle: ${{session[21]}}</p>
+       <p>Session ID: {{session['session_id']}}<br>Running location: {{session['running_on']}}<br> Start Time: {{session['session_start_time']}}  <br>Finish Time: {{session['session_end_time']}} <br>Strategy: {{session['strategy']}}<br> Pair: {{session['pair']}} <br>Candle: {{session['candle']}}<br> pNl so far: %{{session['total_pnl']}}<br> Current Principle: ${{session['principle']}}</p>
         <form method="post" action="/end">
-       <input type="submit" value="DELETE" name={{session[0]}}>
+       <input type="submit" value="DELETE" name={{session['session_id']}}>
        </form>
     {% endfor %}
 
