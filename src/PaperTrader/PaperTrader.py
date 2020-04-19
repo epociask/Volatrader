@@ -2,7 +2,7 @@ import time
 import datetime
 from Helpers.Logger import logToSlack, logDebugToFile
 from Trader.TradeSession import TradeSession
-from Helpers.Logger import Channel
+from Helpers.Logger import Channel, MessageType
 from Helpers.Constants.Enums import Pair, Candle, SessionType
 from DataBasePY.DBReader import DBReader
 from DataBasePY.DBwriter import DBwriter
@@ -128,10 +128,11 @@ class PaperTrader:
                     bought = self.tradingSession.update(dummyCandle, False)
 
                 
-                if datetime.datetime.now().minute % 5 == 0 and self.currentPrice is not None:
+                if datetime.datetime.now().minute % 1 == 0 and self.currentPrice is not None:
                     logDebugToFile(f"WRITING CURRENT PNL for session{self.sessionid}")
                     currentpnl = self.tradingSession.getCurrentPnl(self.currentPrice)
-                    logDebugToFile(f'PNL being written ---- > {currentpnl}')                
+                    logDebugToFile(f'PNL being written ---- > {currentpnl}{type(currentpnl)}')
+                    logDebugToFile(f"principle --------> {self.principle}")                
                     self.writer.writeTotalPnl(currentpnl, self.principle, self.sessionid)
 
 
@@ -140,9 +141,9 @@ class PaperTrader:
                     raise Exception("I've been terminated")
                     return self.sessionid
         except Exception as e:
-            logToSlack(e)
+            logToSlack(e, messageType=MessageType.ERROR)
             self.writer.writePaperTradeEnd(self.sessionid)
-
+            raise e 
         except KeyboardInterrupt:
             self.writer.writePaperTradeEnd(self.sessionid)
             try:

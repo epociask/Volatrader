@@ -1,6 +1,6 @@
 import datetime
 import time
-import os 
+import os
 from Helpers.Constants.Enums import *
 from Helpers.API.CMC_api import getMarketData, getMacroEconomicData
 from DataBasePY.DBoperations import DBoperations
@@ -51,7 +51,7 @@ class DBwriter(DBoperations):
         query = f"DELETE FROM papertrader_results WHERE session_id = \'{sessionID}\';"
         self.execute(query)
         self.commit()
-        return 
+        return
 
     def killPaperTraderSession(self, sessionId=None):
 
@@ -62,7 +62,7 @@ class DBwriter(DBoperations):
             query = f'UPDATE papertrade_results set ACTIVE = False WHERE running_on = {os.environ.get("DATABASE_NAME")}'
         self.execute(query)
         self.commit()
-        return 
+        return
 
     def writePaperTradeStart(self, sessionId, start_time, strategy, pair, candle, principle):
         """
@@ -76,7 +76,7 @@ class DBwriter(DBoperations):
             self.execute(query)
 
         except Exception as e:
-            print("Eror writing paper trade data: ")
+            logErrorToFile("Eror writing paper trade data: ")
             raise e
 
         self.commit()
@@ -89,12 +89,12 @@ class DBwriter(DBoperations):
         query = f"UPDATE papertrader_results set session_end_time = '{datetime.datetime.now()}' WHERE session_id = '{sessionId}';"
         query += f"UPDATE papertrader_results set active = False WHERE session_id = '{sessionId}';"
         logDebugToFile("Finished paper trader, writing results")
-        
+
 
         try:
             self.execute(query)
         except Exception as e:
-            print("Error writing paper trader end data")
+            logDebugToFile("Error writing paper trader end data")
             raise e
 
 
@@ -108,12 +108,12 @@ class DBwriter(DBoperations):
 
         logDebugToFile("Inserting paper trader results...")
         query = f"UPDATE papertrader_results SET transactions = '{json.dumps(results, default=str)}' WHERE session_id = '{sessionId}';"
-        print(query)
+        logDebugToFile(query)
         try:
             self.execute(query)
 
         except Exception as e:
-            print("Error updating transaction data: ")
+            logDebugToFile("Error updating transaction data: ")
             raise e
 
         self.commit()
@@ -122,16 +122,20 @@ class DBwriter(DBoperations):
         """
         Writes the total pnl to the database every 5 mins
         """
-        principle = float(principle + float(principle * (pnl * .01)))
-        query = f"UPDATE papertrader_results SET total_pnl = {pnl} WHERE session_id = '{sessionId}';"
-        query += f"UPDATE papertrader_results SET principle = {principle} WHERE session_id = '{sessionId}';"
-        print("Writing total pnl to database")
-        print(query)
+        if pnl != 0:
+            logDebugToFile('Calculating PNL')
+            logDebugToFile(f"principle type --->{type(principle)}")
+            principle = float(float(principle) + float(float(principle) * float(pnl/100.00)))
+
+        query = f"UPDATE papertrader_results SET total_pnl = {str(pnl)} WHERE session_id = '{str(sessionId)}';"
+        query += f"UPDATE papertrader_results SET principle = {str(principle)} WHERE session_id = '{str(sessionId)}';"
+        logDebugToFile("Writing total pnl to database")
+        logDebugToFile(query)
         try:
             self.execute(query)
 
         except Exception as e:
-            print("Error updating pnl value")
+            logDebugToFile(logging.exception("Error updating pnl value"))
             raise e
 
         self.commit()
@@ -170,7 +174,7 @@ class DBwriter(DBoperations):
 
         clean = lambda exp: exp if exp is not None else "0"
 
-        print(
+        logDebugToFile(
             "INSERT INTO DYNAMIC_MARKET_DATA(TIME_STAMP_DMD, NAME, PRICE, CMC_RANK, MARKET_CAP, NUM_MARKET_PAIRS, CIRCULATING_SUPPLY, PERCENT_CHANGE_1H, PERCENT_CHANGE_24H, PERCENT_CHANGE_7D, VOLUME_24H, SYMBOL) VALUES ('{}','{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');".format(
                 str(timeStamp), str(coin["name"]).replace("'", ""), str(coin['quote']['USD']['price']),
                 str(coin['cmc_rank']), str(coin['num_market_pairs']), str(coin['quote']['USD']['market_cap']),

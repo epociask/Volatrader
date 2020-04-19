@@ -1,3 +1,4 @@
+import time as sleeper
 import sys, os
 from sys import platform
 sys.path.append(os.path.dirname(os.getcwd()))
@@ -86,6 +87,7 @@ def start_session(pair, candleSize, strategy, sl, tp, time, principle):
     print(request.args)
     thread = Thread(target=PaperTrader().trade, args=(Pair[pair], Candle(candleSize), strategy, int(sl), int(tp), principle,Time[time].value,))
     thread.start()
+    sleeper.sleep(1)
     return redirect(url_for(('papertradeRoute')))
 
 @app.route("/papertrade/start", methods=['POST', 'GET'])
