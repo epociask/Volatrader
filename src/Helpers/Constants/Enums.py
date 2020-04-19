@@ -1,6 +1,9 @@
 from enum import Enum
 import ccxt 
 # from Helpers.API.Stock_API import STOCK_MARKET
+
+
+
 class Candle(Enum):
     """
     Enum to represent all possible candle sizes
@@ -62,6 +65,10 @@ class Time(Enum):
     SIXMONTH = 4200
 
 
+pairs = [e.value for e in Pair]
+candles = [e.value for e in Candle]
+strats = [e.value for e in Strategies]
+times = ['ONEWEEK', 'ONEDAY', 'THREEDAY', 'MONTH', 'THREEMONTH']
 class Indicator(Enum):
     """
     Enum to represent all TAAPIO indicator instances

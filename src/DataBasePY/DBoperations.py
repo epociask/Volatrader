@@ -51,7 +51,7 @@ class DBoperations:
 
         try:
             params = config()
-            print("Connecting to postgreSQL database")
+            # print("Connecting to postgreSQL database")
             self.conn = psycopg2.connect(**params)
             self.cur = self.conn.cursor()
 

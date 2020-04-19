@@ -1,5 +1,6 @@
 import datetime
 import time
+import os 
 from Helpers.Constants.Enums import *
 from Helpers.API.CMC_api import getMarketData, getMacroEconomicData
 from DataBasePY.DBoperations import DBoperations
@@ -46,14 +47,25 @@ class DBwriter(DBoperations):
 
         self.commit()
 
+    def deletePaperTradeSession(self, sessionID):
+        query = f"DELETE FROM papertrader_results WHERE session_id = \'{sessionID}\';"
+        self.execute(query)
+        self.commit()
+        return 
 
-    def writePaperTradeStart(self, sessionId, start_time, strategy, pair):
+    def killPaperTraderSession(self, sessionId):
+        query = f"UPDATE papertrader_results set ACTIVE = False WHERE session_id = \'{sessionId}\';"
+        self.execute(query)
+        self.commit()
+        return 
+
+    def writePaperTradeStart(self, sessionId, start_time, strategy, pair, candle, principle):
         """
         Writes initial strategy information when a PaperTrade Session is started
         """
-
-        query = f"INSERT INTO papertrader_results (session_id, session_start_time, strategy, pair) " \
-            f"VALUES ('{sessionId}', '{start_time}', '{strategy}', '{pair.value}')"
+        where = os.environ.get("DATABASE_NAME")
+        query = f"INSERT INTO papertrader_results (session_id, session_start_time, active, strategy, pair, candle,  principle, running_on) " \
+            f"VALUES ('{sessionId}', '{start_time}', True, '{strategy}', '{pair.value}', '{candle.value}', '{principle}', \'{str(where)}\');"
 
         try:
             self.execute(query)
@@ -70,6 +82,7 @@ class DBwriter(DBoperations):
         Writes the time of the paper trade session when the session is completed
         """
         query = f"UPDATE papertrader_results set session_end_time = '{datetime.datetime.now()}' WHERE session_id = '{sessionId}';"
+        query += f"UPDATE papertrader_results set active = False WHERE session_id = '{sessionId}';"
         logDebugToFile("Finished paper trader, writing results")
         
 
@@ -100,11 +113,13 @@ class DBwriter(DBoperations):
 
         self.commit()
 
-    def writeTotalPnl(self, pnl, sessionId):
+    def writeTotalPnl(self, pnl: float, principle: int, sessionId: str):
         """
         Writes the total pnl to the database every 5 mins
         """
+        principle = float(principle + float(principle * (pnl * .01)))
         query = f"UPDATE papertrader_results SET total_pnl = {pnl} WHERE session_id = '{sessionId}';"
+        query += f"UPDATE papertrader_results SET principle = {principle} WHERE session_id = '{sessionId}';"
         print("Writing total pnl to database")
         print(query)
         try:

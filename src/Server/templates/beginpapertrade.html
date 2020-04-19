@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dropdown</title>
+    <link rel="stylesheet" href="https://unpkg.com/bulma@0.8.0/css/bulma.min.css" />
+
+</head>
+
+<style>
+  .padding-top {
+    padding-top: 1rem;
+  }
+
+  #logo {
+    width: 50%;
+    height: 50%;
+    position: absolute;
+    left: 5px;
+    top: 5px;
+  }
+  #pairs {
+    position: center;
+    left: 0px;
+    top: 0px;
+    right: px;
+  }
+</style>
+
+
+<body>
+  <div class="container">
+    <div class="notification">
+    
+      <a href="/">Home</a>
+
+
+      <h4><div align="center"><strong> Enter Paramters To Begin PaperTrade </strong></div></h4>
+
+      <div class="columns padding-top">
+        <div class="column">
+          <form id=pairs action="{{url_for('startPaperTrade')}}" method="POST"> 
+
+            <!-- Pair Dropdown-->
+            <div class="control">
+              <div class="select">
+                <select name="pair">
+                <option value="{{pairs[0]}}" selected>{{pairs[0]}}</option>
+                  {% for pair in pairs[1:] %}
+                <option value="{{pair}}">{{pair}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <!-- Candle Dropdown-->
+            <div class="control">
+              <div class="select">
+                <select name="candle">
+                  <option value="{{candles[0]}}" selected>{{candles[0]}}</option>
+                    {% for candle in candles[1:] %}
+                      <option value="{{candle}}">{{candle}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <!--Time Start Dropdown-->
+            <div class="control">
+              <div class="select">
+                <select name="timeStart">
+                  <option value="{{times[0]}}" selected>{{times[0]}}</option>
+                  {% for time in times[1:] %}
+                    <option value="{{time}}">{{time}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+
+
+          <!--Strategy Dropdown-->
+          <div class="control">
+            <div class="select">
+              <select name="strategy">
+                <option value="{{strategies[0]}}" selected>{{strategies[0]}}</option>
+                {% for strategy in strategies[1:] %}
+                  <option value="{{strategy}}">{{strategy}}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!--Column 2-->    
+        <div class="columns">
+          <div class="column">
+            <div class="control">
+              
+              <label for="stoploss" class="label">Stop Loss</label>
+              <input class="input" name="stoploss" type="number" placeholder="5">
+
+              <label class="label" for="takeprofit">Take Profit Percentage: </label>
+              <input class="input" name="takeprofit" type="number">
+
+              <label class="label" for="principle">Principle Investment: </label>
+              <input class="input" name="principle" type="number"><br/>
+            </div>
+
+            <div class="control">
+              <button type="submit" class="button is-primary">Submit</button>
+            </div>
+          </form>    
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+

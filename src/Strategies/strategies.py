@@ -55,41 +55,7 @@ class TEST_STRAT(strategy):
 
 #     def checkSell(self, )
 
-class SIMPLE_BUY_STRAT(strategy):
 
-    def __init__(self):
-        pass
-    def checkBuy(self, candle):
-        if candle['3outside']['value'] != '0' or float(candle['invertedhammer']['value']) != "0":
-            buyPrice = float(candle['close'])
-            buyTime = candle['timestamp']
-
-            return BUY
-
-        return HOLD
-
-class TEST_BUY_STRAT(strategy):
-    def __init__(self, pair: Pair, candle: Candle, principle:int ):
-        super().__init__(pair, candle, principle)
-        self.dumbass = NATHAN_STRAT(pair, candle, 100)
-        self.sdv = getUpperNormalDistrubtion(pair, candle, 300)
-
-    def checkBuy(self, candle):
-        bear = None
-        for i in candle:
-            if i != 'candle' and i != 'macdfix':
-                print(i, candle[i])
-                if candle[i]['value'] == '-100':
-                    bear = True
-
-        ind, _, _, = self.dumbass.checkBuy(candle)
-        if float(candle['volume']) > self.sdv['2SD'] and float(candle['close']) < float(
-                candle['open']) and bear is None and float(candle['fibonacciretracement']['value']) > float(
-            candle['close']) and ind:
-            return BUY
-
-        else:
-            return HOLD
 
 class THREELINESTRIKE_STRATEGY(strategy):
 

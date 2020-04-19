@@ -1,18 +1,23 @@
-#include<stdio.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "sma.h"
+float SMA(float arr [], int n);
 
 
-
-float SMA(float [] n){
+float SMA(float arr[], int n)
+{
 	
 	float total = 0;
-	int len = sizeof(n)/sizeof(n[0]);
+	for(int i = 0; i < n; i++)
+		total+=arr[n];
 
-	for(int i = 0; i < len; i++)	
-	total += n[i];
+
+	return (float)total/n;
 	
+}
 
-	return total / len;
+int main(){
 
+return 0;
 
 }

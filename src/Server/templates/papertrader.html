@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <a href="/">Home</a>
+    <title><strong>Volatrade - PaperTrader</title>
+</head>
+    <link rel="stylesheet" href="https://unpkg.com/bulma@0.8.0/css/bulma.min.css" />
+
+<body>
+
+
+<h1> ACTIVE PAPER TRADER SESSIONS </h1>
+
+ 
+    {% for session in active_sessions %}
+       <p>Session ID: {{session[0]}}<br>Running location: {{session[1]}}<br> Start Time: {{session[2]}}  <br>Strategy: {{session[11]}}<br> Pair: {{session[12]}} <br>Candle: {{session[13]}}<br> pNl so far: %{{session[20]}}<br> Current Principle: ${{session[21]}}</p>
+       <form method="post" action="/end">
+       <input type="submit" value="TERMINATE" name={{session[0]}}>
+       </form>
+
+    {% endfor %}
+
+
+<h1> UNACTIVE PAPER TRADER SESSIONS </h1>
+
+     {% for session in unactive_sessions %}
+       <p>Session ID: {{session[0]}}<br>Running location: {{session[1]}}<br> Start Time: {{session[2]}}  <br>Strategy: {{session[16]}}<br> Pair: {{session[17]}} <br>Candle: {{session[18]}}<br> pNl so far: %{{session[20]}}<br> Current Principle: ${{session[21]}}</p>
+        <form method="post" action="/end">
+       <input type="submit" value="DELETE" name={{session[0]}}>
+       </form>
+    {% endfor %}
+
+
+<a href="/papertrade/start">Start new papertrade instance</a>
