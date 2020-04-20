@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <a href="/">Home</a>
+    <title><strong>Volatrade - PaperTrader</title>
+</head>
+    <link rel="stylesheet" href="https://unpkg.com/bulma@0.8.0/css/bulma.min.css" />
+
+<body>
+
+
+<h1> ACTIVE PAPER TRADER SESSIONS </h1>
+
+ 
+    {% for session in active_sessions %}
+       <p>Session ID: {{session['session_id']}}<br>Running location: {{session['running_on']}}<br> Start Time: {{session['session_start_time']}} <br>Strategy: {{session['strategy']}}<br> Pair: {{session['pair']}} <br>Candle: {{session['candle']}}<br> pNl so far: %{{session['total_pnl']}}<br> Current Principle: ${{session['principle']}}</p>
+       <form method="post" action="/end">
+       <input type="submit" value="TERMINATE" name={{session['session_id']}}>
+       </form>
+
+    {% endfor %}
+
+
+<h1> UNACTIVE PAPER TRADER SESSIONS </h1>
+
+     {% for session in unactive_sessions %}
+       <p>Session ID: {{session['session_id']}}<br>Running location: {{session['running_on']}}<br> Start Time: {{session['session_start_time']}}  <br>Finish Time: {{session['session_end_time']}} <br>Strategy: {{session['strategy']}}<br> Pair: {{session['pair']}} <br>Candle: {{session['candle']}}<br> pNl so far: %{{session['total_pnl']}}<br> Current Principle: ${{session['principle']}}</p>
+        <form method="post" action="/end">
+       <input type="submit" value="DELETE" name={{session['session_id']}}>
+       </form>
+    {% endfor %}
+
+
+<a href="/papertrade/start">Start new papertrade instance</a>

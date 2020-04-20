@@ -1,6 +1,9 @@
 from enum import Enum
 import ccxt 
 # from Helpers.API.Stock_API import STOCK_MARKET
+
+
+
 class Candle(Enum):
     """
     Enum to represent all possible candle sizes
@@ -10,12 +13,12 @@ class Candle(Enum):
     FIFTEEEN_MINUTE = "15m"
     THIRTY_MINUTE = '30m'
     HOUR = '1h'
-    THREE_HOUR = "3h"
-    TWELVE_HOUR = "12h"
-    ONE_DAY = '1d'
-    THREE_DAY = '3d'
-    ONE_WEEK = '1w'
-    THRE_WEEK = "3w"
+    # THREE_HOUR = "3h"
+    # TWELVE_HOUR = "12h"
+    # ONE_DAY = '1d'
+    # THREE_DAY = '3d'
+    # ONE_WEEK = '1w'
+    # THRE_WEEK = "3w"
 
 class Market(Enum):
     BINANCE = ccxt.binance()
@@ -27,6 +30,12 @@ class SessionType(Enum):
     PAPERTRADE = 1
     LIVETRADE = 2
 
+
+class Strategies(Enum):
+    THREELINESTRIKE = "THREELINESTRIKE_STRATEGY"
+    FIFTY_MOVING_AVERAGE = "FIFTY_MOVING_AVERAGE_STRATEGY"
+    MA = "MA_STRATEGY"
+    TEST = "TEST_STRAT"
 
 class Pair(Enum):
     """
@@ -57,6 +66,10 @@ class Time(Enum):
     SIXMONTH = 4200
 
 
+pairs = [e.value for e in Pair]
+candles = [e.value for e in Candle]
+strats = [e.value for e in Strategies]
+times = ['ONEWEEK', 'ONEDAY', 'THREEDAY', 'MONTH', 'THREEMONTH']
 class Indicator(Enum):
     """
     Enum to represent all TAAPIO indicator instances

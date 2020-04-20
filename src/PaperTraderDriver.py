@@ -2,7 +2,7 @@ import argparse
 import sys, os
 from PaperTrader.PaperTrader import PaperTrader
 from Helpers.Constants.Enums import *
-from Helpers.Logger import logToSlack
+from Helpers.Logger import logToSlack, logErrorToFile
 from DataBasePY.DBwriter import DBwriter
 from datetime import datetime
 
@@ -15,15 +15,14 @@ def main(args):
 
 	except Exception as e:
 		raise e
-		logToSlack(e)
+		logErrorToFile(e)
 
-	# except KeyboardInterrupt:
-		#
-		# # writer.writePaperTradeEnd(paper_trader.sessionid)
-		# try:
-		# 	sys.exit(0)
-		# except SystemExit:
-		# 	os._exit(0)
+	except KeyboardInterrupt:
+		writer.writePaperTradeEnd(paper_trader.sessionid)
+		try:
+			sys.exit(0)
+		except SystemExit:
+			os._exit(0)
 
 if __name__ == '__main__':
 	ap = argparse.ArgumentParser()

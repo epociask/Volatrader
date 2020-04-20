@@ -97,7 +97,6 @@ def getCandlesFromTime(from_datetime: str, pair: Pair, candleSize: Candle, marke
     return data
 
 
-
 def convertCandlesToDict(candles: list) -> str:
     """
     converts list candle data to list of dictionary

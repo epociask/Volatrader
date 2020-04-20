@@ -69,7 +69,7 @@ def configureFile() -> None:
 
 
 def logToSlack(message, channel: Channel = Channel.DEBUG, tagChannel=False,
-               messageType: MessageType = MessageType.WARNING):
+               messageType: MessageType = MessageType.DEBUG):
     """"
     Logs data message to slack channel
     @:param message to send to slackbot
@@ -78,12 +78,15 @@ def logToSlack(message, channel: Channel = Channel.DEBUG, tagChannel=False,
     @:param messageType -> corresponds to messageType enum; determines which error to log to file
     @:returns None
     """
-    if messageType.WARNING:
+    if messageType is messageType.WARNING:
+        print('WARNING')
         logWarningToFile(message)
-    elif messageType.DEBUG:
+    elif messageType is messageType.DEBUG:
+        print('DEBUG')
         logDebugToFile(message)
-    elif messageType.ERROR:
-        logDebugToFile(message)
+    elif messageType is messageType.ERROR:
+        print("ERROR")
+        logErrorToFile(message)
     global lock
     lock.acquire()
     try:

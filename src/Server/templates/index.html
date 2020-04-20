@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head >
+    <meta charset="UTF-8">
+    <title><strong>Volatrade - Home</title>
+</head>
+    <link rel="stylesheet" href="https://unpkg.com/bulma@0.8.0/css/bulma.min.css" />
+
+<body style="background-color:grey;">
+
+<style>
+  #logo {
+    width: 25%;
+    height: 25%;
+    position: absolute;
+    left: 5px;
+    top: 5px;
+  }
+</style>
+
+
+
+<div align= "center"> 
+  <h1><strong>VOLATRADE</strong></h1>
+    <img id="logo" src="{{url_for('static', filename='logo.png' )}}" />
+  <a href="/backtest">Backtester</a>
+  <a href="/papertrade">Papertrader</a>
+</div>
+
+</body>

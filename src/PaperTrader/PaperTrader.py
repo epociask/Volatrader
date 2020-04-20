@@ -2,7 +2,7 @@ import time
 import datetime
 from Helpers.Logger import logToSlack, logDebugToFile
 from Trader.TradeSession import TradeSession
-from Helpers.Logger import Channel
+from Helpers.Logger import Channel, MessageType
 from Helpers.Constants.Enums import Pair, Candle, SessionType
 from DataBasePY.DBReader import DBReader
 from DataBasePY.DBwriter import DBwriter
@@ -75,61 +75,78 @@ class PaperTrader:
 
         :return: unique session id
         """
-        printLogo(SessionType.PAPERTRADE)
-        first = True
-        bought = False
-        end_time = datetime.datetime.now() + datetime.timedelta(hours=self.timeToRun)
 
-        logToSlack(f"Starting Paper Trader for {self.pair.value}/{self.candleSize.value} \nstrat: {self.stratName}\n takeprofit: %{int(self.takeProfitPercent)}\n stoploss: %{self.stopLossPercent}\n Finishing on {end_time}", channel=Channel.PAPERTRADER)
+        try:
 
-        while datetime.datetime.now() < end_time:
-            t = int(str(datetime.datetime.now())[14:16])
+            first = True
+            bought = False
+            end_time = datetime.datetime.now() + datetime.timedelta(hours=self.timeToRun)
 
-            if first:
-                first = False
+            logToSlack(f"Starting Paper Trader for {self.pair.value}/{self.candleSize.value} \nstrat: {self.stratName}\n takeprofit: %{int(self.takeProfitPercent)}\n stoploss: %{self.stopLossPercent}\n Finishing on {end_time}", channel=Channel.PAPERTRADER)
 
-                try:
-                    logDebugToFile("starting preinstall for strat")
-                    for candle in convertCandlesToDict(fetchCandleData(ccxt.binance(), self.pair, self.candleSize, self.strategy.candleLimit)):
-                        self.tradingSession.update(candle)
+            while datetime.datetime.now() < end_time:
+                t = int(str(datetime.datetime.now())[14:16])
 
+                if first:
+                    first = False
 
-                except:
-                    logDebugToFile("Error instantiating strategy in paper trader")
-
-                try:
-                    logDebugToFile(f"Writing data to db for paper trader session {self.sessionid}")
-                    self.writer.writePaperTradeStart(self.sessionid, datetime.datetime.now(), self.stratName, self.pair)
-                except Exception as e:
-                    logDebugToFile("Eror writing to postgres")
-                    raise e
-
-            if (t % self.timeStep == 0 or t == 0):
-                time.sleep(6)
-                data = convertCandlesToDict(fetchCandleData(ccxt.binance(), self.pair, self.candleSize, 1))
-                bought = self.tradingSession.update(data[0], True)
-                logDebugToFile(F"bought status ->{bought}")
-                if not bought:
-                    time.sleep(60)
+                    try:
+                        logDebugToFile("starting preinstall for strat")
+                        for candle in convertCandlesToDict(fetchCandleData(ccxt.binance(), self.pair, self.candleSize, self.strategy.candleLimit)):
+                            self.tradingSession.update(candle)
 
 
-            if (t == 0) and datetime.datetime.now().second in range(0, 15):
-                logToSlack(f"[PAPERTRADER] hourly update for {self.pair.value} for strat: {self.stratName} \n {self.getResults()}", channel=Channel.PAPERTRADER)
+                    except:
+                        logDebugToFile("Error instantiating strategy in paper trader")
 
-            if bought:
-                time.sleep(5)
-                self.currentPrice, _ = getCurrentBinancePrice(self.pair)
-                ts = datetime.datetime.now()
-                logDebugToFile(f"Checking for sell w/ {self.pair} @ {self.currentPrice}")
-                dummyCandle = {"close": self.currentPrice, "timestamp": ts}
-                logDebugToFile(dummyCandle)
-                bought = self.tradingSession.update(dummyCandle, False)
+                    try:
+                        logDebugToFile(f"Writing data to db for paper trader session {self.sessionid}")
+                        self.writer.writePaperTradeStart(self.sessionid, datetime.datetime.now(), self.stratName, self.pair, self.candleSize, self.principle)
+                    except Exception as e:
+                        logDebugToFile("Eror writing to postgres")
+                        raise e
+
+                if (t % self.timeStep == 0 or t == 0):
+                    time.sleep(6)
+                    data = convertCandlesToDict(fetchCandleData(ccxt.binance(), self.pair, self.candleSize, 1))
+                    bought = self.tradingSession.update(data[0], True)
+                    logDebugToFile(F"bought status ->{bought}")
+                    if not bought:
+                        time.sleep(60)
 
 
-            if datetime.datetime.now().minute % 5 == 0 and self.currentPrice is not None:
-                logDebugToFile(f"WRITING CURRENT PNL for session{self.sessionid}")
-                currentpnl = self.tradingSession.getCurrentPnl(self.currentPrice)
-                logDebugToFile(f'PNL being written ---- > {currentpnl}')                
-                self.writer.writeTotalPnl(currentpnl, self.sessionid)
-        
-        return self.sessionid
+                if (t == 0) and datetime.datetime.now().second in range(0, 15):
+                    logToSlack(f"[PAPERTRADER] hourly update for {self.pair.value} for strat: {self.stratName} \n {self.getResults()}", channel=Channel.PAPERTRADER)
+
+                if bought:
+                    time.sleep(5)
+                    self.currentPrice, _ = getCurrentBinancePrice(self.pair)
+                    ts = datetime.datetime.now()
+                    logDebugToFile(f"Checking for sell w/ {self.pair} @ {self.currentPrice}")
+                    dummyCandle = {"close": self.currentPrice, "timestamp": ts}
+                    logDebugToFile(dummyCandle)
+                    bought = self.tradingSession.update(dummyCandle, False)
+
+                
+                if datetime.datetime.now().minute % 1 == 0 and self.currentPrice is not None:
+                    logDebugToFile(f"WRITING CURRENT PNL for session{self.sessionid}")
+                    currentpnl = self.tradingSession.getCurrentPnl(self.currentPrice)
+                    logDebugToFile(f'PNL being written ---- > {currentpnl}{type(currentpnl)}')
+                    logDebugToFile(f"principle --------> {self.principle}")                
+                    self.writer.writeTotalPnl(currentpnl, self.principle, self.sessionid)
+
+
+
+                if not DBReader().getActiveStatus(self.sessionid):
+                    raise Exception("I've been terminated")
+                    return self.sessionid
+        except Exception as e:
+            logToSlack(e, messageType=MessageType.ERROR)
+            self.writer.writePaperTradeEnd(self.sessionid)
+            raise e 
+        except KeyboardInterrupt:
+            self.writer.writePaperTradeEnd(self.sessionid)
+            try:
+                sys.exit(0)
+            except SystemExit:
+                os._exit(0)

@@ -7,16 +7,18 @@ from termcolor import colored
 import numpy as np
 from Trader.Indicators.IndicatorConstants import getIndicator
 
-def figures_to_html(string, figs, filename="analysis.html"):
 
+def figures_to_html(string, figs, server, filename="analysis.html"):
+    config = dict({'scrollZoom': True})
     if os.path.exists(filename):
         os.remove(filename) #this deletes the file
     dashboard = open(filename, 'w')
-    dashboard.write("<div align=\"left\"><img src=\"logo.png\" alt=\"LOGO BABY\" style=\"width:400px;height:200px;\"></div>")
+    dashboard.write("<link rel=\"stylesheet\" href=\"https://unpkg.com/bulma@0.8.0/css/bulma.min.css\" />\"")
+    dashboard.write("<div align=\"left\"><img src=\"logo.png\" alt=\"LOGO BABY\" style=\"width:400px;height:200px;\"></div>" if server is False else "<style> #logo {width: 25%; height: 25%; position: absolute; right: 5px; top: 5px;}</style><img id=\"logo\" src=\"{{url_for('static', filename='logo.png' )}}\"/>")
     dashboard.write(string)
     dashboard.write("<html><head></head><body>" + "\n")
     for fig in figs:
-        inner_html = fig.to_html().split('<body>')[1].split('</body>')[0]
+        inner_html = fig.to_html(config=config).split('<body>')[1].split('</body>')[0]
         dashboard.write(inner_html)
     dashboard.write("</body></html>" + "\n")
     return filename
@@ -32,7 +34,7 @@ def getBacktestResultsString(fees, strategy, candleSize: Candle, pair: Pair, pri
     returnString+= ("<strong>" if html else "") + "\n\t\tStarting Principle: " + ("</strong>" if html else "") + f"${str(principle)}"
     if html:
         returnString = "<h>" +returnString + "</h>"
-        returnString = f"<h1 style=\"color: black; font-family=\"Arial Black\"; class=\"dotted\";> <div align=\"center\"  style=\"border:2px solid {valColor}\"> Backtest Summary for {stratString} on {pair.value}/{candleSize.value} </div></h1>" + returnString
+        returnString = f"<h1 style=\"color: black; class=\"dotted\";> <div align=\"center\"  style=\"border:2px solid {valColor}\"> Backtest Summary for {stratString} on {pair.value}/{candleSize.value} </div></h1>" + returnString
     returnString+= ("<h font-family: \"fantasy\"><br><strong>" if html else "") + ("\n\t\tFinal Portfolio Value: ") + ("</strong>" if html else "") + (f"${colored(str(endValue), valColor, attrs=['bold'])}" if not html else f"${endValue}") +  ("</h>" if html else "")
     returnString+=("<h font-family: \'fantasy\'><br><strong>" if html else "") + f"\n\t\tTotal PnL:  " + ("</strong>" if html else "") + str(totalPl) +  ("</h>" if html else "")
     returnString+= ("<h font-family: \'fantasy\'><br><strong>" if html else "") + "\n\t\tTotal Trades: " + ("</strong>" if html else "") + str(totalTrades) +  ("</h>" if html else "")
@@ -45,23 +47,16 @@ def getBacktestResultsString(fees, strategy, candleSize: Candle, pair: Pair, pri
     returnString+= ("<h font-family: \'fantasy\'><br><strong>" if html else "") + "\n\t\tTotal Fees: " + ("</strong>" if html else "") + f"${fees}" + ("</h>" if html else "")
     return returnString
 
-
+# TODO add slider
+# TODO more functional ohlcv graph 
+# TODO Fix autoscaling for y-axis on ohlcv graph
+# TODO Fix Volume graph
 
 # Returns a candlestick graph with buy and sell points
 def generateCandleGraph(candle_data: pd.DataFrame, pair: Pair, candle: Candle, stratString: str, indicators: list):
 
     fig = make_subplots(rows=5, cols=1)
-    fig.update_layout(
-        autosize=False,
-        height=3000,
-        width=1500,
-        title={
-        'text': f"CANDLE STICK GRAPH WITH USED INDICATORS",
-        'y':1   ,
-        'x':0.5,   
-        'font': dict(family="Roboto ", size=14), 
-        'xanchor': 'center',
-        'yanchor': 'top'})
+    
 
 
     color = []
@@ -72,28 +67,17 @@ def generateCandleGraph(candle_data: pd.DataFrame, pair: Pair, candle: Candle, s
             color.append('red')
 
     steps = []
-    sliders = []
-    for i in range(0, len(fig.data), 3):
-        step = dict(
-            method="restyle",
-            args=["visible", [False] * len(fig.data)],
-        )
-        step["args"][1][i:i+3] = [True, True]
-        steps.append(step)
 
-        sliders = [dict(
-            active=0,
-            currentvalue={"prefix": "Time:  "},
-            pad={"t": 50},
-            steps=steps
-        )]
+    sliders = []
     
     fig.add_trace(go.Candlestick(x=candle_data.index, yaxis="y2",
                     open=candle_data['open'],
                     high=candle_data['high'],
                     low=candle_data['low'],
                     close=candle_data['close'],
-                    name="CANDLES"), row=1, col=1)
+                    name="CANDLES"), row=1, col=1) 
+
+    fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['close'], yaxis='y2'), row=1, col=1) 
 
     fig.add_trace(go.Bar(x=candle_data.index, y=candle_data['volume'], name="Volume", marker=dict(color=color), yaxis='y'), row=2, col=1)
 
@@ -149,7 +133,19 @@ def generateCandleGraph(candle_data: pd.DataFrame, pair: Pair, candle: Candle, s
       
     fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['buy'], yaxis="y2", mode='markers', line=dict(color='blue', width=14), name = "BUY"), row=1, col=1)
     fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['sell'], yaxis="y2", mode='markers', line=dict(color='black', width=14), name="SELL"), row=1, col=1)
-    # fig.update_layout(sliders=sliders)
+    fig.update_layout(
+        autosize=True,
+        dragmode = "orbit",
+        hovermode=  "x unified",
+        height=1500,
+        width=1500,
+        title={
+        'text': f"CANDLE STICK GRAPH WITH USED INDICATORS",
+        'y':1,
+        'x':0.5,  
+        "font" : dict(family="Roboto ", size=14),
+        'xanchor': 'center',
+        'yanchor': 'top'})
     return fig
 
 import Helpers.TimeHelpers

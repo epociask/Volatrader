@@ -2,6 +2,8 @@ from Helpers.Constants.Enums import Indicator, Candle, Pair
 from SlackNotifier.PriceNotifications import getUpperNormalDistrubtion
 from Trader.Indicators import IndicatorFunctions
 from Helpers.TimeHelpers import convertNumericTimeToString
+
+strats = ['THREELINESTRIKE_STRATEGY', 'FIFTY_MOVING_AVERAGE_STRATEGY', 'TEST_BUY_STRAT']
 BUY, SELL = True, True
 HOLD = False 
 def getStrat(name: str):
@@ -53,105 +55,6 @@ class TEST_STRAT(strategy):
 
 #     def checkSell(self, )
 
-class SIMPLE_BUY_STRAT(strategy):
-
-    def __init__(self):
-        pass
-    def checkBuy(self, candle):
-        if candle['3outside']['value'] != '0' or float(candle['invertedhammer']['value']) != "0":
-            buyPrice = float(candle['close'])
-            buyTime = candle['timestamp']
-
-            return BUY
-
-        return HOLD
-
-class TEST_BUY_STRAT(strategy):
-    def __init__(self, pair: Pair, candle: Candle, principle:int ):
-        super().__init__(pair, candle, principle)
-        self.dumbass = NATHAN_STRAT(pair, candle, 100)
-        self.sdv = getUpperNormalDistrubtion(pair, candle, 300)
-
-    def checkBuy(self, candle):
-        bear = None
-        for i in candle:
-            if i != 'candle' and i != 'macdfix':
-                print(i, candle[i])
-                if candle[i]['value'] == '-100':
-                    bear = True
-
-        ind, _, _, = self.dumbass.checkBuy(candle)
-        if float(candle['volume']) > self.sdv['2SD'] and float(candle['close']) < float(
-                candle['open']) and bear is None and float(candle['fibonacciretracement']['value']) > float(
-            candle['close']) and ind:
-            return BUY
-
-        else:
-            return HOLD
-
-
-class NATHAN_STRAT(strategy):
-
-    def __init__(self, pair: Pair, candle: Candle, principle:int):
-        super().__init__(pair, candle, principle)
-
-    def checkBuy(self, candle):
-        """
-        Nathan Haile's genius strategy
-        """
-        if candle['macdfix']['valueMACDSignal'] > candle['macdfix']['valueMACD']:
-            return BUY
-
-        return HOLD
-
-
-class CANDLESTICK_STRAT(strategy):
-
-    def __init__(self, pair: Pair, candle: Candle, principle:int):
-        super().__init__(pair, candle, principle)
-
-    def checkBuy(self, candle):
-        bullSigns = 0
-        bearSigns = 0
-        print(f"fib val; {candle['fibonacciretracement']['value']}")
-        for value in candle:
-            if value != 'candle':
-
-                try:
-                    if candle[value]['value'] == '100':
-                        bullSigns += 1
-
-                    elif candle[value]['value'] == '-100':
-                        bearSigns += 1
-
-                except Exception:
-                    pass
-        total = bullSigns - bearSigns
-        if total >= 2 and (float(candle['fibonacciretracement']['value']) < float(candle['close'])) and \
-                candle['longleggeddoji']['value'] == '100':
-            print(total)
-            return BUY
-
-        return HOLD
-
-
-class EMA_STRATEGY(strategy):
-    def __init__(self, candles, period):
-        self.emas = IndicatorFunctions.EMA(candles, period)
-        self.period = 9
-        self.count = 0
-
-    def checkBuy(self, candle):
-        if self.count < self.period:
-            self.count+=1
-            return HOLD
-
-        if self.emas[self.count] > candle[4]:
-            self.count+=1
-            return BUY 
-
-        self.count += 1 
-        return HOLD
 
 
 class THREELINESTRIKE_STRATEGY(strategy):
@@ -160,7 +63,10 @@ class THREELINESTRIKE_STRATEGY(strategy):
         super().__init__(pair, candle, principle)
         self.candleLimit = 100
         self.candles = []
-        self.indicators = ['PATTERNTHREELINESTRIKE_3', 'PATTERNMORNINGSTAR_3']
+        self.indicators = ['PATTERNTHREELINESTRIKE_3', 'PATTERNBEARISHENGULFING_3']
+        self.sdv = getUpperNormalDistrubtion(pair, candle, 300)
+
+        
 
     def checkBuy(self, candle):
         self.candles.append(candle)

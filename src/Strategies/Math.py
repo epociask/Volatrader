@@ -1,18 +1,16 @@
-from Trader.TradeSession import getTakeProfitPercent
-from Trader.TradeSession import getResults
-from Trader.TradeSession import getTotalTrades
+from Trader.TradeSession import TradeSession 
 import numpy as np 
 
 class Math():
-    def __init__(self):
-        self.portfolio_return = getTakeProfitPercent()/100
+    def __init__(self, session):
+        self.portfolio_return = session.getTakeProfitPercent()/100
         self.risk_free_rate = 0 #3 month US Treasury bill's interest rate used by most US traders (SUGGESTION TO USE IEF INSTEAD)
-        self.stock_return_dict = getResults()
-        self.length = getTotalTrades()
+        self.stock_return_dict = session.getResults()
+        self.length = session.getTotalTrades()
 
     # Sharpe ratio is a proxy of total portfolio risk often used to compare the change in overall risk-return characteristics when a new asset or asset class is added to a portfolio
     def Sharpe_Ratio(self):
-        standard_deviation = Standard_Deviation()
+        standard_deviation = self.Standard_Deviation()
         return((self.portfolio_return - self.risk_free_rate)/standard_deviation)
     #Less than 1: Bad
     #1 – 1.99: Adequate/good
@@ -26,12 +24,12 @@ class Math():
 
     #Standard deviation used to help minimize your risk and still maximize returns. It measures how much the investment returns deviate from the mean of the probability distribution of investments
     def Standard_Deviation(self):
-        standard_deviation = np.sqrt(Variance())
+        standard_deviation = np.sqrt(self.Variance())
         return standard_deviation
 
-    def Standard_Deviation(self, return_list):
-        standard_deviation = np.sqrt(Variance(return_list))
-        return standard_deviation
+    # def Standard_Deviation(self, return_list):
+    #     standard_deviation = np.sqrt(Variance(return_list))
+    #     return standard_deviation
 
     #Expected return measures the mean or expected value of probability distribution of investment returns. COULD BE GOOD TO IMPLEMENT LATER.
     #Doesn't take risk into account and is based largely on historic data
@@ -42,24 +40,24 @@ class Math():
         return_list = return_dict["profitloss"]
         average_return = 0
         variance = 0
-        for(i = 0, i < length, i++):
+        for i in range(return_list):
             average_return += return_list[i]
         average_return = average_return/self.length
-        for(i = 0, i < length, i++):
+        for i in range(return_list):
             variance += (return_list[i] - average_return)**2
         variance = variance/self.length
         return variance
 
-    def Variance(self, return_list):
-        average_return = 0
-        variance = 0
-        for(i = 0, i < len(return_list), i++):
-            average_return += return_list[i]
-        average_return = average_return/len(return_list)
-        for(i = 0, i < len(return_list), i++):
-            variance += (return_list[i] - average_return)**2
-        variance = variance/len(return_list)
-        return variance
+        # def Variance(self, return_list):
+        #     average_return = 0
+        #     variance = 0
+        #     for i in range(return_list):
+        #         average_return += return_list[i]
+        #     average_return = average_return/len(return_list)
+        #     for i in range(return_list):
+        #         variance += (return_list[i] - average_return)**2
+        #     variance = variance/len(return_list)
+        #     return variance
 
     #Rolling sharpe ratio provides a continually-updated, albeit rearward-looking, view of current reward-to-risk. Should help us identify strategy decay over time.
     def Rolling_Sharpe_Ratio(self):
@@ -79,7 +77,7 @@ class Math():
         negative_return_list = []
         return_dict = self.stock_return_dict["tradeResults"]
         return_list = return_dict["profitloss"]
-        for(i = 0, i < length, i++):
+        for i in range(return_list):
             if(return_list[i] < 0):
                 negative_return_list.append(self.stock_return_dict[i])
         downside_deviation = Standard_Deviation(negative_return_list) #focus on only the negative returns
@@ -87,7 +85,7 @@ class Math():
     
     def Sortino_Ratio(self, return_list):
         negative_return_list = []
-        for(i = 0, i < len(return_list), i++):
+        for i in range(return_list):
             if(return_list[i] < 0):
                 negative_return_list.append(return_list[i])
         downside_deviation = Standard_Deviation(negative_return_list) #focus on only the negative returns

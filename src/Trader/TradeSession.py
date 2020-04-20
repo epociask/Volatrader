@@ -2,7 +2,7 @@ import time
 from termcolor import colored
 from Trader.SellLogic import Instance
 from Helpers.Constants.Enums import *
-from Helpers.Logger import logDebugToFile, logToSlack, Channel
+from Helpers.Logger import logDebugToFile, logToSlack, Channel, logErrorToFile
 from Helpers.API.MarketFunctions  import getCurrentBinancePrice
 import ccxt
 from Helpers.TimeHelpers import convertNumericTimeToString
@@ -62,7 +62,7 @@ class TradeSession:
                 return sum(allPnl)
 
             except Exception as e:
-                logDebugToFile(e)
+                logErrorToFile(e)
 
             
 
@@ -208,8 +208,9 @@ class TradeSession:
                 self.profitlosses.append(self.profitLoss)
                 self.reset()
                 if self.type is SessionType.PAPERTRADE:
-                    #write new transaction to database
+                    #write new transaction to 
                     results = self.getResults()["tradeResults"]
+                    logDebugToFile(f"results {results}")
                     self.writer.writeTransactionData(results, self.sessionid)
 
 
