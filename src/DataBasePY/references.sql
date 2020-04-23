@@ -1,4 +1,4 @@
--- Create table query --
+-- Create OHLCV indicators table query --
 CREATE TABLE {PAIRNAME}_OHLCV_{candleSize.value}(timestamp TIMESTAMP PRIMARY KEY NOT NULL,
 open DECIMAL({lowHigh}), high  DECIMAL({lowHigh}), low DECIMAL({lowHigh})
            close DECIMAL(), volume numeric(10), INDICATORS jsonb);
@@ -17,4 +17,15 @@ CREATE TABLE papertrader_results (
     total_pnl numeric(5,3),
     principle numeric,
     transactions jsonb NOT NULL DEFAULT '[]'::jsonb
+);
+
+-- Create support/resistance table query -- 
+
+CREATE TABLE support_resistance (
+
+    pair character varying,
+    candle character varying, 
+    support numeric,
+    resistance numeric,
+    UNIQUE (pair, candle)
 );
