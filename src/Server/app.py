@@ -8,7 +8,7 @@ from Helpers.Constants.Enums import *
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
 from DataBasePY.DBReader import DBReader
-from DataBasePY.DBwriter import DBwriter 
+from DataBasePY.DBwriter import DBwriter
 from PaperTrader.PaperTrader import PaperTrader
 from threading import Thread
 app = Flask(__name__)
@@ -30,7 +30,7 @@ users = {
 def verify_password(username, password):
     if username in users:
         return check_password_hash(users.get(username), password)
-    return False 
+    return False
 
 app = Flask(__name__)
 
@@ -54,7 +54,7 @@ def results(pair, candleSize, strategy, sl, tp, time, principle):
     print(request.args)
     backTest(Pair[pair], Candle(candleSize), strategy, int(sl), int(tp), principle=1000, timeStart=Time[time], server=True)
     return render_template('analysis.html')
-    
+
 @app.route("/end", methods=['POST', 'GET'])
 @auth.login_required
 def endPaperTrade():
@@ -72,7 +72,7 @@ def endPaperTrade():
 
 @app.route("/backtest", methods=['POST', 'GET'])
 @auth.login_required
-def backtestRoute(): 
+def backtestRoute():
     if request.method == 'POST':
         data = request.form
         print(data)
@@ -111,7 +111,7 @@ def papertradeRoute():
 
         else:
             unactive.append(session)
-        
+
 
     return render_template('papertrader.html', active_sessions=active, unactive_sessions=unactive)
 
