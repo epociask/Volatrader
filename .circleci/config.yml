@@ -37,7 +37,7 @@ jobs:
 
       - run:
           name: "Unzipping source"
-          command: "ssh -o StrictHostKeyChecking=no adrian@167.172.206.147 tar -xvzf ccxt-trader.tar.gz"
+          command: "ssh -o StrictHostKeyChecking=no adrian@167.172.206.147 tar -xvzf volatrader.tar.gz"
 
       - run:
           name: "Copying files to web"
