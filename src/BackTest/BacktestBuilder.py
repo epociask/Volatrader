@@ -137,7 +137,7 @@ def generateCandleGraph(candle_data: pd.DataFrame, pair: Pair, candle: Candle, s
         autosize=True,
         dragmode = "orbit",
         hovermode=  "x unified",
-        height=1500,
+        height=2200,
         width=1500,
         title={
         'text': f"CANDLE STICK GRAPH WITH USED INDICATORS",
@@ -196,26 +196,10 @@ def generateLinePlot(data, y_value, graph_title):
 
 
 
-def generateGraphs(candle_data: pd.DataFrame, pair: Pair, candle: Candle, stratString: str, results, strategy, pnlOverDays):
+def generateGraphs(candle_data: pd.DataFrame, pair: Pair, candle: Candle, stratString: str, results, strategy):
     indicators = strategy.indicators
     candleGraph = generateCandleGraph(candle_data, pair, candle, stratString, indicators)
     linePlot = generateLinePlot(candle_data, 'principle', "Principle Over Time")
     transactions = generateTransactionHistoryTable(results)
-    dayByday = go.Figure(data=[go.Table(header=dict(values=["Date", "pNl"]),
-                 cells=dict(values=[pnlOverDays.index, pnlOverDays.pNl]))
-                ])
-    dayByday.update_layout(
-        autosize=False,
-        height=500,
-        width=500,
-        title={
-        'text': f"Day By Day Profits",
-        'y':1,
-        'x':0.5,   
-        'font': dict(family="Roboto ", size=15), 
-        'xanchor': 'center',
-        'yanchor': 'top'})
 
-             
-                     
-    return [candleGraph, linePlot, dayByday, transactions]
+    return [candleGraph, linePlot, transactions]

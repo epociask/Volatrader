@@ -63,10 +63,9 @@ class THREELINESTRIKE_STRATEGY(strategy):
         super().__init__(pair, candle, principle)
         self.candleLimit = 100
         self.candles = []
-        self.indicators = ['PATTERNTHREELINESTRIKE_3', 'PATTERNBEARISHENGULFING_3']
+        # self.indicators = ['PATTERNTHREELINESTRIKE_3', 'PATTERNBULLISHHARAME_3',  'PATTERNTHREEBEARISHSOLDIERS_3', 'PATTERNTHREEBEARISHSOLDIERS_3', 'PATTERNTHREEINSIDE_3']
+        self.indicators = ['FIB_100', 'BB_14']
         self.sdv = getUpperNormalDistrubtion(pair, candle, 300)
-
-        
 
     def checkBuy(self, candle):
         self.candles.append(candle)
@@ -90,7 +89,7 @@ class FIFTY_MOVING_AVERAGE_STRATEGY(strategy):
         self.candleLimit = 50
         self.arr = []
         self.candles = []
-        self.indicators = ["SMA_50", "UPTREND_5", 'RSI_14', "SMA_15", 'PATTERNTHREELINESTRIKE_3']
+        self.indicators = ["SMA_50", "UPTREND_5", 'RSI_14', "SMA_15", 'PATTERNTHREELINESTRIKE']
         self.sdv = getUpperNormalDistrubtion(pair, candle, 500)
 
 

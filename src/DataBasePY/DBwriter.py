@@ -141,6 +141,25 @@ class DBwriter(DBoperations):
         self.commit()
 
 
+    def writeSupportResistance(self, pair: Pair, candle: Candle, support: float, resistance: float):
+        """
+        writes support resistance to data base 
+        """
+
+        query = f"INSERT INTO support_resistance (pair, candle, support, resistance) VALUES (\'{pair.value}\', \'{candle.value}\', \'{support}\', \'{resistance}\')\
+                  ON CONFLICT (pair, candle) DO UPDATE SET support = EXCLUDED.support, resistance = EXCLUDED.resistance;"
+
+        logDebugToFile(query)
+        try:
+            self.execute(query)
+
+        except Exception as e:
+            logDebugToFile("Error writing support resistance")
+            raise e
+
+        self.commit()
+
+
     def writeStaticMarketDataQuerys(self, coin, timeStamp):
         """
         writes static market metric data from CoinCapAPI to postgresql server

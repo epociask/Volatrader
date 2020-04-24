@@ -1,3 +1,4 @@
+import re
 import datetime
 import sys, os
 from sys import platform
@@ -47,26 +48,19 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
 
 
     if readFromDataBase:
-        reader = DBReader()
-        DataSet = reader.fetchCandlesWithIndicators(pair, candleSize)
+        DataSet = DBReader().fetchCandlesWithIndicators(pair, candleSize)
 
     else:
         DataSet = DataOperators.convertCandlesToDict(DataOperators.getCandlesFromTime(convertNumericTimeToString(TimeHelpers.rewind(str(datetime.datetime.now())[0: -7], 60, timeStart.value )), pair, candleSize, market))
 
-        # else:
-        #     DataSet = DataOperators.convertCandlesToDict(DataOperators.fetchCandleData(ccxt.binance(), pair, candleSize, 500))
-
-    DataSet = sorted(DataSet, key=lambda i: int(i['timestamp']), reverse=False)
 
     for candle in DataSet:
         backTestingSession.update(candle)
 
-
+    totalPl = backTestingSession.getTotalPL()
     # Printing Results
     start = TimeHelpers.convertNumericTimeToString(DataSet[0]['timestamp']) if type(DataSet[0]['timestamp']) is int else DataSet[0]['timestamp']
     finish = TimeHelpers.convertNumericTimeToString(DataSet[-1]['timestamp'])   if type(DataSet[-1]['timestamp']) is int else DataSet[-1]['timestamp']
-
-    totalPl = backTestingSession.getTotalPL()
     endingPrice = float(principle + float(principle * (totalPl * .01)))
 
     gainCount, lossCount = backTestingSession.getTradeData()
@@ -77,101 +71,76 @@ def backTest(pair: Pair, candleSize: Candle, strategy: str, stopLossPercent: int
 
     # Outputs Graphs to dashboard.html, rename file to save for future reference
     if outputGraph:
-        getInt = lambda val : int((val['buytime'][8 : 10]))
         results = backTestingSession.getResults()['tradeResults']
-
-        try:
-            ts = getInt(results[0])
-
-        except Exception as e:
-            print(e)
-            return "NO RESULTS TO BE FOUND"
-        timestamps = []
-        profitlosses = []
-        prevData = None
-        pl = 0
-        for val in backTestingSession.getResults()['tradeResults']:
-            if ts == getInt(val):
-                pl += val['profitloss']
-
-            else:
-                ts = getInt(val)
-            
-                timestamps.append(prevData['buytime'][0 : 10])
-                profitlosses.append(pl)
-                pl = val['profitloss']
-            prevData = val
-        rolling_sharps = pd.DataFrame(profitlosses, index=pd.DatetimeIndex(timestamps))
-        rolling_sharps.columns = ['pNl']
 
         buyTimes = [e['buytime'] for e in results]
         sellTimes = [e['selltime'] for e in results]
-        pls = [e['profitloss'] for e in results]    #TODO condense all this 
         candles = DataSet
         plIndex = 0
         candleLimit = strategy.candleLimit
         closes = []
         indicatorFunctions = []
-        ohlcvs = []
-        for index, val in enumerate(strategy.indicators):
+        print("buytimes ", buyTimes)
+        print("selltimes  ", sellTimes)
+        for val in strategy.indicators:             #gets indicator functions used by strategy 
             indicatorFunctions.append(IndicatorFunctions.getFunction("".join(e for e in val if not e.isdigit() and e != "_")))
 
-        for index, candle in enumerate(candles):
+        for index, candle in enumerate(candles):  #iterate through candle set 
             closes.append(float(candle['close']))
-            ohlcvs.append(candle)
-            if convertNumericTimeToString(candle['timestamp']) in buyTimes:
-                candle['buy'] = candle['close']
-                candle['sell'] = "NaN"
 
-            elif convertNumericTimeToString(candle['timestamp']) in sellTimes:
-                candle['sell'] = candle['close']
-                candle['buy'] = 'NaN'
-                plIndex+=1
+            if len(buyTimes) > 0:
+                if convertNumericTimeToString(candle['timestamp']) == buyTimes[0]:
+                    buyTimes.pop(0)
+                    candle['buy'] = candle['close']
+                    candle['sell'] = "NaN"
+            if len(sellTimes) > 0:
+                if convertNumericTimeToString(candle['timestamp']) == sellTimes[0]:
+                    sellTimes.pop(0)
+                    candle['sell'] = candle['close']
+                    candle['buy'] = 'NaN'
+                    plIndex+=1
 
             else:
                 candle['sell'] = 'NaN'
                 candle['buy'] = 'NaN'
 
-            if candleLimit <= 0:
+            if index >= strategy.candleLimit:
                 for index1, val in enumerate(strategy.indicators):
-                    try:
-                        out = indicatorFunctions[index1](closes, int("".join(e for e in val if e.isdigit())))[-1]
+
+                    if bool(re.search(r'\d', val)):
+                        try:
+                            out = indicatorFunctions[index1](closes, int("".join(e for e in val if e.isdigit())))[-1]
+
+                        except Exception as e:
+                            out = indicatorFunctions[index1](DataSet[0: index+1], int("".join(e for e in val if e.isdigit())))  
+
+                    else: 
+
+                        out = indicatorFunctions[index1](DataSet[0: index+1])
+
+                    if type(out) is dict:
+                        for key in out.keys():  #multiple values for indicator 
+                            candle[key] = out[key]
+
+                    elif type(out) is bool:    #candlestick indicators 
+                        if out is True:
+                            candle[val] = candle['close']  
+                        else:
+                            candle[val] = 'NaN'
+
+                    else:
                         candle[val] = out
-
-                    except Exception as e:
-                        if type(e) is TypeError:
-                            out = indicatorFunctions[index1](ohlcvs, int("".join(e for e in val if e.isdigit())))  
-                        else: 
-                            for i in closes:
-                                out = indicatorFunctions[index1](closes)
-
-                        if type(out) is dict:
-                            for key in out.keys():
-                                candle[key] = out[key]
-
-                        if type(out) is bool:
-                            if out is True:
-                                candle[val] = candle['close']  
-                            else:
-                                candle[val] = 'NaN'
+                    
 
 
             candle['timestamp'] = convertNumericTimeToString(candle['timestamp'])
             candle['principle'] = backTestingSession.principleOverTime[index]
             candles[index] = candle
-            candleLimit -= 1 
-        sharpe_ratios = []
-        temp = []
-
-        for pnl in profitlosses:
-            temp.append(pnl)
-            sharpe_ratios.append(sharpe_ratio(np.array(temp)))
-        
         candles_returns = pd.DataFrame(candles)
         candles_returns.index = pd.to_datetime(candles_returns['timestamp'])
         del candles_returns['timestamp']    
         filename = figures_to_html(getBacktestResultsString(backTestingSession.getTotalFees(), stratString, candleSize, pair, principle, endingPrice, totalPl, 
-        (int(gainCount)+int(lossCount)), start, finish, gainCount, lossCount, stopLossPercent, takeProfitPercent, stratString, strategy.indicators, html=True), generateGraphs(candles_returns, pair, candleSize, stratString, results, strategy, rolling_sharps), server)
+        (int(gainCount)+int(lossCount)), start, finish, gainCount, lossCount, stopLossPercent, takeProfitPercent, stratString, strategy.indicators, html=True), generateGraphs(candles_returns, pair, candleSize, stratString, results, strategy), server)
 
         # Open html doc on windows or mac
 

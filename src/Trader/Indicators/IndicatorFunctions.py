@@ -1,3 +1,4 @@
+import indicators
 import pandas as pd
 import numpy as np
 from scipy.stats import linregress
@@ -29,11 +30,11 @@ def ADX(data, n=14):
 
 
 
-def BB(data, period=10, ndev=2):
-    data = [e['close'] for e in data]
-    data = pd.Series(data)
-    indicator_bb = ta.volatility.BollingerBands(close=data, n=20, ndev=2)
-    return {"MOVING AVERAGE BB" : indicator_bb.bollinger_mavg().iat[-1], "UPPER BAND BB": indicator_bb.bollinger_hband().iat[-1], "LOWER BAND BB": indicator_bb.bollinger_lband().iat[-1]}
+def BB(data, period=14):
+
+    middle, upper, low = indicators.BOLINGER_BANDES(np.array([e['close'] for e in data]), period)
+   
+    return {"MOVING AVERAGE BB" : middle, "UPPER BAND BB": upper, "LOWER BAND BB": low}
 
 
 def EMA(values, alpha = .3, epsilon = 0):
@@ -96,6 +97,11 @@ def HAMMER(candles: list, n=3):
     return False 
 
 
+def FIB(candles , period=10):
+    l1, l2, l3 = indicators.FIB(candles, period)
+
+    return {    'LEVEL1': l1, 'LEVEL2': l2, 'LEVEL3': l3}
+
 
 def MACD(closes, n_fast=12, n_slow=26 , n_sign= 9):
     # closes = np.array([e['close'] for e in closes])
@@ -103,14 +109,10 @@ def MACD(closes, n_fast=12, n_slow=26 , n_sign= 9):
     result_MACD = ta.trend.MACD(pd.Series(closes), n_fast, n_slow, n_sign)
     return {"MACD Line": result_MACD.macd().iat[-1], "MACD Histogram" : result_MACD.macd_diff().iat[-1], "Signal Line" : result_MACD.macd_signal().iat[-1]}
 
-def SMA(data, period=3) :
+def SMA(data, period=3):
     ret = np.cumsum(data, dtype=float)
     ret[period:] = ret[period:] - ret[:-period]
     return ret[period - 1:] / period
-
-
-
-
 
 
 
@@ -279,8 +281,18 @@ def PATTERNBEARISHENGULFING(candles, n=3):
     return False 
 
 
+def PATTERNBULLISHHARAME(candles, n=2):
+
+    c1, c2 = candles[-2], candles[-1]
+
+    if DOWNTREND(candles[len(candles) -5: len(candles)]):
+        if BEAR_CANDLE(c1) and BULL_CANDLE(c2):
+            if DIFFERENCE(c1) >=( DIFFERENCE(c2)* 4):
+                if c2['open'] > c1['close']:
+                    return True 
 
 
+    return False 
 
 def PATTERNTWEEZER(candles, n=3):
     c1, c2, c3 = candles[-3], candles[-2], candles[-1]
@@ -308,15 +320,15 @@ def PATTERNTHREEBEARISHSOLDIERS(candles, n=3):
 
 def UPTREND(candles, n=3):
 
-
+    positives = 0
     if candles[len(candles)-n]['close'] <  candles[-1]['close']:   
         temp = candles[len(candles)-n :len(candles)]
         for candle in temp:
-            if candle['close'] < candle['open']:
-                return False
-        return True
+            if candle['close'] > candle['open']:
+                positives += 1 
+        
 
-    if candles[len(candles)-n]['close'] <  candles[-1]['close']:
+    if positives/2 > n:
         return True
 
     return False
