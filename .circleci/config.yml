@@ -41,7 +41,7 @@ jobs:
 
       - run:
           name: "Copying files to web"
-          command: "ssh -o StrictHostKeyChecking=no adrian@167.172.206.147 'rm -rf volatrade-production/src/ && mv --force src volatrade-production/''"
+          command: "ssh -o StrictHostKeyChecking=no adrian@167.172.206.147 'rm -rf volatrade-production/src/ && mv --force src volatrade-production/'"
 
       - run:
           command: "echo 'Done'"
