@@ -14,12 +14,6 @@ jobs:
       - python/load-cache
       - python/install-deps
       - python/save-cache
-      # - run:
-      #     name: "Creating DB config"
-      #     command: "sh create_db.sh"
-      # - run:
-      #     name: "Running unit tests"
-      #     command: "python -m unittest src/test/*.py -v"
 
   deploy:
     docker:
@@ -29,15 +23,28 @@ jobs:
       - python/load-cache
       - python/install-deps
       - python/save-cache
-      # - run:
-      #     name: "Creating DB config"
-      #     command: "sh create_db.sh"
-      # - run:
-      #     name: "Running unit tests"
-      #     command: "python -m unittest src/test/*.py -v"
       - run:
           name: "Deploying to digital ocean"
           command: "sh deploy.sh"
+
+      - run:
+          name: "Zipping files"
+          command: "tar --exclude node_modules -zcvf volatrader.tar.gz src/"
+
+      - run:
+          name: "Copying source files"
+          command: "scp -o StrictHostKeyChecking=no volatrader.tar.gz adrian@167.172.206.147:"
+
+      - run:
+          name: "Unzipping source"
+          command: "ssh -o StrictHostKeyChecking=no adrian@167.172.206.147 tar -xvzf ccxt-trader.tar.gz"
+
+      - run:
+          name: "Copying files to web"
+          command: "ssh -o StrictHostKeyChecking=no adrian@167.172.206.147 mv --force src volatrade-production/"
+
+      - run:
+          command: "echo 'Done'"
 
 workflows:
   heroku_deploy:
