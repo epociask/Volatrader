@@ -39,7 +39,7 @@ class DBwriter(DBoperations):
             self.execute(query)
 
         except Exception as e:
-            logErrorToFile(e)
+            logErrorToFile(f"{os.path.basename(__file__)}{e}")
 
             if type(e) == psycopg2.errors.UndefinedTable:
                 createTableQuery = ""
@@ -76,7 +76,7 @@ class DBwriter(DBoperations):
             self.execute(query)
 
         except Exception as e:
-            logErrorToFile("Eror writing paper trade data: ")
+            logErrorToFile(f"{os.path.basename(__file__)}{e} Eror writing paper trade data: ")
             raise e
 
         self.commit()

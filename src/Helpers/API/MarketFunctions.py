@@ -2,6 +2,7 @@ from Helpers.Constants.Enums import Pair
 import datetime as datetime 
 import requests
 import time 
+from API.Logger import logToSlack
 # from Helpers.logger import logDebugToFile
 
 def getCurrentBinancePrice(pair: Pair):
@@ -16,10 +17,17 @@ def getCurrentBinancePrice(pair: Pair):
         req = requests.get(f"https://api.binance.com/api/v1/ticker/price?symbol={pair.value}")
 
     except Exception as e:
-        print(f"GOT EXCEPTION FROM BINANCE API {e}.. retrying in 10 seconds")
-        getCurrentBinancePrice(pair
-        )
-    return float(req.json()['price']), datetime.datetime.now()
+        logToSlack(f"GOT EXCEPTION FROM BINANCE API {e}.. retrying in 15 seconds")
+        time.sleep(15)
+        getCurrentBinancePrice(pair)
+
+    if "req" in locals():
+        return float(req.json()['price']), datetime.datetime.now()
+
+
+    else:
+        logToSlack("[getCurrentBinancePrice] REQUEST NOT FOUND... trying again in 15 seconds")
+        
 
 
 def getCurrentKrakenPrice(pair: Pair):

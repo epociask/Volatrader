@@ -64,7 +64,7 @@ class THREELINESTRIKE_STRATEGY(strategy):
         self.candleLimit = 100
         self.candles = []
         # self.indicators = ['PATTERNTHREELINESTRIKE_3', 'PATTERNBULLISHHARAME_3',  'PATTERNTHREEBEARISHSOLDIERS_3', 'PATTERNTHREEBEARISHSOLDIERS_3', 'PATTERNTHREEINSIDE_3']
-        self.indicators = ['FIB_100', 'BB_14']
+        self.indicators = ['FIB_100', 'MOM_12']
         self.sdv = getUpperNormalDistrubtion(pair, candle, 300)
 
     def checkBuy(self, candle):

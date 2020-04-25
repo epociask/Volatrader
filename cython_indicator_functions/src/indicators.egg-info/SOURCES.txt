@@ -1,7 +1,0 @@
-setup.py
-sma.c
-uptrend.c
-indicators.egg-info/PKG-INFO
-indicators.egg-info/SOURCES.txt
-indicators.egg-info/dependency_links.txt
-indicators.egg-info/top_level.txt

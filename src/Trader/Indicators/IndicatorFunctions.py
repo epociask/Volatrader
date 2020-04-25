@@ -4,7 +4,7 @@ import numpy as np
 from scipy.stats import linregress
 import ta
 import statistics as stats
-
+import test_indicators
 
 
 def getFunction(name: str):
@@ -64,6 +64,9 @@ def EMA(values, alpha = .3, epsilon = 0):
 
    return result
 
+
+def MOM(candles: list, period: int)->float:
+    return test_indicators.MOMENTUM(np.array([e['close'] for e in candles]), period) 
 
 def RSIDIVERGENCE(candles: list):
     fourteen = RSI(candles, 14)

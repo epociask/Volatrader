@@ -15,7 +15,7 @@ def main(args):
 
 	except Exception as e:
 		raise e
-		logErrorToFile(e)
+		logErrorToFile(f"{os.path.basename(__file__)}{e}")
 
 	except KeyboardInterrupt:
 		writer.writePaperTradeEnd(paper_trader.sessionid)
