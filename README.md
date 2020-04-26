@@ -2,8 +2,7 @@
 --- author/creator =  @epociask ---
 --- author/creator = @a-drain ---
 
-[![Volatrader](https://circleci.com/gh/epociask/Volatrader.svg?style=svg)](https://app.circleci.com/pipelines/github/epociask/Volatrader)
-
+[![CodeFactor](https://www.codefactor.io/repository/github/volatrade/volatrader/badge?s=ed1fa4dcf01a37f1360f09fa0667283d7ba83d43)](https://www.codefactor.io/repository/github/volatrade/volatrader)
 
 ## Installation
 1. Clone the repo
