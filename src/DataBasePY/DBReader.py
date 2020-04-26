@@ -29,7 +29,7 @@ class DBReader(DBoperations):
             y =  str(self.cur.fetchall())
             logDebugToFile(y)
         except Exception as e:
-            logErrorToFile(f"{os.path.basename(__file__)}{e}")
+            logErrorToFile(e)
         print(y)   
         y= y.replace("(", "").replace(",)", "").replace("\'", "\"").replace("None,", "\"None\",").replace("True", "\"True\"").replace("False","\"False\"")
         self.terminateConnection()
@@ -51,7 +51,7 @@ class DBReader(DBoperations):
             self.commit()
 
         except Exception as e:
-            logErrorToFile(f"{os.path.basename(__file__)}{e}")
+            logErrorToFile(e)
         return True if str(boolean).find("T") != -1 else False 
 
 
@@ -71,6 +71,6 @@ class DBReader(DBoperations):
             self.terminateConnection()
 
         except Exception as e:
-            logErrorToFile(f"{os.path.basename(__file__)}{e}")
+            logErrorToFile(e)
 
         return y 

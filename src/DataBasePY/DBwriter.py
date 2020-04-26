@@ -39,7 +39,7 @@ class DBwriter(DBoperations):
             self.execute(query)
 
         except Exception as e:
-            logErrorToFile(f"{os.path.basename(__file__)}{e}")
+            logErrorToFile(e)
 
             if type(e) == psycopg2.errors.UndefinedTable:
                 createTableQuery = ""
@@ -76,7 +76,7 @@ class DBwriter(DBoperations):
             self.execute(query)
 
         except Exception as e:
-            logErrorToFile(f"{os.path.basename(__file__)}{e} Eror writing paper trade data: ")
+            logErrorToFile(e)
             raise e
 
         self.commit()
@@ -146,8 +146,8 @@ class DBwriter(DBoperations):
         writes support resistance to data base 
         """
 
-        query = f"INSERT INTO support_resistance (pair, candle, support, resistance) VALUES (\'{pair.value}\', \'{candle.value}\', \'{support}\', \'{resistance}\')\
-                  ON CONFLICT (pair, candle) DO UPDATE SET support = EXCLUDED.support, resistance = EXCLUDED.resistance;"
+        query = f"INSERT INTO support_resistance (ts, pair, candle, support, resistance) VALUES (\'{str(datetime.datetime.now())}\', \'{pair.value}\', \'{candle.value}\', \'{support}\', \'{resistance}\')\
+                  ON CONFLICT (pair, candle) DO UPDATE SET support = EXCLUDED.support, resistance = EXCLUDED.resistance, ts = EXCLUDED.ts;"
 
         logDebugToFile(query)
         try:
@@ -262,3 +262,4 @@ class DBwriter(DBoperations):
         dataDict = getMarketData()
         for coin in dataDict:
             self.writeStaticMarketDataQuerys(coin)
+

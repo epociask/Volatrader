@@ -2,7 +2,7 @@ from datetime import datetime
 from threading import Thread
 from Helpers.API.CMC_api import getTopPercentChange, getTopVolumeCoins
 from Helpers.Constants.Enums import Pair
-from Helpers.Logger import logToSlack, Channel
+from Helpers.Logger import logToSlack, Channel, MessageType
 from SlackNotifier.PriceNotifications import sendAbnormalVolumeNotification
 from queue import Queue
 import nest_asyncio
@@ -39,6 +39,6 @@ if __name__ == '__main__':
 
 
     except Exception as e:
-        logToSlack(e)
+        logToSlack(e, messageType=MessageType.ERROR)
 
             

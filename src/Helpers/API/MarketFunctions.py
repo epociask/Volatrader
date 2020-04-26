@@ -2,7 +2,7 @@ from Helpers.Constants.Enums import Pair
 import datetime as datetime 
 import requests
 import time 
-from API.Logger import logToSlack
+from Helpers.Logger import logToSlack
 # from Helpers.logger import logDebugToFile
 
 def getCurrentBinancePrice(pair: Pair):

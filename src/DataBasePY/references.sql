@@ -22,7 +22,7 @@ CREATE TABLE papertrader_results (
 -- Create support/resistance table query -- 
 
 CREATE TABLE support_resistance (
-
+	ts character varying, 
     pair character varying,
     candle character varying, 
     support numeric,

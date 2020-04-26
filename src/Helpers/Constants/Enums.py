@@ -36,6 +36,7 @@ class Strategies(Enum):
     FIFTY_MOVING_AVERAGE = "FIFTY_MOVING_AVERAGE_STRATEGY"
     MA = "MA_STRATEGY"
     TEST = "TEST_STRAT"
+    SR = "SUPPORT_RESISTANCE_STRATEGY"
 
 class Pair(Enum):
     """

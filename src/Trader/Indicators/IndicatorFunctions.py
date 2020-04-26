@@ -4,7 +4,7 @@ import numpy as np
 from scipy.stats import linregress
 import ta
 import statistics as stats
-import test_indicators
+import indicators
 
 
 def getFunction(name: str):
@@ -66,7 +66,7 @@ def EMA(values, alpha = .3, epsilon = 0):
 
 
 def MOM(candles: list, period: int)->float:
-    return test_indicators.MOMENTUM(np.array([e['close'] for e in candles]), period) 
+    return indicators.MOMENTUM(np.array([e['close'] for e in candles]), period) 
 
 def RSIDIVERGENCE(candles: list):
     fourteen = RSI(candles, 14)
@@ -94,14 +94,11 @@ def HAMMER(candles: list, n=3):
                 if (candles[len(candles)-1]['high'] - candles[len(candles)-1]['close'] ) > (candles[len(candles)-1]['open'] - candles[len(candles)-1]['close']):
                     print("HAMMER DETECTED")
                     return True 
-
-
-
     return False 
 
 
 def FIB(candles , period=10):
-    l1, l2, l3 = indicators.FIB(candles, period)
+    l1, l2, l3 = indicators.FIB(np.array([e['close'] for e in candles]), period)
 
     return {    'LEVEL1': l1, 'LEVEL2': l2, 'LEVEL3': l3}
 

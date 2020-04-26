@@ -62,7 +62,7 @@ class TradeSession:
                 return sum(allPnl)
 
             except Exception as e:
-                logErrorToFile(f"{os.path.basename(__file__)}{e}")
+                logErrorToFile(e)
 
             
 

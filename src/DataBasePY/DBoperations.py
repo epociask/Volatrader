@@ -3,7 +3,7 @@ from Helpers.DataOperators import convertCandlesToDict
 from DataBasePY import QueryHelpers
 from Helpers.Constants.Enums import Candle, Pair
 from DataBasePY.config import config
-from Helpers.Logger import logToSlack, logDebugToFile
+from Helpers.Logger import logToSlack, logDebugToFile, MessageType
 from threading import Lock
 
 
@@ -97,6 +97,6 @@ class DBoperations:
             return convertCandlesToDict(temp)
 
         except Exception as e:
-            logToSlack(e)
+            logToSlack(e, messageType=MessageType.ERROR)
             self.lock.release()
             raise e

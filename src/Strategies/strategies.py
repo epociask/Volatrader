@@ -3,7 +3,7 @@ from SlackNotifier.PriceNotifications import getUpperNormalDistrubtion
 from Trader.Indicators import IndicatorFunctions
 from Helpers.TimeHelpers import convertNumericTimeToString
 
-strats = ['THREELINESTRIKE_STRATEGY', 'FIFTY_MOVING_AVERAGE_STRATEGY', 'TEST_BUY_STRAT']
+strats = ['THREELINESTRIKE_STRATEGY', 'FIFTY_MOVING_AVERAGE_STRATEGY', 'TEST_BUY_STRAT', 'FIFTY_MOVING_AVERAGE_STRATEGY', 'SUPPORT_RESISTANCE_STRATEGY']
 BUY, SELL = True, True
 HOLD = False 
 def getStrat(name: str):
@@ -55,16 +55,41 @@ class TEST_STRAT(strategy):
 
 #     def checkSell(self, )
 
+class SUPPORT_RESISTANCE_STRATEGY(strategy):
+    def __init__(self, pair: Pair, candle: Candle, principle:int):
+        super().__init__(pair, candle, principle)
+        print("----------------------- INIT --------------------")
+        self.getSupportResistance()
+        self.candleCount = 0
+        self.step = 40
 
 
+    def getSupportResistance(self): 
+        print("---------------------------- NEED INPUT -------------------")
+        self.support = float(input("please enter support"))
+        self.resistance = float(input("please enter resistance"))
+
+    def checkBuy(self, candle):
+        self.candleCount+=1
+        print(self.candleCount)
+        if self.candleCount % self.step  == 0:
+            print(convertNumericTimeToString(candle['timestamp']))
+            self.getSupportResistance()
+        
+        if float(candle['close']) - 1 <= self.support:
+            return BUY 
+
+        return HOLD 
 class THREELINESTRIKE_STRATEGY(strategy):
 
     def __init__(self, pair: Pair, candle: Candle, principle:int):
         super().__init__(pair, candle, principle)
-        self.candleLimit = 100
         self.candles = []
-        # self.indicators = ['PATTERNTHREELINESTRIKE_3', 'PATTERNBULLISHHARAME_3',  'PATTERNTHREEBEARISHSOLDIERS_3', 'PATTERNTHREEBEARISHSOLDIERS_3', 'PATTERNTHREEINSIDE_3']
-        self.indicators = ['FIB_100', 'MOM_12']
+        clean = lambda clean : int(''.join(e for e in clean if e.isdigit()))
+
+        self.indicators = ['FIB_144', 'MOM_12']
+        self.candleLimit = max([clean(e) for e in self.indicators])
+
         self.sdv = getUpperNormalDistrubtion(pair, candle, 300)
 
     def checkBuy(self, candle):

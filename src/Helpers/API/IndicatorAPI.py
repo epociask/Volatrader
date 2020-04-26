@@ -1,6 +1,6 @@
 import requests
 from Helpers.Enums import Indicator
-from Helpers.Logger import logToSlack
+from Helpers.Logger import logToSlack, MessageType 
 IndicatorENUMS = [e for e in Indicator]
 def getIndicator(indicator: Indicator, candleJSON: list) -> (list, None):
     """
@@ -33,7 +33,7 @@ def getIndicator(indicator: Indicator, candleJSON: list) -> (list, None):
     else:
         err = f"TAAPIO response status code : {resp.status_code}  \n content: {resp.content}"
         # logErrorToFile(err)
-        logToSlack(f"{os.path.basename(__file__)}{e}")
+        logToSlack(err, messageType=MessageType.Error)
         raise Exception(resp.status_code + " " + resp.headers)
 
 

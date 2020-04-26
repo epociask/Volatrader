@@ -122,7 +122,7 @@ def logWarningToFile(warning: str) -> None:
 
 
 
-def logErrorToFile(error: str) -> None:
+def logErrorToFile(error: Exception) -> None:
     """
     Logs error data to txt file in logs directory
     @:param error -> error message to log to file
@@ -131,7 +131,7 @@ def logErrorToFile(error: str) -> None:
 
     checkIfConfig()
     global logger
-    logger.error(f'[ERROR] {error}\n')
+    logger.exception(error)
 
 
 def checkIfConfig() -> None:
