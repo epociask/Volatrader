@@ -14,6 +14,9 @@ jobs:
       - python/load-cache
       - python/install-deps
       - python/save-cache
+      - run:
+          name: "Building library"
+          command: "cd src && make all"
 
   deploy:
     docker:
@@ -23,9 +26,9 @@ jobs:
       - python/load-cache
       - python/install-deps
       - python/save-cache
+
       - run:
-          name: "Deploying to digital ocean"
-          command: "sh deploy.sh"
+          command: "mv create_db.sh src"
 
       - run:
           name: "Zipping files"
@@ -42,6 +45,10 @@ jobs:
       - run:
           name: "Copying files to web"
           command: "ssh -o StrictHostKeyChecking=no adrian@167.172.206.147 'rm -rf volatrade-production/src/ && mv --force src volatrade-production/'"
+
+      - run:
+          name: "Creating database.ini"
+          command: "sh create_db.sh"
 
       - run:
           command: "echo 'Done'"

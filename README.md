@@ -1,8 +1,9 @@
-<<<<<<< HEAD
 # The Volatrader
-
 --- author/creator =  @epociask ---
 --- author/creator = @a-drain ---
+
+[![<Volatrader>](https://circleci.com/gh/epociask/Volatrader.svg?style=svg)](https://app.circleci.com/pipelines/github/epociask/Volatrader)
+
 
 ## Installation
 1. Clone the repo
