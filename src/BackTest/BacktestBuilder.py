@@ -1,11 +1,12 @@
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import pandas as pd
-import os 
+import os
 from Helpers.Constants.Enums import *
 from termcolor import colored
 import numpy as np
 from Trader.Indicators.IndicatorConstants import getIndicator
+import Helpers.TimeHelpers
 
 
 def figures_to_html(string, figs, server, filename="analysis.html"):
@@ -48,7 +49,7 @@ def getBacktestResultsString(fees, strategy, candleSize: Candle, pair: Pair, pri
     return returnString
 
 # TODO add slider
-# TODO more functional ohlcv graph 
+# TODO more functional ohlcv graph
 # TODO Fix autoscaling for y-axis on ohlcv graph
 # TODO Fix Volume graph
 
@@ -56,7 +57,7 @@ def getBacktestResultsString(fees, strategy, candleSize: Candle, pair: Pair, pri
 def generateCandleGraph(candle_data: pd.DataFrame, pair: Pair, candle: Candle, stratString: str, indicators: list):
 
     fig = make_subplots(rows=5, cols=1)
-    
+
 
 
     color = []
@@ -69,15 +70,15 @@ def generateCandleGraph(candle_data: pd.DataFrame, pair: Pair, candle: Candle, s
     steps = []
 
     sliders = []
-    
+
     fig.add_trace(go.Candlestick(x=candle_data.index, yaxis="y2",
                     open=candle_data['open'],
                     high=candle_data['high'],
                     low=candle_data['low'],
                     close=candle_data['close'],
-                    name="CANDLES"), row=1, col=1) 
+                    name="CANDLES"), row=1, col=1)
 
-    fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['close'], yaxis='y2'), row=1, col=1) 
+    fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['close'], yaxis='y2'), row=1, col=1)
 
     fig.add_trace(go.Bar(x=candle_data.index, y=candle_data['volume'], name="Volume", marker=dict(color=color), yaxis='y'), row=2, col=1)
 
@@ -86,7 +87,7 @@ def generateCandleGraph(candle_data: pd.DataFrame, pair: Pair, candle: Candle, s
     for indicator in indicators:
 
         values = getIndicator(indicator)
-        if values[0]: 
+        if values[0]:
             if len(values) == 1 and indicator.find('PATTERN') == -1:
                 fig.add_trace(go.Scatter(x=candle_data.index, yaxis="y2",
                             y=candle_data[indicator],
@@ -101,13 +102,13 @@ def generateCandleGraph(candle_data: pd.DataFrame, pair: Pair, candle: Candle, s
                 for val in values:
                     if type(val) is not bool:
                         print("adding for ", val)
-                        color = 'red' if val == 'MOVING AVERAGE BB' else 'grey' 
-            
-                        
+                        color = 'red' if val == 'MOVING AVERAGE BB' else 'grey'
+
+
                         fig.add_trace(go.Scatter(x=candle_data.index, yaxis="y2",
                             y=candle_data[val], line=dict(color=color, width=1, dash='dot' if val == 'MOVING AVERAGE BB' else 'solid'),
                             name=val.upper()), row=1, col=1)
-        
+
         else:
 
                 print(f"row # {rowNum} adding for {indicator}")
@@ -121,7 +122,7 @@ def generateCandleGraph(candle_data: pd.DataFrame, pair: Pair, candle: Candle, s
 
                             if val == 'MACD Histogram':
                                 fig.add_trace(go.Bar(x=candle_data.index, yaxis=f'y{rowNum}', y=candle_data[val], name=val), row=rowNum, col=1)
-                                
+
                             else:
                                 fig.add_trace(go.Scatter(x=candle_data.index, yaxis=f'y{rowNum}', y=candle_data[val], name=val), row=rowNum, col=1)
 
@@ -130,25 +131,22 @@ def generateCandleGraph(candle_data: pd.DataFrame, pair: Pair, candle: Candle, s
                     fig.add_trace(go.Scatter(x=candle_data.index, yaxis=f'y{rowNum}', y=([70] * candle_data['open'].count()),  line=dict(color='black', width=1, dash='dot')), row=rowNum, col=1)
 
         rowNum+=1
-      
+
     fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['buy'], yaxis="y2", mode='markers', line=dict(color='blue', width=14), name = "BUY"), row=1, col=1)
     fig.add_trace(go.Scatter(x=candle_data.index, y=candle_data['sell'], yaxis="y2", mode='markers', line=dict(color='black', width=14), name="SELL"), row=1, col=1)
     fig.update_layout(
-        autosize=True,
-        dragmode = "orbit",
-        hovermode=  "x unified",
+        autosize=False,
         height=2200,
         width=1500,
         title={
         'text': f"CANDLE STICK GRAPH WITH USED INDICATORS",
         'y':1,
-        'x':0.5,  
+        'x':0.5,
         "font" : dict(family="Roboto ", size=14),
         'xanchor': 'center',
         'yanchor': 'top'})
     return fig
 
-import Helpers.TimeHelpers
 # buytime buyprice, selltime sellprice profitloss
 def generateTransactionHistoryTable(results):
     df = pd.DataFrame(results)
@@ -177,7 +175,7 @@ def generateLinePlot(data, y_value, graph_title):
     fig = make_subplots(rows=1, cols=1)
     fig.add_trace(go.Scatter(x = data.index,
                         y = data[y_value],
-                        name = y_value.upper()))    
+                        name = y_value.upper()))
 
     fig.update_layout(
         autosize=False,
@@ -188,10 +186,10 @@ def generateLinePlot(data, y_value, graph_title):
                 'y':0.9,
                 'x':0.5,
             },
-      
+
     )
-    
-        
+
+
     return fig
 
 
@@ -201,5 +199,4 @@ def generateGraphs(candle_data: pd.DataFrame, pair: Pair, candle: Candle, stratS
     candleGraph = generateCandleGraph(candle_data, pair, candle, stratString, indicators)
     linePlot = generateLinePlot(candle_data, 'principle', "Principle Over Time")
     transactions = generateTransactionHistoryTable(results)
-
     return [candleGraph, linePlot, transactions]
