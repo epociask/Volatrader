@@ -2,7 +2,7 @@
 --- author/creator =  @epociask ---
 --- author/creator = @a-drain ---
 
-[![<Volatrader>](https://circleci.com/gh/epociask/Volatrader.svg?style=svg)](https://app.circleci.com/pipelines/github/epociask/Volatrader)
+[![Volatrader](https://circleci.com/gh/epociask/Volatrader.svg?style=svg)](https://app.circleci.com/pipelines/github/epociask/Volatrader)
 
 
 ## Installation

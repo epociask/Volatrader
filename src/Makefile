@@ -8,6 +8,6 @@ test:
 	python -m pytest -vv tests/*.py
 
 lint:
-	pylint *
+	python -m pylint *
 
 all: install lint test
