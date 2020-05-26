@@ -163,8 +163,8 @@ def Economic_Strength():
         total += gross_domestic_product * score/2.5 #2-3% growth for a healthy economy
     if(short_term_unemployment >= 4 & short_term_unemployment <= 6):
         total += score #between 4% - 6% for a healthy economy
-    """elif(short_term_unemployment < 4):
-        total += score - (score/2 * (4-short_term_unemployment))""" #too little unemployment leads to inflation but that is covered now in CPI
+    #elif(short_term_unemployment < 4):
+        #total += score - (score/2 * (4-short_term_unemployment)) #too little unemployment leads to inflation but that is covered now in CPI
     elif(short_term_unemployment > 6):
         total += score - (score/2 * (short_term_unemployment-6))
     CPI_growth = Percentage_Growth(CPI_list[0],CPI_list[1])
