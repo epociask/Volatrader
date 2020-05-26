@@ -163,13 +163,15 @@ def Economic_Strength():
         total += gross_domestic_product * score/2.5 #2-3% growth for a healthy economy
     if(short_term_unemployment >= 4 & short_term_unemployment <= 6):
         total += score #between 4% - 6% for a healthy economy
-    elif(short_term_unemployment < 4):
-        total += score - (score/2 * (4-short_term_unemployment))
+    """elif(short_term_unemployment < 4):
+        total += score - (score/2 * (4-short_term_unemployment))""" #too little unemployment leads to inflation but that is covered now in CPI
     elif(short_term_unemployment > 6):
         total += score - (score/2 * (short_term_unemployment-6))
     CPI_growth = Percentage_Growth(CPI_list[0],CPI_list[1])
     if (CPI_growth < 3.5):
         total += score - (score/2 * (CPI_growth - 3.5)) # < 3.5% for a healthy economy
+    elif(CPI_growth > 0):
+        total += score
     return total
   
 
@@ -277,4 +279,4 @@ def Price_Earnings_Ratio(market_value, earnings, total_shares):
 
 #Gives the growth or decline of a strategy over a given period of time. Remember strategies "decay" over time meaning they become less viable as others use new/different strategies.
 def Expected_Value(average_returns, probability):
-    return gain, percentage_correct, loss, percentage_incorrect
+    return #integral(0, infinity)(x*f(x)*d(x))
